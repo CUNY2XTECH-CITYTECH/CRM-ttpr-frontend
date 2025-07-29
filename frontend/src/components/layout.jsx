@@ -10,7 +10,7 @@ function Layout({ children }) {
       <main className="w-full">
         <Header CloseSidebar={SidebarTrigger} role={"staff"} />
         {/* <SidebarTrigger /> */}
-        <div className="px-6 py-4 box-border">{children}</div>
+        <div className="px-12 py-4 box-border">{children}</div>
       </main>
     </SidebarProvider>
   );
