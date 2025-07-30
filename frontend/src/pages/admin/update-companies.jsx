@@ -4,7 +4,6 @@ import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessa
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
-import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { validateCompaniesForm } from '@/lib/validations';
 import {
