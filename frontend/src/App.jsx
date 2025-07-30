@@ -8,6 +8,7 @@ function App() {
   return (
     <>
       <Layout>
+        <Topbar title="Internships" />
         <div>Hello</div>
       </Layout>
     </>
