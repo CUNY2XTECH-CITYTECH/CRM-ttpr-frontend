@@ -1,19 +1,25 @@
 import React, { useState } from 'react'
 import { Button } from './ui/button'
-
-import {  Rows3, LayoutGrid, ArrowLeft } from 'lucide-react'
+import { Rows3, LayoutGrid, ArrowLeft } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 export const Topbar = ({ title, view, setView, mode }) => {
+
+  const navigate= useNavigate()
   const changeView = () => {
     setView(!view)
   }
+  const routeBack = () => {
+    navigate(-1)
+  }
+
   return (
     <div className='grid gap-1 '>
-      <div className='flex gap-3'>
-      <div className='hover:bg-accent flex gap-1 items-center w-fit px-2 py-1 cursor-pointer border-gray-200  border rounded-sm '>
-        <ArrowLeft className='w-5 h-5'/>
-        <span className='text-sm'>Back</span>
-      </div>
-      <h4 className='py-2 font-semibold uppercase'>{title}</h4>
+      <div className='grid gap-3'>
+        <div onClick={routeBack} className='hover:bg-accent flex gap-1 items-center w-fit px-2 py-1 cursor-pointer border-gray-200  border rounded-sm '>
+          <ArrowLeft className='w-5 h-5' />
+          <span className='text-sm'>Back</span>
+        </div>
+        <h4 className='py-2 font-semibold uppercase'>{title}</h4>
       </div>
       {mode === 'read' ?
         <div className='border-t border-gray-200 py-4 flex gap-1 justify-between'>
