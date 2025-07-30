@@ -7,6 +7,8 @@ import LoginPage from './pages/students/signIn'
 import AdminLogin from './pages/admin/signIn'
 import AdminRegister from './pages/admin/register'
 import StudentRegister from './pages/students/register'
+import CreateCompanies from './pages/admin/create-companies'
+import UpdateCompanies from './pages/admin/update-companies'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -17,6 +19,9 @@ createRoot(document.getElementById('root')).render(
         <Route path="/admin-signIn" element={<AdminLogin />}/>
         <Route path="/admin-register" element={<AdminRegister />}/>
         <Route path="/student-register" element={<StudentRegister />}/>
+        <Route path="/signIn" element={<LoginPage />} />
+        <Route path='/admin/create-companies' element={<CreateCompanies />} />
+        <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
       // add your pages here
       </Routes>
     </BrowserRouter>
