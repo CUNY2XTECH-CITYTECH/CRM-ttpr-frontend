@@ -9,6 +9,7 @@ import AdminRegister from './pages/admin/register'
 import StudentRegister from './pages/students/register'
 import CreateCompanies from './pages/admin/create-companies'
 import UpdateCompanies from './pages/admin/update-companies'
+import StudentOnboarding from './pages/students/studentOnboarding'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -22,6 +23,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/signIn" element={<LoginPage />} />
         <Route path='/admin/create-companies' element={<CreateCompanies />} />
         <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
+        <Route path='/students/onboarding' element={<StudentOnboarding/>} />
       // add your pages here
       </Routes>
     </BrowserRouter>
