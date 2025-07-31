@@ -1,147 +1,194 @@
 import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { Topbar } from "@/components/topbar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessage, Form } from '@/components/ui/form'
 import { GraduationCap, Users, Briefcase } from "lucide-react"
 import Layout from "../../components/layout"
+import { validateInternshipForm } from "@/lib/validations"
 
 
 export default function InternshipForm() {
-const [company, setCompany] = useState("")
-const [position, setPosition] = useState("")
-const [salary, setSalary] = useState("")
-const [requirements, setRequirements] = useState("")
-const [responsibility, setResponsibility] = useState("")
-const [details, setDetails] = useState("")
-const [applicationDeadline, setApplicationDeadline] = useState("")
-const [tags, setTags] = useState("")
+ const [view, setView] = useState('create')
+ 
+ const internshipForm = useForm({
+    resolver: yupResolver(validateInternshipForm),
+    defaultValues: {
+        name: '', 
+        position: '', 
+        salary: '',
+        requirements: '',
+        responsibility: '',
+        details: '',
+        applicationDeadline: '',
+        tags: ''
+    }
+ })
 
+const onSubmit = (data) => {
+    console.log(data)
+}
     return (
    <Layout>
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl bg-white border-0">
-            <CardHeader className="text-center">
-                <div className="mx-auto mb-4 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-                    <Briefcase className="w-6 h-6 text-white" />
-                </div>
-                <CardTitle className="text-2xl font-bold">Create Internship Form</CardTitle>
-                <CardDescription>Please fill out the form to create internship for students</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <form className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="company">Company Name</Label>
-                        <Input
-                            id="company"
-                            type="text"
-                            placeholder="Enter company name"
-                            value={company}
-                            onChange={(e) => setCompany(e.target.value)}
-                            required
-                        />
-                    </div>
-                    
-                    <div className="space-y-2">
-                        <Label htmlFor="position">Position Title</Label>
-                        <Input
-                            id="position"
-                            type="text"
-                            placeholder="Enter position"
-                            value={position}
-                            onChange={(e) => setPosition(e.target.value)}
-                            required
-                        />
-                    </div>
-                    
-                    <div className="space-y-2">
-                        <Label htmlFor="salary">Salary</Label>
-                        <Input
-                            id="salary"
-                            type="text"
-                            placeholder="Enter salary (ex: 50000)"
-                            value={salary}
-                            onChange={(e) => setSalary(e.target.value)}
-                        />
-                    </div>
-                    
-                    <div className="space-y-2">
-                        <Label htmlFor="requirements">Requirements</Label>
-                        <Input
-                            id="requirements"
-                            type="text"
-                            placeholder="Enter requirements"
-                            value={requirements}
-                            onChange={(e) => setRequirements(e.target.value)}
-                            required
-                        />
-                    </div>
-                    
-                    <div className="space-y-2">
-                        <Label htmlFor="responsibility">Responsibility</Label>
-                        <Input
-                            id="responsibility"
-                            type="text"
-                            placeholder="Enter responsibility"
-                            value={responsibility}
-                            onChange={(e) => setResponsibility(e.target.value)}
-                        />
-                    </div>
-                    
-                    <div className="space-y-2">
-                        <Label htmlFor="details">Details</Label>
-                        <textarea
-                            id="details"
-                            placeholder="Enter details about the internship"
-                            value={details}
-                            onChange={(e) => setDetails(e.target.value)}
-                            className="w-full min-h-[150px] p-4 border rounded-md placeholder:text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                            rows={6}
-                            required
-                        />
-                    </div>
-                    
-                    <div className="space-y-2">
-                        <Label htmlFor="applicationDeadline">Application Deadline</Label>
-                        <Input
-                            id="applicationDeadline"
-                            type="date"
-                            value={applicationDeadline}
-                            onChange={(e) => setApplicationDeadline(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="tags">Tags</Label>
-                        <Input
-                            id="tags"
-                            type="text"
-                            placeholder="Enter tags (comma separated)"
-                            value={tags}
-                            onChange={(e) => setTags(e.target.value)}
-                        />
-                        {tags && (
-                            <div className="flex flex-wrap gap-2 mt-2">
-                                {tags.split(',').map((tag, index) => (
-                                    tag.trim() && (
-                                        <span
-                                            key={index}
-                                            className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border"
-                                        >
-                                            {tag.trim()}
-                                        </span>
-                                    )
-                                ))}
-                            </div>
-                        )}
-                    </div>
+    <Topbar view={view} setView={setView} title="Create New Internship" mode="form" />
+     <div className='w-[80%] m-auto py-4'>
+        <Form {...internshipForm}>
+            <div className="flex flex-col items-center mb-6">
+                <Briefcase className="w-12 h-12 text-blue-600 mb-2" />
+                <h2 className="text-2xl font-semibold text-gray-800">Create New Internship</h2>
+                <p className="text-gray-600 text-sm">Fill out the details below to create a new internship opportunity</p>
+            </div>
+          <form onSubmit={internshipForm.handleSubmit(onSubmit)} className='space-y-6'>
+            <div className="grid grid-cols-2 gap-2">
+            <FormField
+            control={internshipForm.control}
+            name="name"
+            render={({ field}) => (
+                <FormItem>
+                    <FormLabel>Company Name</FormLabel>
+                    <FormControl>
+                        <Input placeholder="Company Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
 
-                    <Button type="submit" className="w-full mt-6">
-                        Create Internship Posting
-                    </Button>
-                </form>
-            </CardContent>
-        </Card>
+            )}
+            />
+           
+            <FormField
+            control={internshipForm.control}
+            name="position"
+            render={({ field}) => (
+                <FormItem>
+                    <FormLabel>Position </FormLabel>
+                    <FormControl>
+                        <Input placeholder="Position" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            
+
+            </div>
+            <div>
+            <FormField
+            control={internshipForm.control}
+            name="salary"
+            render={({ field}) => (
+                <FormItem>
+                    <FormLabel>Salary</FormLabel>
+                    <FormControl>
+                        <Input placeholder="Salary of the position" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            
+            </div>
+            <div>
+            <FormField
+            control={internshipForm.control}
+            name="requirements"
+            render={({ field}) => (
+                <FormItem>
+                    <FormLabel>Requirements</FormLabel>
+                    <FormControl>
+                        <Textarea placeholder="Requirements for the role" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            
+            </div>
+            <div>
+            <FormField
+            control={internshipForm.control}
+            name="responsibility"
+            render={({ field}) => (
+                <FormItem>
+                    <FormLabel>Responsibility</FormLabel>
+                    <FormControl>
+                        <Textarea placeholder="Responsibilities of the role" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            </div>
+            <div>
+            <FormField
+            control={internshipForm.control}
+            name="details"
+            render={({ field}) => (
+                <FormItem>
+                    <FormLabel>Details</FormLabel>
+                    <FormControl>
+                        <Textarea placeholder="Details about the internship" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            </div>
+            <div>
+            <FormField
+            control={internshipForm.control}
+            name="applicationDeadline"
+            render={({ field}) => (
+                <FormItem>
+                    <FormLabel>Application Deadline</FormLabel>
+                    <FormControl>
+                        <Input type="date" placeholder="Application Deadline" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            </div>
+            <div>
+            <FormField
+            control={internshipForm.control}
+            name="tags"
+            render={({ field}) => (
+                <FormItem>
+                    <FormLabel>Tags</FormLabel>
+                    <FormControl>
+                        <Input placeholder="Tags (comma separated)" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                        Separate tags with commas (e.g., "React, JavaScript, Frontend")
+                    </FormDescription>
+                    {field.value && (
+                        <div className="flex flex-wrap gap-2 mt-2">
+                            {field.value.split(',').map((tag, index) => {
+                                const trimmedTag = tag.trim();
+                                return trimmedTag ? (
+                                    <span 
+                                        key={index}
+                                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                                    >
+                                        {trimmedTag}
+                                    </span>
+                                ) : null;
+                            })}
+                        </div>
+                    )}
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            </div>
+            <Button type="submit" className="w-full mt-4">Create Internship</Button>
+          </form>
+        </Form>
     </div>
    </Layout>
     )
