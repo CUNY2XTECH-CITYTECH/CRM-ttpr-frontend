@@ -14,10 +14,10 @@ export const Topbar = ({ title, view=null, setView=null, mode }) => {
 
   return (
     <div className='grid gap-1 '>
-      <div className='grid gap-3'>
+      <div className='flex gap-10'>
         <div onClick={routeBack} className='hover:bg-accent flex gap-1 items-center w-fit px-2 py-1 cursor-pointer border-gray-200  border rounded-sm '>
           <ArrowLeft className='w-5 h-5' />
-          <span className='text-sm'>Back</span>
+          <span className='text-xs'>Back</span>
         </div>
         <h4 className='py-2 font-semibold uppercase'>{title}</h4>
       </div>

@@ -1,5 +1,6 @@
 import Layout from '@/components/layout';
 import { Topbar } from '@/components/topbar';
+import { Button } from '@/components/ui/button';
 import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessage, Form } from '@/components/ui/form';
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
@@ -32,10 +33,12 @@ const UpdateCompanies= () => {
   }
   return (
     <Layout>
-      <Topbar view={view} setView={setView} title="Google Company" mode="create" />
+      <Topbar title="Google Company" mode="create" />
       <div className='w-[80%] m-auto py-4'>
         <Form {...companiesForm}>
-          <form onSubmit={companiesForm.handleSubmit(onSubmit)} className='space-y-6'>
+          <form onSubmit={companiesForm.handleSubmit(onSubmit)} className='grid space-y-6'>
+
+            <Button type="submit" className={"ml-auto"}>Save</Button>
             <div className='grid grid-cols-2 gap-2'>
               <FormField
                 control={companiesForm.control}
