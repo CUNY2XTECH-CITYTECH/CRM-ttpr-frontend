@@ -10,16 +10,16 @@ export const Header = ({ role, CloseSidebar }) => {
       <div className="self-center cursor-pointer">
         <CloseSidebar />
       </div>
-      <div className="px-4 py-1 rounded-full bg-gray-200 flex gap-1 ">
+      <div className="px-3 py-1 rounded-full bg-secondary md:w-[300px] flex gap-1 focus-within:ring-1 ring-primary ">
         <Input
           type={"text"}
           placeholder="Search.."
           value={keyword}
-          className="focus-visible:ring-0 border-none focus:outline-none focus:border-none"
+          className="focus-visible:ring-0 border-none w-full text-lg shadow-none focus:outline-none focus:border-none"
           id="keyword"
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <Search className="w-5 h-5 self-center" />
+        <Search className="w-5 h-5 self-center mr-1" />
       </div>
       <div className="ml-auto self-center">
         <Bell className="w-5 h-5" />
