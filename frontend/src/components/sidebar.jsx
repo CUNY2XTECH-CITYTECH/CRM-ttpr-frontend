@@ -24,7 +24,9 @@ import {
   Users,
   ChevronDown,
   SquarePlus,
-  List
+  List,
+  Building,
+  BuildingIcon
 } from "lucide-react";
 import {
   Collapsible,
@@ -73,6 +75,21 @@ const items = [
     }],
     icon: Rows4,
   },
+  {
+    title: "Departments",
+    url: "#",
+    childLinks: [{
+      title: "create departments",
+      url: "/admin/create-departments",
+    }
+      ,
+    {
+      title: "view departments",
+      url: "/admin/view-departments",
+    }],
+    icon: BuildingIcon,
+  },
+
   {
     title: "Staffs",
     url: "#",
@@ -133,14 +150,14 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <>
+              {items.map((item, e) => (
+                <div key={e}>
                   {item.childLinks ?
                     <Collapsible className="group/collapsible">
                       <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
                           <SidebarMenuButton>
-                            <a  className="flex gap-2">
+                            <a className="flex gap-2">
                               <item.icon className="w-4 h-4" />
                               <span>{item.title}</span>
                             </a>
@@ -148,12 +165,12 @@ export function AppSidebar() {
                         </CollapsibleTrigger>
                         <CollapsibleContent>
                           <SidebarMenuSub className={'mx-2'}>
-                            {item.childLinks.map(cl=>
-                            <SidebarMenuSubItem className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
-                              <a className="flex gap-1" href={cl.url}>
-                                <span>{cl.title}</span>
-                              </a>
-                            </SidebarMenuSubItem>
+                            {item.childLinks.map(cl =>
+                              <SidebarMenuSubItem className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
+                                <a className="flex gap-1" href={cl.url}>
+                                  <span>{cl.title}</span>
+                                </a>
+                              </SidebarMenuSubItem>
                             )}
                           </SidebarMenuSub>
                         </CollapsibleContent>
@@ -163,13 +180,13 @@ export function AppSidebar() {
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
                         <a href={item.url} className="flex gap-2">
-                          <item.icon className="w-5 h-5"/>
+                          <item.icon className="w-5 h-5" />
                           <span>{item.title}</span>
                         </a>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   }
-                </>
+                </div>
               ))}
 
             </SidebarMenu>
