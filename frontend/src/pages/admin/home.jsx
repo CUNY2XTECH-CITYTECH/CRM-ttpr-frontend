@@ -18,7 +18,6 @@ export default function AdminHome() {
     { name: "Techstacks", icon: <Server className="text-xl" /> },
     { name: "Skills", icon: <ShieldUser className="text-xl" /> },
     { name: "Settings", icon: <Settings className="text-xl" /> },
-    
   ]
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center px-6 py-12">
