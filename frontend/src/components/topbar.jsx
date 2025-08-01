@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from './ui/button'
-import { Rows3, LayoutGrid, ArrowLeft } from 'lucide-react'
+import { Rows3, LayoutGrid, ArrowLeft, ChevronLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 export const Topbar = ({ title, view=null, setView=null, mode }) => {
 
@@ -14,10 +14,10 @@ export const Topbar = ({ title, view=null, setView=null, mode }) => {
 
   return (
     <div className='grid gap-1 '>
-      <div className='grid gap-3'>
-        <div onClick={routeBack} className='hover:bg-accent flex gap-1 items-center w-fit px-2 py-1 cursor-pointer border-gray-200  border rounded-sm '>
-          <ArrowLeft className='w-5 h-5' />
-          <span className='text-sm'>Back</span>
+      <div className='flex gap-10'>
+        <div onClick={routeBack} className='hover:bg-accent flex items-center w-fit pl-1 pr-2 py-0 cursor-pointer border-secondary border rounded-sm '>
+          <ChevronLeft className='w-5 h-5' />
+          <span className='text-xs'>Back</span>
         </div>
         <h4 className='py-2 font-semibold uppercase'>{title}</h4>
       </div>

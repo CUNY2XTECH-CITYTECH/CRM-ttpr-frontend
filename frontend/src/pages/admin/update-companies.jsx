@@ -4,6 +4,7 @@ import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessa
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
+import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { validateCompaniesForm } from '@/lib/validations';
 import {
@@ -14,8 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
 const UpdateCompanies= () => {
-  const [view, setView] = useState('row')
+  // const [view, setView] = useState('row')
   const companiesForm = useForm({
     resolver: yupResolver(validateCompaniesForm),
     defaultValues: {
@@ -27,29 +29,27 @@ const UpdateCompanies= () => {
       zipcode: ''
     }
   })
-  const onSubmit = () => {
-
+  const onSubmit = (values) => {
+   console.log('v',values)
   }
   return (
     <Layout>
-      <Topbar view={view} setView={setView} title="Google Company" mode="create" />
+      <Topbar title={"Google"} mode="create" />
       <div className='w-[80%] m-auto py-4'>
         <Form {...companiesForm}>
-          <form onSubmit={companiesForm.handleSubmit(onSubmit)} className='space-y-6'>
+          <form onSubmit={companiesForm.handleSubmit(onSubmit)} className='grid space-y-8'>
+            <Button type="submit" className={"ml-auto"}>Save</Button>
             <div className='grid grid-cols-2 gap-2'>
               <FormField
                 control={companiesForm.control}
                 name="name"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={'relative'}>
                     <FormLabel>Company Name</FormLabel>
                     <FormControl>
                       <Input placeholder="Company Name" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is Company&apos;s name
-                    </FormDescription>
-                    <FormMessage />
+                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
                   </FormItem>
                 )}
               >
@@ -63,10 +63,7 @@ const UpdateCompanies= () => {
                     <FormControl>
                       <Input placeholder="Company Email" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is Company&apos;s Email
-                    </FormDescription>
-                    <FormMessage />
+                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
                   </FormItem>
                 )}
               >
@@ -82,10 +79,7 @@ const UpdateCompanies= () => {
                     <FormControl>
                       <Textarea placeholder="Company Mission" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is Company&apos;s Mission
-                    </FormDescription>
-                    <FormMessage />
+                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
                   </FormItem>
                 )}
               >
@@ -110,9 +104,8 @@ const UpdateCompanies= () => {
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormDescription>
-                      This is Company&apos;s Industry</FormDescription>
-                    <FormMessage />
+
+                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
                   </FormItem>
                 )}
               >
@@ -128,10 +121,7 @@ const UpdateCompanies= () => {
                     <FormControl>
                       <Input placeholder="https://www.example.com" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is Company&apos;s Website URL
-                    </FormDescription>
-                    <FormMessage />
+                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
                   </FormItem>
                 )}
               >
@@ -154,7 +144,7 @@ const UpdateCompanies= () => {
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
                   </FormItem>
                 )}
               >
@@ -168,21 +158,21 @@ const UpdateCompanies= () => {
                     <FormControl>
                       <Input placeholder="xxx street" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
                   </FormItem>
                 )}
               >
               </FormField>
               <FormField
                 control={companiesForm.control}
-                name="zip"
+                name="zipcode"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Zipcode</FormLabel>
                     <FormControl>
                       <Input placeholder="xxxxxx-xxxx" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
                   </FormItem>
                 )}
               >
