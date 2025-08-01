@@ -17,3 +17,16 @@ export const validateDepartmentForm = yup.object().shape({
   name: yup.string().min(3).required(),
   room: yup.string().min(3).required()
 })
+
+
+export const validateInternshipForm = yup.object().shape({
+  // email, position, industry,website,city, zipcode, street
+  name: yup.string().required(),
+  position: yup.string().required(),
+  salary: yup.string().max(200),
+  requirements: yup.string().required(),
+  responsibility: yup.string().required().max(500),
+  details: yup.string().required(),
+  applicationDeadline: yup.string().required(),
+  tags: yup.string().required()
+})

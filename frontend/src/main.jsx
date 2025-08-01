@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import LoginPage from './pages/students/signIn'
+import InternshipForm from './pages/admin/internshipForm.jsx'
 import AdminLogin from './pages/admin/signIn'
 import AdminRegister from './pages/admin/register'
 import StudentRegister from './pages/students/register'
@@ -21,13 +22,13 @@ createRoot(document.getElementById('root')).render(
         <Route path="/admin-signIn" element={<AdminLogin />}/>
         <Route path="/admin-register" element={<AdminRegister />}/>
         <Route path="/student-register" element={<StudentRegister />}/>
-        <Route path="/signIn" element={<LoginPage />} />
+        <Route path="/signIn" element={<LoginPage />}  />
         <Route path='/admin/create-companies' element={<CreateCompanies />} />
         <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
         <Route path='/admin/create-departments' element={<CreateDepartments/>} />
         <Route path='/admin/update-departments' element={<UpdateDepartments/>} />
         <Route path='/students/onboarding' element={<StudentOnboarding/>} />
-      // add your pages here
+        <Route path="/internshipForm" element={<InternshipForm />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
