@@ -2,9 +2,8 @@ import { name } from 'ejs'
 import * as yup from 'yup'
 const websiteRegex = '^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(:[0-9]{1,5})?(\/[^\s]*)?$'
 const zipRegex = '^\d{5}(-\d{4})?$'
-const passwordRegex = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
 const phoneRegex = '^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}$'
-
+const passwordRegex = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).*$'
 export const validateCompaniesForm = yup.object().shape({
   // email, mission, industry,website,city, zipcode, street
   name: yup.string().min(3).required(),
@@ -36,7 +35,7 @@ export const validateInternshipForm = yup.object().shape({
 export const validateRegisterationForm = yup.object().shape({
   name: yup.string().required(),
   email: yup.string().email().required(),
-  password:yup.string().matches(passwordRegex,"Password must be \nat least 8 characters long\ninclude an uppercase letter,\n a lowercase letter,\n a number, \na special character '@, $, !, %, *, ?, &'").required(),
+  password:yup.string().matches(passwordRegex,"Password must be 8 characters long with a digit, a lowercase, an uppercase and a special character").min(8).required(), 
   empId:yup.string().matches().required(),
-  role:yup.string(),
+  role:yup.string().required(),
 })

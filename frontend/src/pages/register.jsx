@@ -5,25 +5,39 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Users, Briefcase } from "lucide-react"
-import {useForm} from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import {validateRegisterationForm} from '@/lib/validations'
+import { validateRegisterationForm } from '@/lib/validations'
 import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessage, Form } from '@/components/ui/form';
 
 export default function Register() {
   const registerForm = useForm({
-   resolver:yupResolver(validateRegisterationForm),
-    defaultValues:{
-    name: "",
-    email: "",
-    password: "",
-    empId:"",
-    role: "",
+    resolver: yupResolver(validateRegisterationForm),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      empId: "",
+      role: "",
 
     }
   })
-  const onSubmit= (e) => {
-    console.log(e)
+  const onSubmit = async (e) => {
+    console.log("hello", e)
+    if (e) {
+      await fetch('http://localhost:8080/api/user/create',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        },
+        e).then(res => console.log(res)).then(err => console.log(err))
+    }
+  }
+  const onError = (e) => {
+
+    console.log("error", e)
   }
 
   return (
@@ -38,8 +52,8 @@ export default function Register() {
         </CardHeader>
         <CardContent>
 
-         <Form {...registerForm}>
-          <form onSubmit={registerForm.handleSubmit(onSubmit)} className='grid space-y-6'>
+          <Form {...registerForm}>
+            <form onSubmit={registerForm.handleSubmit(onSubmit, onError)} className='grid space-y-6'>
               <FormField
                 control={registerForm.control}
                 name="name"
@@ -47,9 +61,9 @@ export default function Register() {
                   <FormItem className={'relative'}>
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                      <Input  placeholder="Enter your full name" {...field} />
+                      <Input placeholder="Enter your full name" {...field} />
                     </FormControl>
-                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
+                    <FormMessage className={' text-xs py-0  text-start'} />
                   </FormItem>
                 )}
               >
@@ -61,28 +75,28 @@ export default function Register() {
                   <FormItem className={'relative'}>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input  placeholder="Enter your email" {...field} />
+                      <Input placeholder="Enter your email" {...field} />
                     </FormControl>
-                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
+                    <FormMessage className={' text-xs py-0   text-start  '} />
                   </FormItem>
                 )}
               >
-               <FormField
+              </FormField>
+              <FormField
                 control={registerForm.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem className={'relative'}>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input  placeholder="Enter your password" {...field} />
+                      <Input placeholder="Enter your password" {...field} />
                     </FormControl>
-                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
+                    <FormMessage className={' text-xs py-0  text-start'} />
                   </FormItem>
                 )}
               >
               </FormField>
 
-             </FormField>
               <FormField
                 control={registerForm.control}
                 name="empId"
@@ -90,9 +104,9 @@ export default function Register() {
                   <FormItem className={'relative'}>
                     <FormLabel>EmpID</FormLabel>
                     <FormControl>
-                      <Input  placeholder="Enter your EmpID or Student ID" {...field} />
+                      <Input placeholder="Enter your EmpID or Student ID" {...field} />
                     </FormControl>
-                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
+                    <FormMessage className={' text-xs py-0   text-start    '} />
                   </FormItem>
                 )}
               >
@@ -104,9 +118,9 @@ export default function Register() {
                   <FormItem className={'relative'}>
                     <FormLabel>Choose Role</FormLabel>
                     <FormControl>
-                      <Select>
+                      <Select onValueChange={field.onChange}>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="User Role" {...field}/>
+                          <SelectValue placeholder="User Role" {...field} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="student" >Student</SelectItem>
@@ -115,17 +129,17 @@ export default function Register() {
                       </Select>
                     </FormControl>
 
-                    <FormMessage className={'text-xs absolute -bottom-5 left-0'} />
+                    <FormMessage className={' text-xs py-0 mr-auto  text-start'} />
                   </FormItem>
                 )}
               >
               </FormField>
 
-           <Button type="submit" className="w-full cursor-pointer">
-              Register Account
-            </Button>
-          </form>
-    </Form>
+              <Button type="submit" className="w-full cursor-pointer">
+                Register Account
+              </Button>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>
