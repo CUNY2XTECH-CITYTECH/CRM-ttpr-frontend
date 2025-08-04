@@ -10,6 +10,8 @@ import AdminRegister from './pages/admin/register'
 import StudentRegister from './pages/students/register'
 import CreateCompanies from './pages/admin/create-companies'
 import UpdateCompanies from './pages/admin/update-companies'
+import StudentProfileUpdate from './pages/students/profile'
+import AdminProfileUpdate from './pages/admin/profile'
 import StudentOnboarding from './pages/students/studentOnboarding'
 import CreateDepartments from './pages/admin/create-departments'
 import UpdateDepartments from './pages/admin/update-departments'
@@ -27,6 +29,9 @@ createRoot(document.getElementById('root')).render(
         <Route path="/student-register" element={<StudentRegister />}/>
         <Route path='/admin/create-companies' element={<CreateCompanies />} />
         <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
+        <Route path='/students/profile' element={<StudentProfileUpdate/>}/>
+        <Route path='/admin/profile' element ={<AdminProfileUpdate/>}/>
+      // add your pages here
         <Route path="/internshipForm" element={<InternshipForm />} />
         <Route path="/adminHome" element={<AdminHome/>} />
         <Route path="studentHome" element={<StudentHome />} />
