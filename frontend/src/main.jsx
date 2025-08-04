@@ -27,9 +27,9 @@ createRoot(document.getElementById('root')).render(
         <Route path="/student-register" element={<StudentRegister />}/>
         <Route path='/admin/create-companies' element={<CreateCompanies />} />
         <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
-        <Route path="/internshipForm" element={<InternshipForm />} />
-        <Route path="/adminHome" element={<AdminHome/>} />
-        <Route path="studentHome" element={<StudentHome />} />
+        <Route path="/admin/create-internships" element={<InternshipForm />} />
+        <Route path="/admin/" element={<AdminHome/>} />
+        <Route path="/student/" element={<StudentHome />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
