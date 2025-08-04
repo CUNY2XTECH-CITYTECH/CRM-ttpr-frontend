@@ -61,28 +61,14 @@ export default function AdminRegister() {
                 required
               />
             </div>
-
             <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Phone Number</Label>
+              <Label htmlFor="id">EmpId</Label>
               <Input
-                id="phoneNumber"
-                name="phoneNumber"
-                type="tel"
-                placeholder="Enter your phone number"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="department">Department</Label>
-              <Input
-                id="department"
-                name="department"
+                id="id"
+                name="id"
                 type="text"
-                placeholder="Enter your department"
-                value={formData.department}
+                placeholder="Enter your EmpId"
+                value={formData.email}
                 onChange={handleChange}
                 required
               />
@@ -90,27 +76,21 @@ export default function AdminRegister() {
 
             <div className="space-y-2">
               <Label htmlFor="role">Role</Label>
-              <Select value={formData.role} onValueChange={(value) => setFormData(prev => ({...prev, role: value}))}>
+              <Select value={formData.role} onValueChange={(value) => setFormData(prev => ({ ...prev, role: value }))}>
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Select Role" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="lecturer">
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4" />
-                      Lecturer
+                      Student
                     </div>
                   </SelectItem>
                   <SelectItem value="coordinator">
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4" />
-                      Coordinator
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="admin">
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4" />
-                      Administrator
+                      Staff
                     </div>
                   </SelectItem>
                 </SelectContent>

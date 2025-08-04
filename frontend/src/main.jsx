@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<App />} />
         <Route path="/signIn" element={<LoginPage />}/>
         <Route path="/admin-signIn" element={<AdminLogin />}/>
-        <Route path="/admin-register" element={<AdminRegister />}/>
+        <Route path="/register" element={<AdminRegister />}/>
         <Route path="/student-register" element={<StudentRegister />}/>
         <Route path="/signIn" element={<LoginPage />} />
         <Route path='/admin/create-companies' element={<CreateCompanies />} />
