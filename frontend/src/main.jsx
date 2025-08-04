@@ -6,8 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router'
 import LoginPage from './pages/students/signIn'
 import InternshipForm from './pages/admin/internshipForm.jsx'
 import AdminLogin from './pages/admin/signIn'
-import AdminRegister from './pages/admin/register'
-import StudentRegister from './pages/students/register'
+import Register from './pages/register'
 import CreateCompanies from './pages/admin/create-companies'
 import UpdateCompanies from './pages/admin/update-companies'
 import StudentOnboarding from './pages/students/studentOnboarding'
@@ -23,8 +22,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<App />} />
         <Route path="/signIn" element={<LoginPage />}/>
         <Route path="/admin-signIn" element={<AdminLogin />}/>
-        <Route path="/register" element={<AdminRegister />}/>
-        <Route path="/student-register" element={<StudentRegister />}/>
+        <Route path="/register" element={<Register/>}/>
         <Route path='/admin/create-companies' element={<CreateCompanies />} />
         <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
         <Route path="/internshipForm" element={<InternshipForm />} />
