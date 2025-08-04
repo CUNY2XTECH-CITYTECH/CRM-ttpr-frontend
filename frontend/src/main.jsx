@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import LoginPage from './pages/students/signIn'
+import InternshipForm from './pages/admin/internshipForm.jsx'
 import AdminLogin from './pages/admin/signIn'
 import AdminRegister from './pages/admin/register'
 import StudentRegister from './pages/students/register'
@@ -12,6 +13,9 @@ import UpdateCompanies from './pages/admin/update-companies'
 import StudentOnboarding from './pages/students/studentOnboarding'
 import CreateDepartments from './pages/admin/create-departments'
 import UpdateDepartments from './pages/admin/update-departments'
+import AdminHome from './pages/admin/home'
+import StudentHome from './pages/students/home'
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
@@ -21,13 +25,11 @@ createRoot(document.getElementById('root')).render(
         <Route path="/admin-signIn" element={<AdminLogin />}/>
         <Route path="/register" element={<AdminRegister />}/>
         <Route path="/student-register" element={<StudentRegister />}/>
-        <Route path="/signIn" element={<LoginPage />} />
         <Route path='/admin/create-companies' element={<CreateCompanies />} />
         <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
-        <Route path='/admin/create-departments' element={<CreateDepartments/>} />
-        <Route path='/admin/update-departments' element={<UpdateDepartments/>} />
-        <Route path='/students/onboarding' element={<StudentOnboarding/>} />
-      // add your pages here
+        <Route path="/internshipForm" element={<InternshipForm />} />
+        <Route path="/adminHome" element={<AdminHome/>} />
+        <Route path="studentHome" element={<StudentHome />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
