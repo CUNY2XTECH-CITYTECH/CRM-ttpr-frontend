@@ -25,10 +25,11 @@ createRoot(document.getElementById('root')).render(
         <Route path="/admin-signIn" element={<AdminLogin />}/>
         <Route path="/admin-register" element={<AdminRegister />}/>
         <Route path="/student-register" element={<StudentRegister />}/>
-        <Route path="/signIn" element={<LoginPage />}  />
         <Route path='/admin/create-companies' element={<CreateCompanies />} />
         <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
         <Route path="/internshipForm" element={<InternshipForm />} />
+        <Route path="/adminHome" element={<AdminHome/>} />
+        <Route path="studentHome" element={<StudentHome />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
