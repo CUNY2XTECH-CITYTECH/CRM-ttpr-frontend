@@ -13,6 +13,7 @@ import UpdateCompanies from './pages/admin/update-companies'
 import StudentOnboarding from './pages/students/studentOnboarding'
 import CreateDepartments from './pages/admin/create-departments'
 import UpdateDepartments from './pages/admin/update-departments'
+import Appointment from './pages/admin/appointment'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
@@ -29,6 +30,7 @@ createRoot(document.getElementById('root')).render(
         <Route path='/admin/update-departments' element={<UpdateDepartments/>} />
         <Route path='/students/onboarding' element={<StudentOnboarding/>} />
         <Route path="/internshipForm" element={<InternshipForm />} />
+        <Route path='/admin/appointment' element={<Appointment />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
