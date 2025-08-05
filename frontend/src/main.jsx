@@ -15,6 +15,7 @@ import CreateDepartments from './pages/admin/create-departments'
 import UpdateDepartments from './pages/admin/update-departments'
 import AdminHome from './pages/admin/home'
 import StudentHome from './pages/students/home'
+import StudentForm from './pages/students/jobapp'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -29,7 +30,8 @@ createRoot(document.getElementById('root')).render(
         <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
         <Route path="/internshipForm" element={<InternshipForm />} />
         <Route path="/adminHome" element={<AdminHome/>} />
-        <Route path="studentHome" element={<StudentHome />} />
+        <Route path="/studentHome" element={<StudentHome />} />
+        <Route path="/studentForm" element={<StudentForm />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
