@@ -36,6 +36,6 @@ export const validateRegisterationForm = yup.object().shape({
   name: yup.string().required(),
   email: yup.string().email().required(),
   password:yup.string().matches(passwordRegex,"Password must be 8 characters long with a digit, a lowercase, an uppercase and a special character").min(8).required(), 
-  empId:yup.string().matches().required(),
+  id:yup.string().matches().required(),
   role:yup.string().required(),
 })

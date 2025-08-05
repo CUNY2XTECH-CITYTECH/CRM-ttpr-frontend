@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { validateRegisterationForm } from '@/lib/validations'
 import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessage, Form } from '@/components/ui/form';
+import { createData } from "@/utils/http-methods"
 
 export default function Register() {
   const registerForm = useForm({
@@ -17,7 +18,7 @@ export default function Register() {
       name: "",
       email: "",
       password: "",
-      empId: "",
+      id: "",
       role: "",
 
     }
@@ -25,14 +26,8 @@ export default function Register() {
   const onSubmit = async (e) => {
     console.log("hello", e)
     if (e) {
-      await fetch('http://localhost:8080/api/user/create',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        },
-        e).then(res => console.log(res)).then(err => console.log(err))
+      let res = await createData('user/create', e)
+      console.log(res, 'try')
     }
   }
   const onError = (e) => {
@@ -99,7 +94,7 @@ export default function Register() {
 
               <FormField
                 control={registerForm.control}
-                name="empId"
+                name="id"
                 render={({ field }) => (
                   <FormItem className={'relative'}>
                     <FormLabel>EmpID</FormLabel>
