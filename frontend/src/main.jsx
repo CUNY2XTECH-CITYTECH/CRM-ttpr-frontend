@@ -14,9 +14,9 @@ import AdminProfileUpdate from './pages/admin/profile'
 import StudentOnboarding from './pages/students/studentOnboarding'
 import CreateDepartments from './pages/admin/create-departments'
 import UpdateDepartments from './pages/admin/update-departments'
+import Appointment from './pages/admin/appointment'
 import AdminHome from './pages/admin/home'
 import StudentHome from './pages/students/home'
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
@@ -31,6 +31,7 @@ createRoot(document.getElementById('root')).render(
         <Route path='/admin/profile' element ={<AdminProfileUpdate/>}/>
       // add your pages here
         <Route path="/internshipForm" element={<InternshipForm />} />
+        <Route path='/admin/appointment' element={<Appointment />} />
         <Route path="/adminHome" element={<AdminHome/>} />
         <Route path="studentHome" element={<StudentHome />} />
       </Routes>
