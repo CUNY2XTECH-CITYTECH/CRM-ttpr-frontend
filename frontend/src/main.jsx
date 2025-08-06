@@ -19,17 +19,18 @@ import AdminHome from './pages/admin/home'
 import StudentHome from './pages/students/home'
 import StudentForm from './pages/students/jobapp'
 
+import MultiStepForm from './pages/students/multistep-form'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<AdminHome/>} />
         <Route path="/signIn" element={<LoginPage />}/>
         <Route path="/admin-signIn" element={<AdminLogin />}/>
         <Route path="/register" element={<Register/>}/>
         <Route path='/admin/create-companies' element={<CreateCompanies />} />
         <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
-        <Route path='/students/profile' element={<StudentProfileUpdate/>}/>
+        <Route path='/student/profile' element={<StudentProfileUpdate/>}/>
         <Route path='/admin/profile' element ={<AdminProfileUpdate/>}/>
       // add your pages here
         <Route path="/internshipForm" element={<InternshipForm />} />
@@ -37,6 +38,12 @@ createRoot(document.getElementById('root')).render(
         <Route path="/adminHome" element={<AdminHome/>} />
         <Route path="/studentHome" element={<StudentHome />} />
         <Route path="/studentForm" element={<StudentForm />} />
+        <Route path="/admin/create-internships" element={<InternshipForm />} />
+        <Route path='/admin/create-appointments' element={<Appointment />} />
+        {/* <Route path="/admin" element={<AdminHome/>} /> */}
+        <Route path="/student" element={<StudentHome />} />
+        <Route path="/form" element={<MultiStepForm/>} />
+        <Route path="/onboard" element={<StudentOnboarding/>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
