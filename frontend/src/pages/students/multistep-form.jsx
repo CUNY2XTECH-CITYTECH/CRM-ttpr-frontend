@@ -77,7 +77,7 @@ export default function MultiStepForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="max-w-md mt-30 mx-auto p-6 bg-white rounded-lg shadow-sm">
       <motion.h2
         key={steps[currentStep].key}
         initial={{ opacity: 0, y: 20 }}
