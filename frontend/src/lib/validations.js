@@ -38,3 +38,9 @@ export const validateAppointmentForm = yup.object().shape({
   location: yup.string().required("Location is required"),
   attendees: yup.string().required("Attendees are required")
 })
+
+export const validateSkillsForm = yup.object().shape({
+  name: yup.string().required("Skill name is required").min(2, "Skill name must be at least 2 characters"),
+  description: yup.string(),
+  category: yup.string().required("Category is required")
+})

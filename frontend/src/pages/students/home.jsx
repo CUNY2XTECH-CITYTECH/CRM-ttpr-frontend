@@ -8,15 +8,9 @@ import { LayoutDashboard, GraduationCap, Users, Briefcase, Settings, FileText, H
 
 export default function AdminHome() {
   const navlinks = [
-    { name: "Dashboard", icon: <LayoutDashboard className="text-xl" /> },
-    { name: "Students", icon: <GraduationCap className="text-xl"/> },
-    { name: "Companies", icon: <Building className="text-xl" /> },
     { name: "Internships", icon: <Handshake className="text-xl"/> },
     { name: "Calendar", icon: <CalendarDays className="text-xl"/> },
-    { name: "Appointment", icon: <TableProperties className="text-xl" /> },
-    { name: "Document", icon: <FileText className="text-xl" /> },
     { name: "Techstacks", icon: <Server className="text-xl" /> },
-    { name: "Skills", icon: <ShieldUser className="text-xl" /> },
     { name: "Settings", icon: <Settings className="text-xl" /> },
   ]
   return (
@@ -24,7 +18,7 @@ export default function AdminHome() {
       <div className="text-black text-3xl font-bold mb-16 text-center">
         WELCOME "ADD BACKEND NAME"
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {navlinks.map((link) => (
           <div
             key={link.name}
