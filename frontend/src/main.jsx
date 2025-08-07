@@ -18,6 +18,7 @@ import Appointment from './pages/admin/appointment'
 import AdminHome from './pages/admin/home'
 import StudentHome from './pages/students/home'
 import StudentForm from './pages/students/jobapp'
+import JobBoard from './pages/students/jobboard'
 
 import MultiStepForm from './pages/students/multistep-form'
 createRoot(document.getElementById('root')).render(
@@ -44,6 +45,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/student" element={<StudentHome />} />
         <Route path="/form" element={<MultiStepForm/>} />
         <Route path="/onboard" element={<StudentOnboarding/>} />
+        <Route path="/jobApp" element={<StudentForm/>} />
+        <Route path="/viewboard" element={<JobBoard/>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

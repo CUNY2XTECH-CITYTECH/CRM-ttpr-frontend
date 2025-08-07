@@ -34,6 +34,7 @@ export default function StudentForm() {
   const onSubmit = (values) => {
     console.log("Submitted values:", values);
   };
+
   const internship = {
     title: "",
     locations: [],
@@ -54,9 +55,9 @@ export default function StudentForm() {
     <Layout>
       <Topbar title="Student Application Form" mode="form" />
       <div className="flex flex-col lg:flex-row w-[90%] m-auto py-4 gap-20">
-        <div className="lg:w-1/2 w-full bg-white ">
-          <h1 className="text-2xl font-bold mb-2">{internship.title || "Job Title Placeholder"}</h1>
-          <div className="text-sm text-gray-600 mb-4 space-y-1">
+        <div className="lg:w-1/2 w-full bg-white px-2">
+          <h1 className="text-xl md:text-2xl font-bold mb-2">{internship.title || "Job Title Placeholder"}</h1>
+          <div className="text-sm md:text-base text-gray-600 mb-4 space-y-1">
             <div>📍 {internship.locations.length > 0 ? internship.locations.join(" • ") : "Location TBD"}</div>
             <div>🕒 {internship.workType || "Work Type"} • {internship.employmentType || "Employment Type"}</div>
             <div>💰 {internship.salary || "Salary Range"} • Start: {internship.startDate || "Start Date"}</div>
@@ -68,7 +69,7 @@ export default function StudentForm() {
               alt="Company Logo"
               className="w-12 h-12 rounded-full bg-gray-200"
             />
-            <div className>
+            <div>
               <p className="font-semibold">{internship.company.name || "Company Name"}</p>
               <p className="text-sm text-gray-500">{internship.company.industry || "Industry"}</p>
             </div>
@@ -76,17 +77,18 @@ export default function StudentForm() {
 
           {internship.description.length > 0 ? (
             internship.description.map((para, idx) => (
-              <p key={idx} className="text-sm text-gray-800 mt-2 leading-relaxed">{para}</p>
+              <p key={idx} className="text-sm md:text-base text-gray-800 mt-2 leading-relaxed">{para}</p>
             ))
           ) : (
             <p className="text-sm text-gray-500 italic">Description</p>
           )}
         </div>
         <div className="hidden lg:block w-[1px] bg-gray-300" />
-        <div className="lg:w-1/2 w-full">
+        <div className="block lg:hidden h-[1px] bg-gray-300 my-6" />
+        <div className="lg:w-1/2 w-full px-2">
           <Form {...studentForm}>
             <form onSubmit={studentForm.handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={studentForm.control}
                   name="lastName"
@@ -114,7 +116,7 @@ export default function StudentForm() {
                   )}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={studentForm.control}
                   name="email"
@@ -142,7 +144,7 @@ export default function StudentForm() {
                   )}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={studentForm.control}
                   name="phoneNumber"
@@ -170,7 +172,7 @@ export default function StudentForm() {
                   )}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={studentForm.control}
                   name="DOB"
@@ -198,7 +200,7 @@ export default function StudentForm() {
                   )}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={studentForm.control}
                   name="studentId"
@@ -219,14 +221,14 @@ export default function StudentForm() {
                     <FormItem>
                       <FormLabel>Resume</FormLabel>
                       <FormControl>
-                        <Input type="file" {...field} />
+                        <Input type="file" className="truncate" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={studentForm.control}
                   name="LinkedIn"
@@ -254,21 +256,22 @@ export default function StudentForm() {
                   )}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-2"> 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> 
                 <FormField
-                control={studentForm.control}
-                name="skills"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Skills</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Skills (comma separated)" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  control={studentForm.control}
+                  name="skills"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Skills</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Skills (comma separated)" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
+
               <Button type="submit">Submit</Button>
             </form>
           </Form>

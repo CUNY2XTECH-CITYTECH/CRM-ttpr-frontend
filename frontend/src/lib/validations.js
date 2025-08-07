@@ -67,3 +67,14 @@ export const validateStudentForm = yup.object().shape({
   GitHub: yup.string().url("Invalid GitHub URL").optional(),
   skills: yup.string().optional()
 })
+
+
+export const validateViewBoard = yup.object().shape({
+position: yup.string().required("Position is required"),
+  company: yup.string().required("Company is required"),
+  location: yup.string().required("Location is required"),
+  salary: yup.string().optional(),
+  description: yup.string().max(500, "Description must be less than 500 characters").required("Description is required"),
+  requirements: yup.string().required("Requirements are required"),
+  applicationDeadline: yup.date().required("Application deadline is required").min(new Date(), "Deadline must be in the future")
+})
