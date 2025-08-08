@@ -32,15 +32,17 @@ export class BaseClient {
       body: JSON.stringify(body),
       ...options
     }
-    console.log(url, config, 'lol')
     try {
       const response = await fetch(url, config)
       if (!response.ok) {
-        let errorData = Error || null;
+        console.log(response, 'ressss')
+        let errorData = null;
+        errorData = await response.json()
         let errorMessage = errorData?.message || response.statusText || `Request failed with ${response.status}`
-        throw new HTTPClientError(
-          errorMessage, response.status
-        )
+        // return new HTTPClientError(
+        //   errorMessage, response.status, response.statusText, errorData?.toString()
+        // )
+        return { error: errorMessage, status: response.status }
       }
       const contentType = response.headers.get("content-type")
       if (contentType?.includes('application/json')) {
@@ -70,7 +72,7 @@ export class BaseClient {
           "Network error or CORS issue. Please check your connection or server configuration.",
           0, // Use 0 for network errors as there's no HTTP status
           "Network Error",
-          reason.toString(),
+          error?.toString(),
         );
       }
       // Catch any other unexpected errors
@@ -78,7 +80,7 @@ export class BaseClient {
         "An unexpected error occurred during the request.",
         -1, // Use -1 for unknown errors
         "Unknown Error",
-        reason?.toString(),
+        error?.toString(),
       );
     }
   }

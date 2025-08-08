@@ -1,7 +1,7 @@
 import Layout from '@/components/layout';
 import { Topbar } from '@/components/topbar';
 import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessage, Form } from '@/components/ui/form';
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import * as yup from 'yup'
@@ -16,7 +16,9 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/lib/authContext';
 const CreateCompanies = () => {
+  const {token,email} = useAuth()
   // const [view, setView] = useState('row')
   const companiesForm = useForm({
     resolver: yupResolver(validateCompaniesForm),
@@ -29,8 +31,13 @@ const CreateCompanies = () => {
       zipcode: ''
     }
   })
+  useEffect(() => {
+    console.log('token',token,email) 
+  }, [])
+  
   const onSubmit = (values) => {
    console.log('v',values)
+
   }
   return (
     <Layout>
