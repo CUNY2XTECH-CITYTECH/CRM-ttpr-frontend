@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button"
 import { Select } from '@radix-ui/react-select'
 import { useState } from 'react'
 import { LayoutDashboard, GraduationCap, Users, Briefcase, Settings, FileText, Handshake, CalendarDays, Building, Server, TableProperties, ShieldUser} from 'lucide-react'
+import { useAuth } from '@/lib/authContext'
 
 
 export default function AdminHome() {
+  const {token} = useAuth()
   const navlinks = [
     { name: "Dashboard", icon: <LayoutDashboard className="text-xl" /> },
     { name: "Students", icon: <GraduationCap className="text-xl"/> },
@@ -19,6 +21,7 @@ export default function AdminHome() {
     { name: "Skills", icon: <ShieldUser className="text-xl" /> },
     { name: "Settings", icon: <Settings className="text-xl" /> },
   ]
+  console.log(token)
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center px-6 py-12">
       <div className="text-black text-3xl font-bold mb-16 text-center">
