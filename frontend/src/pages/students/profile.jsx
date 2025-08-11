@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Layout from '@/components/layout';
 import { Topbar } from '@/components/topbar';
+import { Textarea } from '@/components/ui/textarea';
 
 const StudentProfileUpdate = ({ userId }) => {
   const [student, setStudent] = useState({
@@ -19,7 +20,8 @@ const StudentProfileUpdate = ({ userId }) => {
       ''
     ],
     achievements: [],
-    organizations: []
+    organizations: [],
+    experiences: []
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -63,6 +65,38 @@ const StudentProfileUpdate = ({ userId }) => {
     setStudent(prev => ({
       ...prev,
       socialLinks: newSocialLinks
+    }));
+  };
+
+  const handleAddExperience = () => {
+    const newExperience = {
+      id: Date.now(),
+      title: '',
+      company: '',
+      startDate: '',
+      endDate: '',
+      current: false,
+      description: ''
+    };
+    setStudent(prev => ({
+      ...prev,
+      experiences: [...prev.experiences, newExperience]
+    }));
+  };
+
+  const handleExperienceChange = (id, field, value) => {
+    setStudent(prev => ({
+      ...prev,
+      experiences: prev.experiences.map(exp => 
+        exp.id === id ? { ...exp, [field]: value } : exp
+      )
+    }));
+  };
+
+  const handleRemoveExperience = (id) => {
+    setStudent(prev => ({
+      ...prev,
+      experiences: prev.experiences.filter(exp => exp.id !== id)
     }));
   };
 
@@ -202,8 +236,128 @@ const StudentProfileUpdate = ({ userId }) => {
                 )}
               </div>
             </div>
-          </div>
+            <div className="bg-white rounded-lg shadow p-6 mt-6">
+              <h3 className="text-lg font-semibold mb-4">About Me</h3>
+              <Textarea
+                name="about"
+                type="text"
+                value={student.bio}
+                onChange={handleChange}
+                placeholder="Tell us about yourself..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows="4"
+              />
+            </div>
+            <div className="bg-white rounded-lg shadow p-6 mt-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Experience</h3>
+                <button
+                  type="button"
+                  onClick={handleAddExperience}
+                  className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm"
+                >
+                  + Add Experience
+                </button>
+              </div>
+              
+              {student.experiences.length > 0 ? (
+                <div className="space-y-4">
+                  {student.experiences.map((experience) => (
+                    <div key={experience.id} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+                            <input
+                              type="text"
+                              value={experience.title}
+                              onChange={(e) => handleExperienceChange(experience.id, 'title', e.target.value)}
+                              placeholder="e.g. Software Engineer Intern"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                            <input
+                              type="text"
+                              value={experience.company}
+                              onChange={(e) => handleExperienceChange(experience.id, 'company', e.target.value)}
+                              placeholder="e.g. Tech Corp"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveExperience(experience.id)}
+                          className="ml-3 text-red-500 hover:text-red-700"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                          <input
+                            type="month"
+                            value={experience.startDate}
+                            onChange={(e) => handleExperienceChange(experience.id, 'startDate', e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                          <input
+                            type="month"
+                            value={experience.endDate}
+                            onChange={(e) => handleExperienceChange(experience.id, 'endDate', e.target.value)}
+                            disabled={experience.current}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                          />
+                        </div>
+                        <div className="flex items-end">
+                          <label className="flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              checked={experience.current}
+                              onChange={(e) => {
+                                handleExperienceChange(experience.id, 'current', e.target.checked);
+                                if (e.target.checked) {
+                                  handleExperienceChange(experience.id, 'endDate', '');
+                                }
+                              }}
+                              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            />
+                            <span className="text-sm text-gray-700">Current Position</span>
+                          </label>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <Textarea
+                          value={experience.description}
+                          onChange={(e) => handleExperienceChange(experience.id, 'description', e.target.value)}
+                          placeholder="Describe your responsibilities and achievements..."
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          rows="3"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <p>No experiences added yet.</p>
+                  <p className="text-sm">Click "Add Experience" to get started.</p>
+                </div>
+              )}
+            </div>
         </div>
+      </div>
       </div>
     </Layout>
   );

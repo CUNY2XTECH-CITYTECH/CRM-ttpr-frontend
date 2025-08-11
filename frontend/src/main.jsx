@@ -11,18 +11,12 @@ import CreateCompanies from './pages/admin/create-companies'
 import UpdateCompanies from './pages/admin/update-companies'
 import StudentProfileUpdate from './pages/students/profile'
 import AdminProfileUpdate from './pages/admin/profile'
-import StudentProfileUpdate from './pages/students/profile'
-import AdminProfileUpdate from './pages/admin/profile'
 import StudentOnboarding from './pages/students/studentOnboarding'
-import CreateDepartments from './pages/admin/create-departments'
-import UpdateDepartments from './pages/admin/update-departments'
 import Appointment from './pages/admin/appointment'
 import AdminHome from './pages/admin/home'
-import StudentHome from './pages/students/home'
 import MultiStepForm from './pages/students/multistep-form'
-import AdminHome from './pages/admin/home'
 import StudentHome from './pages/students/home'
-import Skills from './pages/admin/skills'
+import Skills from './pages/admin/skills' 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -42,6 +36,7 @@ createRoot(document.getElementById('root')).render(
         {/* <Route path="/admin" element={<AdminHome/>} /> */}
         <Route path="/student" element={<StudentHome />} />
         <Route path="/form" element={<MultiStepForm/>} />
+        <Route path="/admin/skills" element={<Skills />} />
         <Route path="/onboard" element={<StudentOnboarding/>} />
       </Routes>
     </BrowserRouter>
