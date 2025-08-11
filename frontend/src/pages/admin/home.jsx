@@ -5,9 +5,10 @@ import { Select } from '@radix-ui/react-select'
 import { useState } from 'react'
 import { LayoutDashboard, GraduationCap, Users, Briefcase, Settings, FileText, Handshake, CalendarDays, Building, Server, TableProperties, ShieldUser} from 'lucide-react'
 import { href } from 'react-router'
-
+import { useAuth } from '@/lib/authContext'
 
 export default function AdminHome() {
+  const {token} = useAuth()
   const navlinks = [
       { name: "Dashboard", icon: <LayoutDashboard className="text-xl" />, path: "/admin/dashboard" },
       { name: "Students", icon: <GraduationCap className="text-xl" />, path: "/admin/view-students" },

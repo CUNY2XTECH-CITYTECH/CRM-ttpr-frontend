@@ -1,18 +1,18 @@
 import { HTTPClientError, BaseClient } from "./server";
 
-export async function createData(endpoint, data) {
+export async function createData(endpoint, data,option) {
   let client = new BaseClient()
-  return client.post(endpoint, data)
+  return client.post(endpoint, data,option)
 }
-export async function getData(endpoint, data) {
+export async function getData(endpoint, data,option) {
   let client = new BaseClient()
-  return client.get(endpoint, data)
+  return client.get(endpoint, data,option)
 }
-export async function updateData(endpoint, data) {
+export async function updateData(endpoint, data,option) {
   let client = new BaseClient()
-  return client.put(endpoint, data)
+  return client.put(endpoint, data,option)
 }
-export async function deleteData(endpoint, data) {
+export async function deleteData(endpoint, data,option) {
   let client = new BaseClient()
-  return client.delete(endpoint, data)
+  return client.delete(endpoint, data,option)
 }
