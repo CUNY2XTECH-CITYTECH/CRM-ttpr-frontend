@@ -45,7 +45,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/student" element={<StudentHome />} />
         <Route path="/form" element={<MultiStepForm/>} />
         <Route path="/onboard" element={<StudentOnboarding/>} />
-        <Route path="/jobApp" element={<StudentForm/>} />
+        <Route path="/jobApp/:id" element={<StudentForm />} />
         <Route path="/viewboard" element={<JobBoard/>} />
       </Routes>
     </BrowserRouter>
