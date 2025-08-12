@@ -19,6 +19,8 @@ import Waiting from './pages/admin/waiting'
 import InfoPage from './pages/info-page'
 import { Toaster } from "react-hot-toast";
 import { useAuth } from "./lib/authContext.jsx";
+import ViewBoard from "./pages/students/jobboard";
+import StudentForm from "./pages/students/jobapp";
 function App() {
   return (
     <>
@@ -41,6 +43,9 @@ function App() {
         <Route path="/account-exists" element={<InfoPage/>}/>
         <Route path="/form" element={<MultiStepForm/>} />
         <Route path="/onboard" element={<StudentOnboarding/>} />
+        <Route path="/viewBoard" element={<ViewBoard/>} />
+        <Route path="/studentForm/:id" element={<StudentForm/>} />
+    
       </Routes>
         <Toaster/>
     </BrowserRouter>
