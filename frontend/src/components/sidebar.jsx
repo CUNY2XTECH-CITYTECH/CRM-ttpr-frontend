@@ -193,7 +193,7 @@ export function AppSidebar({ role }) {
                           <CollapsibleContent>
                             <SidebarMenuSub className={'mx-2'}>
                               {item.childLinks.map(cl =>
-                                <SidebarMenuSubItem className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
+                                <SidebarMenuSubItem key={cl.url} className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
                                   <a className="flex gap-1" href={cl.url}>
                                     <span>{cl.title}</span>
                                   </a>
@@ -236,7 +236,7 @@ export function AppSidebar({ role }) {
                           <CollapsibleContent>
                             <SidebarMenuSub className={'mx-2'}>
                               {item.childLinks.map(cl =>
-                                <SidebarMenuSubItem className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
+                                <SidebarMenuSubItem key={cl.url} className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
                                   <a className="flex gap-1" href={cl.url}>
                                     <span>{cl.title}</span>
                                   </a>

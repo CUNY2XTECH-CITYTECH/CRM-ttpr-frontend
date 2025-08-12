@@ -6,26 +6,30 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { LayoutDashboard, GraduationCap, Users, Briefcase, Settings, FileText, Handshake, CalendarDays, Building, Server, TableProperties, ShieldUser } from 'lucide-react'
 import { href } from 'react-router'
+import { useAuth } from '@/lib/dataContext'
 
 export default function AdminHome() {
-  const { token, currentUser} = useAuth()
+  const { token, currentUser } = useAuth()
   const navigate = useNavigate()
 
   const navlinks = [
-    { name: "Dashboard", icon: <LayoutDashboard className="text-xl" /> },
-    { name: "Students", icon: <GraduationCap className="text-xl" /> },
-    { name: "Companies", icon: <Building className="text-xl" /> },
-    { name: "Internships", icon: <Handshake className="text-xl" /> },
-    { name: "Calendar", icon: <CalendarDays className="text-xl" /> },
-    { name: "Appointment", icon: <TableProperties className="text-xl" /> },
-    { name: "Document", icon: <FileText className="text-xl" /> },
-    { name: "Techstacks", icon: <Server className="text-xl" /> },
-    { name: "Skills", icon: <ShieldUser className="text-xl" /> },
-    { name: "Settings", icon: <Settings className="text-xl" /> },
-  ]
-  useEffect(() => {
+    { name: "Dashboard", icon: <LayoutDashboard className="text-xl" />, path: "/admin/dashboard" },
+    { name: "Students", icon: <GraduationCap className="text-xl" />, path: "/admin/view-students" },
+    { name: "Companies", icon: <Building className="text-xl" />, path: "/admin/view-companies" },
+    { name: "Internships", icon: <Handshake className="text-xl" />, path: "/admin/view-internships" },
+    { name: "Calendar", icon: <CalendarDays className="text-xl" />, path: "/admin/calendar" },
+    { name: "Appointment", icon: <TableProperties className="text-xl" />, path: "/admin/view-appointments" },
+    { name: "Document", icon: <FileText className="text-xl" />, path: "/admin/view-documents" },
+    { name: "Techstacks", icon: <Server className="text-xl" />, path: "/admin/view-techstacks" },
+    { name: "Skills", icon: <ShieldUser className="text-xl" />, path: "/admin/view-skills" },
+    { name: "Settings", icon: <Settings className="text-xl" />, path: "/admin/profile" },
 
-    if (user !== 'admin') {
+
+  ];
+
+  useEffect(() => {
+   console.log(currentUser,'cu')
+    if (currentUser && currentUser.role !== 'admin') {
       navigate('/not-authorized')
     }
   }, [token])

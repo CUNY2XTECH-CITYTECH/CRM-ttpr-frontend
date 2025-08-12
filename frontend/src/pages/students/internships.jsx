@@ -5,7 +5,6 @@ import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/dataContext";
 
-
 export default function ViewInternships() {
   const navigate = useNavigate(); // ✅
 
@@ -20,7 +19,8 @@ export default function ViewInternships() {
       salary: "$4,500/month",
       posted: "2 days ago",
       logo: "",
-      description: "Join our team to work on cutting-edge web applications using React and Node.js.",
+      description:
+        "Join our team to work on cutting-edge web applications using React and Node.js.",
     },
     {
       _id: "2",
@@ -31,7 +31,8 @@ export default function ViewInternships() {
       salary: "$3,800/month",
       posted: "1 day ago",
       logo: "",
-      description: "Collaborate with designers and backend engineers to build engaging UIs with React.",
+      description:
+        "Collaborate with designers and backend engineers to build engaging UIs with React.",
     },
     {
       _id: "3",
@@ -42,7 +43,8 @@ export default function ViewInternships() {
       salary: "$4,000/month",
       posted: "3 days ago",
       logo: "",
-      description: "Assist in defining product features and roadmap, and conduct market research.",
+      description:
+        "Assist in defining product features and roadmap, and conduct market research.",
     },
     {
       _id: "4",
@@ -53,7 +55,8 @@ export default function ViewInternships() {
       salary: "$4,200/month",
       posted: "Today",
       logo: "",
-      description: "Analyze datasets to generate insights and help drive data-informed decisions.",
+      description:
+        "Analyze datasets to generate insights and help drive data-informed decisions.",
     },
     {
       _id: "5",
@@ -64,7 +67,8 @@ export default function ViewInternships() {
       salary: "$3,600/month",
       posted: "5 days ago",
       logo: "",
-      description: "Create beautiful and user-friendly interface designs and wireframes.",
+      description:
+        "Create beautiful and user-friendly interface designs and wireframes.",
     },
     {
       _id: "6",
@@ -75,56 +79,63 @@ export default function ViewInternships() {
       salary: "$4,100/month",
       posted: "2 days ago",
       logo: "",
-      description: "Work with cloud infrastructure, CI/CD pipelines, and monitoring systems.",
-    }
-
-
+      description:
+        "Work with cloud infrastructure, CI/CD pipelines, and monitoring systems.",
+    },
   ]);
 
-
   const [loading, setLoading] = useState(true);
-  const {token,currentUser} = useAuth()
+  const { token, currentUser } = useAuth();
 
   useEffect(() => {
-   console.log(currentUser,'cu')
+    console.log(currentUser, "cu");
     fetch("http://localhost:5000/api/jobs")
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setInternships(data);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Error loading jobs:", err);
         setLoading(false);
       });
   }, [token]);
 
   const removeInternship = (id) => {
-    setInternships(prev => prev.filter(job => job._id !== id));
+    setInternships((prev) => prev.filter((job) => job._id !== id));
   };
 
   return (
     <>
-      {currentUser ?
-        <Layout role={currentUser.role}>
+      {currentUser ? (
+        <Layout user={currentUser}>
           <Topbar title="Recent Internships for you" />
           <div className="max-w-3xl mx-auto mt-8 p-6 bg-gray-100 rounded-lg shadow-sm space-y-6">
             {loading ? (
               <p>Loading internships...</p>
             ) : internships.length === 0 ? (
-              <p className="text-center text-gray-500 italic">No internships available.</p>
+              <p className="text-center text-gray-500 italic">
+                No internships available.
+              </p>
             ) : (
               internships.map((job) => (
                 <div
                   key={job._id}
-                  onClick={() => navigate(`/internships/apply/${job._id}`, { state: { job } })} // ✅ Navigates with ID param
+                  onClick={() =>
+                    navigate(`/internships/apply/${job._id}`, {
+                      state: { job },
+                    })
+                  } // ✅ Navigates with ID param
                   className="flex items-start gap-4 border-b pb-4 relative cursor-pointer hover:bg-gray-100 p-2 rounded"
                 >
                   <div className="w-14 h-14 bg-gray-300 rounded" />
                   <div className="flex-1">
-                    <p className="font-semibold text-sm md:text-base">{job.title}</p>
+                    <p className="font-semibold text-sm md:text-base">
+                      {job.title}
+                    </p>
                     <p className="text-sm text-gray-600">
-                      {job.company}. {job.location}. ({job.arrangement}). {job.salary}
+                      {job.company}. {job.location}. ({job.arrangement}).{" "}
+                      {job.salary}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">{job.posted}</p>
                   </div>
@@ -142,8 +153,9 @@ export default function ViewInternships() {
             )}
           </div>
         </Layout>
-        : <div></div>
-      }
+      ) : (
+        <div></div>
+      )}
     </>
   );
 }

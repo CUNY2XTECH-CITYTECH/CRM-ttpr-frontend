@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from 'react-router'
 import LoginPage from './pages/login'
-import InternshipForm from './pages/admin/internshipForm.jsx'
 import Register from './pages/register'
 import CreateCompanies from './pages/admin/create-companies'
 import UpdateCompanies from './pages/admin/update-companies'
@@ -20,6 +19,8 @@ import InfoPage from './pages/info-page'
 import { Toaster } from "react-hot-toast";
 import JobApplication from "./pages/students/job-application";
 import ViewInternships from "./pages/students/internships";
+import ViewCompanies from "./pages/admin/view-companies";
+import CreateInternships from "./pages/admin/create-internships";
 function App() {
   return (
     <>
@@ -31,8 +32,10 @@ function App() {
           <Route path='/admin/create-companies' element={<CreateCompanies />} />
           <Route path='/admin/update-companies' element={<UpdateCompanies />} />
           <Route path='/admin/profile' element={<AdminProfileUpdate />} />
-          <Route path="/admin/create-internships" element={<InternshipForm />} />
+          <Route path="/admin/create-internships" element={<CreateInternships/>} />
           <Route path='/admin/create-appointments' element={<Appointment />} />
+
+          <Route path='/admin/view-companies' element={<ViewCompanies/>} />
           <Route path="/admin/waiting" element={<Waiting />} />
           {/* <Route path="/admin" element={<AdminHome/>} /> */}
           <Route path="/" element={<StudentHome />} />
