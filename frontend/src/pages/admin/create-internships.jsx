@@ -46,6 +46,10 @@ export default function CreateInternships() {
     if (currentUser && currentUser?.role !== "admin") {
       navigate("/not-authorized");
     }
+    if(!token){
+        navigate('/login') 
+    }
+
   }, [token]);
 
   return (

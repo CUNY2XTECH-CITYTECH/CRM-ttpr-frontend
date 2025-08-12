@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
 import {
@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { validateStudentForm } from "@/lib/validations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/dataContext";
 
 // 👇 fallback mock data
 const fallbackMockJob = {
@@ -23,6 +24,8 @@ const fallbackMockJob = {
 };
 
 export default function JobApplication() {
+  const {token,currentUser} = useAuth()
+  const navigate = useNavigate()
   const { id } = useParams();
   const location = useLocation();
 
@@ -57,6 +60,13 @@ export default function JobApplication() {
   };
 
   useEffect(() => {
+
+    if (currentUser && currentUser.role !== 'student') {
+      navigate('/not-authorized')
+    }
+    if (!token) {
+      navigate('/login')
+    }
     // Skip fetch if job is already passed from location
     if (passedJob) return;
 
@@ -79,12 +89,14 @@ export default function JobApplication() {
     } else {
       setInternship(fallbackMockJob); // 👈 fallback if no ID at all
     }
-  }, [id, passedJob]);
+  }, [token]);
 
   if (!internship) return <p>Loading job details...</p>;
 
   return (
-    <Layout>
+    <>
+    {currentUser?
+    <Layout user={currentUser}>
       <Topbar title="Student Application Form" mode="form" />
       <div className="flex flex-col lg:flex-row w-[90%] m-auto py-4 gap-20">
         <div className="lg:w-1/2 w-full bg-white px-2">
@@ -293,5 +305,8 @@ export default function JobApplication() {
         </div>
       </div>
     </Layout>
+    :<div></div>
+    }
+    </>
   );
 }

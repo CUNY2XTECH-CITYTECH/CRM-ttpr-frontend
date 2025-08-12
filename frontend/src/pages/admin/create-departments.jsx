@@ -35,6 +35,10 @@ export default function CreateDepartments() {
     if (currentUser && currentUser?.role !== "admin") {
       navigate("/not-authorized");
     }
+    if(!token){
+        navigate('/login') 
+    }
+
   }, [token]);
 
   return (

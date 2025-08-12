@@ -6,22 +6,25 @@ import { useState } from 'react'
 import { LayoutDashboard, GraduationCap, Users, Briefcase, Settings, FileText, Handshake, CalendarDays, Building, Server, TableProperties, ShieldUser } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import toast from 'react-hot-toast'
-import { useClient,useAuth } from '@/lib/dataContext'
+import { useClient, useAuth } from '@/lib/dataContext'
 import { fetchUserData } from '@/lib/commonFunctions'
 
 
 export default function StudentHome() {
-  const { token, currentUser} = useAuth()
-  const { client} = useClient()
+  const { token, currentUser } = useAuth()
+  const { client } = useClient()
   const navigate = useNavigate()
   const navlinks = [
-    { name: "Internships", icon: <Handshake className="text-xl" />,path:'/internships' },
-    { name: "Calendar", icon: <CalendarDays className="text-xl" /> ,path:'/calendar' },
-    { name: "Techstacks", icon: <Server className="text-xl" /> ,path:'/techstacks' },
-    { name: "profile", icon: <Settings className="text-xl" /> ,path:'/profile' },
+    { name: "Internships", icon: <Handshake className="text-xl" />, path: '/internships' },
+    { name: "Calendar", icon: <CalendarDays className="text-xl" />, path: '/calendar' },
+    { name: "Techstacks", icon: <Server className="text-xl" />, path: '/techstacks' },
+    { name: "profile", icon: <Settings className="text-xl" />, path: '/profile' },
   ]
   useEffect(() => {
-    if (!currentUser && !token) {
+    if (currentUser && currentUser.role !== 'student') {
+      navigate('/not-authorized')
+    }
+    if (!token) {
       navigate('/login')
     }
 

@@ -28,9 +28,12 @@ export default function AdminHome() {
   ];
 
   useEffect(() => {
-   console.log(currentUser,'cu')
+    console.log(currentUser, 'cu')
     if (currentUser && currentUser.role !== 'admin') {
       navigate('/not-authorized')
+    }
+    if (!token) {
+      navigate('/login')
     }
   }, [token])
 

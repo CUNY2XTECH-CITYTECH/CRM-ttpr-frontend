@@ -11,8 +11,10 @@ export const DataContextProvider = ({ children }) => {
   const token = cookies.access_token;
   const client = new Client(token);
 
-  const logout = () => {
-    setUser(null);
+  const logout = async() => {
+    const logoutAttempt = await client.auth.logout({credentials:'include'})
+    console.log('trying to logut',logoutAttempt)
+    setCurrentUser(null)
   };
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export const DataContextProvider = ({ children }) => {
       }
     };
     loadData();
-  }, [token]); 
+  }, [token]);
 
   const values = {
     client: client,
@@ -40,15 +42,15 @@ export const DataContextProvider = ({ children }) => {
 };
 
 export const useClient = () => {
-  const { client} = useContext(DataContext);
+  const { client } = useContext(DataContext);
   if (client) {
     console.log("error");
   }
 
-  return { client};
+  return { client };
 };
 
 export const useAuth = () => {
-  const { token,currentUser } = useContext(DataContext);
-  return { token,currentUser };
+  const { token, currentUser,logout } = useContext(DataContext);
+  return { token, currentUser,logout };
 };
