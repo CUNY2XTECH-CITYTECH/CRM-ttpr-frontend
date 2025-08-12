@@ -3,14 +3,13 @@ import { Header } from "./header";
 import { AppSidebar } from "./sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
-function Layout({ children,role }) {
-  console.log('role',role)
+function Layout({ children,user}) {
   return (
     <SidebarProvider >
 
-      <AppSidebar role={role} />
+      <AppSidebar role={user.role} />
       <main className="w-full">
-        <Header CloseSidebar={<SidebarTrigger />} role={"staff"} />
+        <Header CloseSidebar={<SidebarTrigger />} currentUser={user} role={"staff"} />
         {/* <SidebarTrigger /> */}
         <div className="px-12 py-4 box-border">{children}</div>
       </main>
