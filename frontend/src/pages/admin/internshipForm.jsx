@@ -38,6 +38,10 @@ export default function InternshipForm() {
     if (currentUser?.role !== 'admin') {
       navigate('/not-authorized')
     }
+    if(!token){
+
+      navigate('/login')
+    }
   }, [token])
 
 

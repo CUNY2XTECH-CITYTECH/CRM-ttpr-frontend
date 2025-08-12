@@ -99,6 +99,13 @@ export default function ViewInternships() {
         console.error("Error loading jobs:", err);
         setLoading(false);
       });
+
+    if (currentUser && currentUser.role !== 'student') {
+      navigate('/not-authorized')
+    }
+    if (!token) {
+      navigate('/login')
+    }
   }, [token]);
 
   const removeInternship = (id) => {

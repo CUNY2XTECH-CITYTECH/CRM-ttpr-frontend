@@ -3,11 +3,16 @@ import { BaseClient } from "./server";
 export class AuthServiceClient extends BaseClient {
   async login(data, optionalHeader) {
     // get all user
-    const res = await this.post('login', data, optionalHeader);
+    const res = await this.post('auth/login', data, optionalHeader);
     return res
   }
-  async refresh(data) {
-    const res = await this.post('refresh', data, { credentials: 'include' });
+  async logout(optionalHeader) {
+    // get all user
+    const res = await this.get('auth/logout',optionalHeader);
+    return res
+  }
+  async refresh(data,optionalHeader) {
+    const res = await this.post('refresh', data,optionalHeader);
     return res
 
   }

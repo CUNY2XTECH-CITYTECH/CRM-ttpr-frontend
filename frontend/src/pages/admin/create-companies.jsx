@@ -47,6 +47,9 @@ const CreateCompanies = () => {
     if (currentUser && currentUser?.role !== "admin") {
       navigate("/not-authorized");
     }
+    if(!token){
+        navigate('/login') 
+    }
   }, [token]);
 
   const onSubmit = (values) => {
