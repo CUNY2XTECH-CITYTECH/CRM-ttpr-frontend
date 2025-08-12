@@ -16,7 +16,12 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from "react-router";
+
 const UpdateCompanies= () => {
+
+  const {currentUser,token} = useAuth()
+  const navigate = useNavigate()
   // const [view, setView] = useState('row')
   const companiesForm = useForm({
     resolver: yupResolver(validateCompaniesForm),
@@ -29,6 +34,14 @@ const UpdateCompanies= () => {
       zipcode: ''
     }
   })
+  useEffect(() => {
+
+    if (currentUser?.role!== 'admin') {
+      navigate('/not-authorized')
+    }
+  }, [token])
+
+
   const onSubmit = (values) => {
    console.log('v',values)
   }

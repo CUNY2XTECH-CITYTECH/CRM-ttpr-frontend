@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -6,19 +6,19 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { GraduationCap, Users, Briefcase } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { createData } from "@/utils/http-methods"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { validateLoginForm } from "@/lib/validations"
 import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessage, Form } from '@/components/ui/form';
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router"
 import { useCookies } from "react-cookie"
-import { useAuth } from "@/lib/authContext"
+import { useAuth,useClient} from "@/lib/dataContext"
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { login } = useAuth()
-  const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
+  const { token,currentUser} = useAuth()
+  const {client} = useClient()
+
   const loginForm = useForm({
     resolver: yupResolver(validateLoginForm),
     defaultValues: {
@@ -28,21 +28,20 @@ export default function LoginPage() {
   })
   const onSubmit = async (e) => {
     try {
-      let res = await createData('login', e, { credentials: 'include' })
-      if (res.status !== 200) {
-        toast.error(res.error)
-        console.log(res)
-      }
-      else {
+      let res = await client.auth.login(e, { credentials: 'include' })
+      if (res.status === 200) {
+        login(res.data.message)
+        console.log(res.data.message,'msg')
         toast.success("Logged in successfully")
-        login(cookies.access_token, res.data.message.email)
-        console.log(cookies.access_token, 'accc')
         if (res.data?.message?.role === 'admin') {
           navigate('/admin')
         }
         else {
-          navigate('/student')
+          navigate('/')
         }
+      }
+      else {
+        toast.error(res.error)
       }
     } catch (error) {
       console.log(error)

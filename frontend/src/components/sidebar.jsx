@@ -26,6 +26,7 @@ import {
   SquarePlus,
   List,
   Building,
+  Handshake, CalendarDays, Server,
   BuildingIcon
 } from "lucide-react";
 import {
@@ -33,10 +34,34 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
-
-
 import React from "react";
 
+const studentItems = [
+  {
+    title: "Internships",
+    url: "/internships",
+    childLinks: null,
+    icon: Handshake,
+  },
+  {
+    title: "Calendar",
+    url: "/calendar",
+    childLinks: null,
+    icon: CalendarDays,
+  },
+  {
+    title: "Techstacks",
+    url: "/techstacks",
+    childLinks: null,
+    icon: Server,
+  },
+  {
+    title: "Profile",
+    url: "/profile",
+    childLinks: null,
+    icon: Settings,
+  },
+];
 const items = [
   {
     title: "Dashboard",
@@ -139,7 +164,7 @@ const items = [
   },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({ role }) {
   const [isOpen, setIsOpen] = React.useState(false)
   return (
     <Sidebar className={"bg-primary"}>
@@ -149,47 +174,94 @@ export function AppSidebar() {
             CitytechCRM
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item, e) => (
-                <div key={e}>
-                  {item.childLinks ?
-                    <Collapsible className="group/collapsible">
-                      <SidebarMenuItem>
-                        <CollapsibleTrigger asChild>
-                          <SidebarMenuButton>
-                            <a className="flex gap-2">
-                              <item.icon className="w-4 h-4" />
-                              <span>{item.title}</span>
-                            </a>
-                          </SidebarMenuButton>
-                        </CollapsibleTrigger>
-                        <CollapsibleContent>
-                          <SidebarMenuSub className={'mx-2'}>
-                            {item.childLinks.map(cl =>
-                              <SidebarMenuSubItem className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
-                                <a className="flex gap-1" href={cl.url}>
-                                  <span>{cl.title}</span>
-                                </a>
-                              </SidebarMenuSubItem>
-                            )}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
-                      </SidebarMenuItem>
-                    </Collapsible>
-                    :
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <a href={item.url} className="flex gap-2">
-                          <item.icon className="w-5 h-5" />
-                          <span>{item.title}</span>
-                        </a>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  }
-                </div>
-              ))}
+            {role==='admin' ? (
+              <SidebarMenu>
+                {items.map((item, e) => (
 
-            </SidebarMenu>
+                  <div key={e}>
+                    {item.childLinks ?
+                      <Collapsible className="group/collapsible">
+                        <SidebarMenuItem>
+                          <CollapsibleTrigger asChild>
+                            <SidebarMenuButton>
+                              <a className="flex gap-2">
+                                <item.icon className="w-4 h-4" />
+                                <span>{item.title}</span>
+                              </a>
+                            </SidebarMenuButton>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <SidebarMenuSub className={'mx-2'}>
+                              {item.childLinks.map(cl =>
+                                <SidebarMenuSubItem className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
+                                  <a className="flex gap-1" href={cl.url}>
+                                    <span>{cl.title}</span>
+                                  </a>
+                                </SidebarMenuSubItem>
+                              )}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </SidebarMenuItem>
+                      </Collapsible>
+                      :
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton asChild>
+                          <a href={item.url} className="flex gap-2">
+                            <item.icon className="w-5 h-5" />
+                            <span>{item.title}</span>
+                          </a>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    }
+                  </div>
+                ))}
+
+              </SidebarMenu>
+            ) : (
+              <SidebarMenu>
+                {studentItems.map((item, e) => (
+
+                  <div key={e}>
+                    {item.childLinks ?
+                      <Collapsible className="group/collapsible">
+                        <SidebarMenuItem>
+                          <CollapsibleTrigger asChild>
+                            <SidebarMenuButton>
+                              <a className="flex gap-2">
+                                <item.icon className="w-4 h-4" />
+                                <span>{item.title}</span>
+                              </a>
+                            </SidebarMenuButton>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <SidebarMenuSub className={'mx-2'}>
+                              {item.childLinks.map(cl =>
+                                <SidebarMenuSubItem className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
+                                  <a className="flex gap-1" href={cl.url}>
+                                    <span>{cl.title}</span>
+                                  </a>
+                                </SidebarMenuSubItem>
+                              )}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </SidebarMenuItem>
+                      </Collapsible>
+                      :
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton asChild>
+                          <a href={item.url} className="flex gap-2">
+                            <item.icon className="w-5 h-5" />
+                            <span>{item.title}</span>
+                          </a>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    }
+                  </div>
+                ))}
+
+              </SidebarMenu>
+
+            )}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

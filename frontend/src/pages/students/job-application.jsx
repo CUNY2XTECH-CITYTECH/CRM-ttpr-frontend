@@ -22,7 +22,7 @@ const fallbackMockJob = {
   description: "This is placeholder data shown because the backend fetch did not return anything.",
 };
 
-export default function StudentForm() {
+export default function JobApplication() {
   const { id } = useParams();
   const location = useLocation();
 
