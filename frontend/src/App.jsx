@@ -18,8 +18,8 @@ import MultiStepForm from './pages/students/multistep-form'
 import Waiting from './pages/admin/waiting'
 import InfoPage from './pages/info-page'
 import { Toaster } from "react-hot-toast";
-import ViewBoard from "./pages/students/jobboard";
-import StudentForm from "./pages/students/jobapp";
+import JobApplication from "./pages/students/job-application";
+import ViewInternships from "./pages/students/internships";
 function App() {
   return (
     <>
@@ -30,25 +30,24 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path='/admin/create-companies' element={<CreateCompanies />} />
           <Route path='/admin/update-companies' element={<UpdateCompanies />} />
-          <Route path='/student/profile' element={<StudentProfileUpdate />} />
           <Route path='/admin/profile' element={<AdminProfileUpdate />} />
           <Route path="/admin/create-internships" element={<InternshipForm />} />
           <Route path='/admin/create-appointments' element={<Appointment />} />
           <Route path="/admin/waiting" element={<Waiting />} />
           {/* <Route path="/admin" element={<AdminHome/>} /> */}
           <Route path="/" element={<StudentHome />} />
+          <Route path='/profile' element={<StudentProfileUpdate />} />
           <Route path="/form" element={<MultiStepForm />} />
           <Route path="/onboard" element={<StudentOnboarding />} />
           <Route path="/error" element={<InfoPage />} />
           <Route path="/not-authorized" element={<InfoPage />} />
           <Route path="/account-exists" element={<InfoPage />} />
-        <Route path="/viewBoard" element={<ViewBoard/>} />
-        <Route path="/studentForm/:id" element={<StudentForm/>} />
- 
+          <Route path="/internships" element={<ViewInternships/>} />
+          <Route path="/internships/apply/:id" element={<JobApplication/>} />
         </Routes>
         <Toaster />
       </BrowserRouter>
-  
+
     </>
   );
 }

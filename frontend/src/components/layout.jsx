@@ -3,10 +3,12 @@ import { Header } from "./header";
 import { AppSidebar } from "./sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
-function Layout({ children }) {
+function Layout({ children,role }) {
+  console.log('role',role)
   return (
-    <SidebarProvider>
-      <AppSidebar />
+    <SidebarProvider >
+
+      <AppSidebar role={role} />
       <main className="w-full">
         <Header CloseSidebar={<SidebarTrigger />} role={"staff"} />
         {/* <SidebarTrigger /> */}

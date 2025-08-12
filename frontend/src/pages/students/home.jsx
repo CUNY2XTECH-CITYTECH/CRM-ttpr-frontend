@@ -15,10 +15,10 @@ export default function StudentHome() {
   const { client} = useClient()
   const navigate = useNavigate()
   const navlinks = [
-    { name: "Internships", icon: <Handshake className="text-xl" /> },
-    { name: "Calendar", icon: <CalendarDays className="text-xl" /> },
-    { name: "Techstacks", icon: <Server className="text-xl" /> },
-    { name: "Settings", icon: <Settings className="text-xl" /> },
+    { name: "Internships", icon: <Handshake className="text-xl" />,path:'/internships' },
+    { name: "Calendar", icon: <CalendarDays className="text-xl" /> ,path:'/calendar' },
+    { name: "Techstacks", icon: <Server className="text-xl" /> ,path:'/techstacks' },
+    { name: "profile", icon: <Settings className="text-xl" /> ,path:'/profile' },
   ]
   useEffect(() => {
     if (!currentUser && !token) {

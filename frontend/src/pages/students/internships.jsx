@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
 import { X } from "lucide-react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/lib/dataContext";
 
 
-export default function ViewBoard() {
+export default function ViewInternships() {
   const navigate = useNavigate(); // ✅
 
   const [internships, setInternships] = useState([
@@ -76,14 +77,16 @@ export default function ViewBoard() {
       logo: "",
       description: "Work with cloud infrastructure, CI/CD pipelines, and monitoring systems.",
     }
-  
-  
+
+
   ]);
-  
+
 
   const [loading, setLoading] = useState(true);
+  const {token,currentUser} = useAuth()
 
   useEffect(() => {
+   console.log(currentUser,'cu')
     fetch("http://localhost:5000/api/jobs")
       .then(res => res.json())
       .then(data => {
@@ -94,48 +97,53 @@ export default function ViewBoard() {
         console.error("Error loading jobs:", err);
         setLoading(false);
       });
-  }, []);
+  }, [token]);
 
   const removeInternship = (id) => {
     setInternships(prev => prev.filter(job => job._id !== id));
   };
 
   return (
-    <Layout>
-      <Topbar title="Recent Internships for you" />
-      <div className="max-w-3xl mx-auto mt-8 p-6 bg-gray-100 rounded-lg shadow-sm space-y-6">
-        {loading ? (
-          <p>Loading internships...</p>
-        ) : internships.length === 0 ? (
-          <p className="text-center text-gray-500 italic">No internships available.</p>
-        ) : (
-          internships.map((job) => (
-            <div
-              key={job._id}
-              onClick={() => navigate(`/jobApp/${job._id}`, { state: { job } })} // ✅ Navigates with ID param
-              className="flex items-start gap-4 border-b pb-4 relative cursor-pointer hover:bg-gray-100 p-2 rounded"
-            >
-              <div className="w-14 h-14 bg-gray-300 rounded" />
-              <div className="flex-1">
-                <p className="font-semibold text-sm md:text-base">{job.title}</p>
-                <p className="text-sm text-gray-600">
-                  {job.company}. {job.location}. ({job.arrangement}). {job.salary}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">{job.posted}</p>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeInternship(job._id);
-                }}
-                className="text-gray-400 hover:text-gray-600 absolute top-0 right-0"
-              >
-                <X size={16} />
-              </button>
-            </div>
-          ))
-        )}
-      </div>
-    </Layout>
+    <>
+      {currentUser ?
+        <Layout role={currentUser.role}>
+          <Topbar title="Recent Internships for you" />
+          <div className="max-w-3xl mx-auto mt-8 p-6 bg-gray-100 rounded-lg shadow-sm space-y-6">
+            {loading ? (
+              <p>Loading internships...</p>
+            ) : internships.length === 0 ? (
+              <p className="text-center text-gray-500 italic">No internships available.</p>
+            ) : (
+              internships.map((job) => (
+                <div
+                  key={job._id}
+                  onClick={() => navigate(`/internships/apply/${job._id}`, { state: { job } })} // ✅ Navigates with ID param
+                  className="flex items-start gap-4 border-b pb-4 relative cursor-pointer hover:bg-gray-100 p-2 rounded"
+                >
+                  <div className="w-14 h-14 bg-gray-300 rounded" />
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm md:text-base">{job.title}</p>
+                    <p className="text-sm text-gray-600">
+                      {job.company}. {job.location}. ({job.arrangement}). {job.salary}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">{job.posted}</p>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeInternship(job._id);
+                    }}
+                    className="text-gray-400 hover:text-gray-600 absolute top-0 right-0"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </Layout>
+        : <div></div>
+      }
+    </>
   );
 }
