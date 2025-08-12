@@ -1,19 +1,17 @@
 import { BaseClient } from "./server";
 
 export class UserClient extends BaseClient {
-  constructor(token){
-   super(token)
+  constructor(token) {
+    super(undefined, token)
   }
   async fetchAll() {
     // get all user
     const res = await this.get('users');
-    console.log(res)
-    if(res.ok){
-    return res.json();
-    }
-    else{
-       return res.error
-    }
+    return res
+  }
+  async fetchOne() {
+    const res = await this.get('users/me');
+      return res
 
   }
 
@@ -21,22 +19,21 @@ export class UserClient extends BaseClient {
     // get all user
 
     const res = await this.post('users/create');
-    return res.json();
+    return res;
   }
 
   async update() {
     // get all user
 
     const res = await this.post('users/update');
-    return res.json();
+    return res
   }
 
   async delete() {
     // get all user
 
     const res = await this.post('users/delete');
-    return res.json();
-  }
+    return res  }
 }
 
 

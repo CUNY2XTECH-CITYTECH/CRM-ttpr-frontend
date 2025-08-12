@@ -1,4 +1,5 @@
-import React,{useState} from 'react'
+import React from 'react'
+import { useState ,useEffect} from "react";
 import Layout from '@/components/layout';
 import { Topbar } from '@/components/topbar';
 import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessage, Form } from '@/components/ui/form';
@@ -8,7 +9,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { validateDepartmentForm } from '@/lib/validations';
 import { Button } from '@/components/ui/button';
 
+import { useAuth } from "@/lib/dataContext";
 export default function CreateDepartments() {
+
+  const {currentUser,token} = useAuth()
   const departmentForm = useForm({
     resolver: yupResolver(validateDepartmentForm),
     defaultValues: {
@@ -18,6 +22,15 @@ export default function CreateDepartments() {
   const onSubmit = (values) => {
     console.log('v', values)
   }
+
+  useEffect(() => {
+
+    if (currentUser?.role!== 'admin') {
+      navigate('/not-authorized')
+    }
+  }, [token])
+
+
 
   return (
     <Layout>

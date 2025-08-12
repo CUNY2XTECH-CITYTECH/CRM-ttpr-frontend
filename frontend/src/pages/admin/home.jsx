@@ -1,15 +1,14 @@
-import React,{useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Select } from '@radix-ui/react-select'
 import { Header } from '@/components/header'
 import { useState } from 'react'
-import { LayoutDashboard, GraduationCap, Users, Briefcase, Settings, FileText, Handshake, CalendarDays, Building, Server, TableProperties, ShieldUser } from 'lucide-react'
-import { useAuth } from '@/lib/authContext'
 import { useNavigate } from 'react-router'
+import { LayoutDashboard, GraduationCap, Users, Briefcase, Settings, FileText, Handshake, CalendarDays, Building, Server, TableProperties, ShieldUser } from 'lucide-react'
+import { href } from 'react-router'
 
 export default function AdminHome() {
-  const { token, user } = useAuth()
-  const [currentUser, setCurrentUser] = useState(null)
+  const { token, currentUser} = useAuth()
   const navigate = useNavigate()
 
   const navlinks = [
@@ -26,25 +25,9 @@ export default function AdminHome() {
   ]
   useEffect(() => {
 
-    if(user!=='admin'){
+    if (user !== 'admin') {
       navigate('/not-authorized')
     }
-
-    (async () => {
-      if (token) {
-        let getCurrentUserData = await authorized_get(token, 'users/me')
-        if (!getCurrentUserData) {
-          navigate('/login')
-        }
-
-        setCurrentUser(getCurrentUserData?.data[0])
-        console.log(getCurrentUserData)
-      }
-      else {
-        navigate('/login')
-      }
-    }
-    )()
   }, [token])
 
 
@@ -59,17 +42,22 @@ export default function AdminHome() {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {navlinks.map((link) => (
-            <div
-              key={link.name}
-              className="bg-white shadow-md rounded-xl p-6 w-40 h-32 flex flex-col items-center justify-center hover:shadow-lg transition">
-              <div className="text-blue-600 mb-2">{link.icon}</div>
-              <span className="text-gray-800 text-center text-xl font-medium">
-                {link.name}
-              </span>
-            </div>
+
+            <a href={link.path} key={link.name}>
+              <div
+                key={link.name}
+                className="bg-white shadow-md rounded-xl p-6 w-40 h-32 flex flex-col items-center justify-center hover:shadow-lg transition">
+                <div className="text-blue-600 mb-2">{link.icon}</div>
+                <span className="text-gray-800 text-center text-xl font-medium">
+                  {link.name}
+                </span>
+              </div>
+
+            </a>
           ))}
+
         </div>
       </div>
     </div>
-  )
+  );
 }

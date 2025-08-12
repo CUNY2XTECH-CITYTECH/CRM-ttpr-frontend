@@ -18,7 +18,8 @@ import MultiStepForm from './pages/students/multistep-form'
 import Waiting from './pages/admin/waiting'
 import InfoPage from './pages/info-page'
 import { Toaster } from "react-hot-toast";
-import { useAuth } from "./lib/authContext.jsx";
+import ViewBoard from "./pages/students/jobboard";
+import StudentForm from "./pages/students/jobapp";
 function App() {
   return (
     <>
@@ -31,7 +32,6 @@ function App() {
           <Route path='/admin/update-companies' element={<UpdateCompanies />} />
           <Route path='/student/profile' element={<StudentProfileUpdate />} />
           <Route path='/admin/profile' element={<AdminProfileUpdate />} />
-      // add your pages here
           <Route path="/admin/create-internships" element={<InternshipForm />} />
           <Route path='/admin/create-appointments' element={<Appointment />} />
           <Route path="/admin/waiting" element={<Waiting />} />
@@ -42,10 +42,13 @@ function App() {
           <Route path="/error" element={<InfoPage />} />
           <Route path="/not-authorized" element={<InfoPage />} />
           <Route path="/account-exists" element={<InfoPage />} />
+        <Route path="/viewBoard" element={<ViewBoard/>} />
+        <Route path="/studentForm/:id" element={<StudentForm/>} />
+ 
         </Routes>
         <Toaster />
       </BrowserRouter>
-
+  
     </>
   );
 }

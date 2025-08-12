@@ -12,12 +12,11 @@ import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessa
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router"
 import { useCookies } from "react-cookie"
-import { useAuth } from "@/lib/authContext"
-import { useClient } from "@/lib/dataContext"
+import { useAuth,useClient} from "@/lib/dataContext"
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { login,user } = useAuth()
+  const { token,currentUser} = useAuth()
   const {client} = useClient()
 
   const loginForm = useForm({
@@ -29,9 +28,10 @@ export default function LoginPage() {
   })
   const onSubmit = async (e) => {
     try {
-      let res = await client.create('login', e, { credentials: 'include' })
+      let res = await client.auth.login(e, { credentials: 'include' })
       if (res.status === 200) {
         login(res.data.message)
+        console.log(res.data.message,'msg')
         toast.success("Logged in successfully")
         if (res.data?.message?.role === 'admin') {
           navigate('/admin')

@@ -16,9 +16,11 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/lib/authContext';
+import { useAuth } from '@/lib/dataContext';
+import { useNavigate } from 'react-router';
 const CreateCompanies = () => {
-  const {token,email} = useAuth()
+  const {token,user} = useAuth()
+  const navigate = useNavigate()
   // const [view, setView] = useState('row')
   const companiesForm = useForm({
     resolver: yupResolver(validateCompaniesForm),
@@ -32,7 +34,9 @@ const CreateCompanies = () => {
     }
   })
   useEffect(() => {
-    console.log('token',token,email) 
+    if (user !== 'admin') {
+      navigate('/not-authorized')
+    }
   }, [])
   
   const onSubmit = (values) => {

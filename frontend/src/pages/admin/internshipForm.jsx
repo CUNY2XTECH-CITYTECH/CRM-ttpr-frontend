@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState ,useEffect} from "react";
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Topbar } from "@/components/topbar"
@@ -9,11 +9,13 @@ import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessa
 import { GraduationCap, Users, Briefcase } from "lucide-react"
 import Layout from "../../components/layout"
 import { validateInternshipForm } from "@/lib/validations"
-
+import { useNavigate } from "react-router";
+import { useAuth } from "@/lib/dataContext";
 
 export default function InternshipForm() {
  const [view, setView] = useState('create')
- 
+  const navigate= useNavigate()
+  const {currentUser,token} = useAuth()
  const internshipForm = useForm({
     resolver: yupResolver(validateInternshipForm),
     defaultValues: {
@@ -31,6 +33,14 @@ export default function InternshipForm() {
 const onSubmit = (data) => {
     console.log(data)
 }
+  useEffect(() => {
+  console.log('current',currentUser)
+    if (currentUser?.role!== 'admin') {
+      navigate('/not-authorized')
+    }
+  }, [token])
+
+
     return (
    <Layout>
     <Topbar view={view} setView={setView} title="Create New Internship" mode="form" />
@@ -71,8 +81,6 @@ const onSubmit = (data) => {
                 </FormItem>
             )}
             />
-            
-
             </div>
             <div>
             <FormField

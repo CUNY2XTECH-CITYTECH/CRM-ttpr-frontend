@@ -54,3 +54,33 @@ export const validateAppointmentForm = yup.object().shape({
   location: yup.string().required("Location is required"),
   attendees: yup.string().required("Attendees are required")
 })
+
+
+export const validateStudentForm = yup.object().shape({
+  lastName: yup.string().min(2).required(),
+  firstName: yup.string().min(2).required(),
+  email: yup.string().email().required(),
+  password: yup.string().min(6).required(),
+  phoneNumber: yup.string().matches(/^\d{10}$/, "Phone number must be 10 digits").required(),
+  age: yup.number().min(18).max(100).required(),
+  DOB: yup.date().required(),
+  address: yup.string().required(),
+  school: yup.string().required(),
+  studentId: yup.string().required(),
+  graduationYear: yup.number().min(new Date().getFullYear()).max(new Date().getFullYear() + 10).required(),
+  resume: yup.mixed().required("Resume is required"),
+  LinkedIn: yup.string().url("Invalid LinkedIn URL").optional(),
+  GitHub: yup.string().url("Invalid GitHub URL").optional(),
+  skills: yup.string().optional()
+})
+
+
+export const validateViewBoard = yup.object().shape({
+position: yup.string().required("Position is required"),
+  company: yup.string().required("Company is required"),
+  location: yup.string().required("Location is required"),
+  salary: yup.string().required(),
+  description: yup.string().required("Description is required").max(500, "Description must be less than 500 characters"),
+  requirements: yup.string().required("Requirements are required"),
+  applicationDeadline: yup.date().required("Application deadline is required").min(new Date(), "Deadline must be in the future")
+})
