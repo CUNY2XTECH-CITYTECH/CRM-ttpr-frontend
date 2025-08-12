@@ -1,40 +1,55 @@
-import { useState, useEffect } from 'react';
-import Layout from '@/components/layout';
-import { Topbar } from '@/components/topbar';
+import { useState, useEffect } from "react";
+import Layout from "@/components/layout";
+import { Topbar } from "@/components/topbar";
+import { useNavigate } from "react-router";
+import { useAuth } from "@/lib/dataContext";
+const StaffProfileUpdate = () => {
+  const { currentUser, token } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    async () => {
+      if (currentUser?.role !== "admin") {
+        navigate("/not-authorized");
+      }
+    };
+  }, []);
 
-const StaffProfileUpdate = ({ userId }) => {
   const [staff, setStaff] = useState({
-    name: '',
-    profileImage: '',
-    bio: '',
-    pronouns: '',
-    socialLinks: [
-      'https://linkedin.com/in/staff-member',
-      '',
-      ''
-    ],
-    department: 'Computer Science',
-    position: 'Professor'
+    name: "",
+    profileImage: "",
+    bio: "",
+    pronouns: "",
+    socialLinks: ["https://linkedin.com/in/staff-member", "", ""],
+    department: "Computer Science",
+    position: "Professor",
   });
 
   const [imagePreview, setImagePreview] = useState(null);
-  const [localTime, setLocalTime] = useState('');
+  const [localTime, setLocalTime] = useState("");
 
   // Update local time
   useEffect(() => {
+    if (currentUser && currentUser.role !== "admin") {
+      navigate("/login");
+    }
     const updateTime = () => {
-      setLocalTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      setLocalTime(
+        new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
     };
     updateTime();
     const interval = setInterval(updateTime, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setStaff(prev => ({
+    setStaff((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -46,9 +61,9 @@ const StaffProfileUpdate = ({ userId }) => {
         setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
-      setStaff(prev => ({
+      setStaff((prev) => ({
         ...prev,
-        profileImage: file
+        profileImage: file,
       }));
     }
   };
@@ -56,37 +71,56 @@ const StaffProfileUpdate = ({ userId }) => {
   const handleSocialLinkChange = (index, value) => {
     const newSocialLinks = [...staff.socialLinks];
     newSocialLinks[index] = value;
-    setStaff(prev => ({
+    setStaff((prev) => ({
       ...prev,
-      socialLinks: newSocialLinks
+      socialLinks: newSocialLinks,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Staff profile updated:', staff);
-    alert('Profile updated successfully!');
+    console.log("Staff profile updated:", staff);
+    alert("Profile updated successfully!");
   };
 
   return (
-    <Layout>
-        <div className="flex-1 flex flex-col overflow-hidden">
+    <>
+      {currentUser ? (
+        <Layout user={currentUser}>
+          <div className="flex-1 flex flex-col overflow-hidden">
             <Topbar title="Staff Profile" mode="create" />
             <div className="min-h-screen bg-gray-50 flex justify-start p-8">
               <div className="w-full max-w-2xl">
-                <h1 className="text-2xl font-bold text-gray-800 mb-6">{localTime}</h1>
-                
+                <h1 className="text-2xl font-bold text-gray-800 mb-6">
+                  {localTime}
+                </h1>
+
                 <div className="bg-white rounded-lg shadow p-6 mb-6">
                   {/* Profile Image and Name */}
                   <div className="flex items-center space-x-4 mb-6">
                     <div className="relative">
                       <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden">
                         {imagePreview ? (
-                          <img src={imagePreview} alt="Profile" className="w-full h-full object-cover" />
+                          <img
+                            src={imagePreview}
+                            alt="Profile"
+                            className="w-full h-full object-cover"
+                          />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-10 w-10"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                              />
                             </svg>
                           </div>
                         )}
@@ -102,8 +136,17 @@ const StaffProfileUpdate = ({ userId }) => {
                         htmlFor="profileImage"
                         className="absolute -bottom-2 -right-2 bg-blue-500 text-white p-1 rounded-full cursor-pointer hover:bg-blue-600"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                       </label>
                     </div>
@@ -130,7 +173,9 @@ const StaffProfileUpdate = ({ userId }) => {
 
                   {/* Bio */}
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Bio</label>
+                    <label className="block text-gray-700 font-medium mb-2">
+                      Bio
+                    </label>
                     <textarea
                       name="bio"
                       value={staff.bio}
@@ -143,7 +188,9 @@ const StaffProfileUpdate = ({ userId }) => {
                   {/* Pronouns and Department */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
-                      <label className="block text-gray-700 font-medium mb-2">Pronouns</label>
+                      <label className="block text-gray-700 font-medium mb-2">
+                        Pronouns
+                      </label>
                       <input
                         type="text"
                         name="pronouns"
@@ -153,14 +200,18 @@ const StaffProfileUpdate = ({ userId }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-gray-700 font-medium mb-2">Department</label>
+                      <label className="block text-gray-700 font-medium mb-2">
+                        Department
+                      </label>
                       <select
                         name="department"
                         value={staff.department}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
-                        <option value="Computer Science">Computer Science</option>
+                        <option value="Computer Science">
+                          Computer Science
+                        </option>
                         <option value="Mathematics">Mathematics</option>
                         <option value="Physics">Physics</option>
                         <option value="Biology">Biology</option>
@@ -171,17 +222,27 @@ const StaffProfileUpdate = ({ userId }) => {
 
                   {/* Social Accounts */}
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Social Accounts</label>
+                    <label className="block text-gray-700 font-medium mb-2">
+                      Social Accounts
+                    </label>
                     <div className="space-y-3">
                       {staff.socialLinks.map((link, index) => (
                         <div key={index} className="flex items-center">
                           <select
-                            value={link.includes('linkedin') ? 'LinkedIn' : link.includes('twitter') ? 'Twitter' : 'Other'}
+                            value={
+                              link.includes("linkedin")
+                                ? "LinkedIn"
+                                : link.includes("twitter")
+                                ? "Twitter"
+                                : "Other"
+                            }
                             onChange={(e) => {
                               const platform = e.target.value;
                               let newLink = link;
-                              if (platform === 'LinkedIn') newLink = 'https://linkedin.com/in/';
-                              if (platform === 'Twitter') newLink = 'https://twitter.com/';
+                              if (platform === "LinkedIn")
+                                newLink = "https://linkedin.com/in/";
+                              if (platform === "Twitter")
+                                newLink = "https://twitter.com/";
                               handleSocialLinkChange(index, newLink);
                             }}
                             className="mr-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -193,7 +254,9 @@ const StaffProfileUpdate = ({ userId }) => {
                           <input
                             type="url"
                             value={link}
-                            onChange={(e) => handleSocialLinkChange(index, e.target.value)}
+                            onChange={(e) =>
+                              handleSocialLinkChange(index, e.target.value)
+                            }
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder={`Social link ${index + 1}`}
                           />
@@ -221,7 +284,11 @@ const StaffProfileUpdate = ({ userId }) => {
               </div>
             </div>
           </div>
-    </Layout>
+        </Layout>
+      ) : (
+        <div></div>
+      )}
+    </>
   );
 };
 

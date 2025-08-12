@@ -31,6 +31,11 @@ Then, you can run "npm run dev"
 - in all jsx files, (whether components or pages) it has to be a javascript function, and it needs to be exported
 - for pages (it should be export default, but for components, not necessarily)
 
+### for http crud methods
+- there is a file called http-methods.js under src/utils folder
+- Please don't edit or write anything there
+- but you can use those methods in your file (refer to src/pages/register.jsx)
+
 ### basic template for react components or pages
 
 import React from 'react'
