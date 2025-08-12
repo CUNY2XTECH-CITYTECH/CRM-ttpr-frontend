@@ -4,6 +4,7 @@ import { Topbar } from "@/components/topbar";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom"; 
 
+
 export default function ViewBoard() {
   const navigate = useNavigate(); // ✅
 
