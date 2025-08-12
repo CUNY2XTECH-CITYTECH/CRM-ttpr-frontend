@@ -8,7 +8,7 @@ function Layout({ children }) {
     <SidebarProvider>
       <AppSidebar />
       <main className="w-full">
-        <Header CloseSidebar={SidebarTrigger} role={"staff"} />
+        <Header CloseSidebar={<SidebarTrigger />} role={"staff"} />
         {/* <SidebarTrigger /> */}
         <div className="px-12 py-4 box-border">{children}</div>
       </main>

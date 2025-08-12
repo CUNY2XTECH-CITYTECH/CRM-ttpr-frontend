@@ -12,12 +12,15 @@ export class HTTPClientError extends Error {
  * class for handling http requests
  */
 export class BaseClient {
-  constructor(defaultHeaders = { "Content-Type": "application/json" }) {
+  constructor(defaultHeaders = { "Content-Type": "application/json" }, token) {
     const baseURL = import.meta.env.VITE_API_URI;
     if (!baseURL) {
       throw new Error("BaseURL is required for BaseClient.");
     }
     this.baseURL = baseURL.endsWith("/") ? baseURL : `${baseURL}/`;
+    if (token) {
+      defaultHeaders.authorization = `Bearer ${token}`
+    }
     this.defaultHeaders = defaultHeaders;
   }
   // for making request
@@ -35,14 +38,14 @@ export class BaseClient {
     try {
       const response = await fetch(url, config)
       if (!response.ok) {
-        console.log(response, 'ressss')
         let errorData = null;
         errorData = await response.json()
+        console.log(errorData, 'ressss')
         let errorMessage = errorData?.message || response.statusText || `Request failed with ${response.status}`
         // return new HTTPClientError(
         //   errorMessage, response.status, response.statusText, errorData?.toString()
         // )
-        return { error: errorMessage, status: response.status }
+        return { error: errorMessage, status: response.status, data: errorData?.data }
       }
       const contentType = response.headers.get("content-type")
       if (contentType?.includes('application/json')) {

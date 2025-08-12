@@ -9,11 +9,13 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { validateRegisterationForm } from '@/lib/validations'
 import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessage, Form } from '@/components/ui/form';
-import { createData } from "@/utils/http-methods"
+// import { createData } from "@/utils/http-methods"
 import { useNavigate } from "react-router-dom"
+import { useClient } from "@/lib/dataContext"
 export default function Register() {
 
   const navigate = useNavigate()
+  const {client} = useClient()
   const registerForm = useForm({
     resolver: yupResolver(validateRegisterationForm),
     defaultValues: {
@@ -29,7 +31,7 @@ export default function Register() {
     console.log("hello", e)
     if (e) {
       // used http method from utils/http-method.js
-      let res = await createData('user/create', e)
+      let res = await client.create('user/create', e)
       console.log(res, 'try')
       // if registeration successed
       if (res.status == 200) {

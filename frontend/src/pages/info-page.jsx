@@ -7,8 +7,12 @@ function InfoPage() {
   return (
     <div className="h-screen w-full grid justify-center items-center">
       {(path === '/error') ?
-        <div>Oops... ${action} failed. ${reason}</div>
-        : path === '/account-exists' ?
+        <div>Oops... Error occurred.</div>
+        :
+path==="/not-authorized"?
+
+        <div>You are not authorized.</div>:
+        path === '/account-exists' ?
           <div className="grid gap-2">
             <h4>
             Account already exists with this email.

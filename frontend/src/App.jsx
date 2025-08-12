@@ -22,28 +22,29 @@ import { useAuth } from "./lib/authContext.jsx";
 function App() {
   return (
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/admin" element={<AdminHome/>} />
-        <Route path="/login" element={<LoginPage />}/>
-        <Route path="/register" element={<Register/>}/>
-        <Route path='/admin/create-companies' element={<CreateCompanies />} />
-        <Route path='/admin/update-companies' element={<UpdateCompanies/>} />
-        <Route path='/student/profile' element={<StudentProfileUpdate/>}/>
-        <Route path='/admin/profile' element ={<AdminProfileUpdate/>}/>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path='/admin/create-companies' element={<CreateCompanies />} />
+          <Route path='/admin/update-companies' element={<UpdateCompanies />} />
+          <Route path='/student/profile' element={<StudentProfileUpdate />} />
+          <Route path='/admin/profile' element={<AdminProfileUpdate />} />
       // add your pages here
-        <Route path="/admin/create-internships" element={<InternshipForm />} />
-        <Route path='/admin/create-appointments' element={<Appointment />} />
-        {/* <Route path="/admin" element={<AdminHome/>} /> */}
-        <Route path="/student" element={<StudentHome />} />
-        <Route path="/admin/waiting" element={<Waiting/>}/>
-        <Route path="/error" element={<InfoPage/>}/>
-        <Route path="/account-exists" element={<InfoPage/>}/>
-        <Route path="/form" element={<MultiStepForm/>} />
-        <Route path="/onboard" element={<StudentOnboarding/>} />
-      </Routes>
-        <Toaster/>
-    </BrowserRouter>
+          <Route path="/admin/create-internships" element={<InternshipForm />} />
+          <Route path='/admin/create-appointments' element={<Appointment />} />
+          <Route path="/admin/waiting" element={<Waiting />} />
+          {/* <Route path="/admin" element={<AdminHome/>} /> */}
+          <Route path="/" element={<StudentHome />} />
+          <Route path="/form" element={<MultiStepForm />} />
+          <Route path="/onboard" element={<StudentOnboarding />} />
+          <Route path="/error" element={<InfoPage />} />
+          <Route path="/not-authorized" element={<InfoPage />} />
+          <Route path="/account-exists" element={<InfoPage />} />
+        </Routes>
+        <Toaster />
+      </BrowserRouter>
 
     </>
   );
