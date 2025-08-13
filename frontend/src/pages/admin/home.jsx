@@ -45,8 +45,6 @@ export default function AdminHome() {
       <div className="bg-gray-100 h-[calc(100vh-68.8px)] grid justify-center  items-center">
 
 
-        <div className="text-black text-3xl font-bold mb-16 text-center">
-        </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {navlinks.map((link) => (
 

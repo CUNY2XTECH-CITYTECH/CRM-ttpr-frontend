@@ -9,7 +9,7 @@ export const fetchUserData = async (client, token) => {
 
   const invalidOrExpire = currentSession.status !== 200 || currentSession.status === 403;
 
-  if (invalidOrExpire) {
+  if (invalidOrExpire && currentSession) {
     const refreshData = await client.auth.refresh({ userId: currentSession.data.userId }, {
       credentials: 'include'
     });

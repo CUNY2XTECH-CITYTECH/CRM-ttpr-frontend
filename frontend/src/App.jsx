@@ -6,7 +6,6 @@ import Register from './pages/register'
 import CreateCompanies from './pages/admin/create-companies'
 import UpdateCompanies from './pages/admin/update-companies'
 import StudentProfileUpdate from './pages/students/profile'
-import AdminProfileUpdate from './pages/admin/profile'
 import StudentOnboarding from './pages/students/studentOnboarding'
 import CreateDepartments from './pages/admin/create-departments'
 import UpdateDepartments from './pages/admin/update-departments'
@@ -21,17 +20,20 @@ import JobApplication from "./pages/students/job-application";
 import ViewInternships from "./pages/students/internships";
 import ViewCompanies from "./pages/admin/view-companies";
 import CreateInternships from "./pages/admin/create-internships";
+import AdminProfile from "./pages/admin/profile";
+import Dashboard from "./pages/admin/dashboard";
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/admin" element={<AdminHome />} />
+          <Route path="/admin/dashboard" element={<Dashboard/>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
           <Route path='/admin/create-companies' element={<CreateCompanies />} />
           <Route path='/admin/update-companies' element={<UpdateCompanies />} />
-          <Route path='/admin/profile' element={<AdminProfileUpdate />} />
+          <Route path='/admin/profile' element={<AdminProfile/>} />
           <Route path="/admin/create-internships" element={<CreateInternships/>} />
           <Route path='/admin/create-appointments' element={<Appointment />} />
 
