@@ -60,3 +60,9 @@ export const validateSkillsForm = yup.object().shape({
   description: yup.string(),
   category: yup.string().required("Category is required")
 })
+
+
+export const validateInterest = yup.object().shape({
+  name: yup.string().required("Name of skill required")
+
+})

@@ -4,8 +4,7 @@ import { Topbar } from '@/components/topbar';
 
 const StaffProfileUpdate = ({ userId }) => {
   const [currentUser,setCurrentUser] = useState(null)
-  useEffect(async() => {
-  }, [])
+
   
   const [staff, setStaff] = useState({
     name: '',

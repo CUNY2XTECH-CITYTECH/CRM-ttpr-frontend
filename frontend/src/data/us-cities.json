@@ -1,0 +1,1691 @@
+{
+  "cities": [
+    {
+      "city": "New York",
+      "state": "New York",
+      "state_code": "NY",
+      "population": 8336817,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Los Angeles",
+      "state": "California",
+      "state_code": "CA",
+      "population": 3979576,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Chicago",
+      "state": "Illinois",
+      "state_code": "IL",
+      "population": 2693976,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Houston",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 2320268,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Phoenix",
+      "state": "Arizona",
+      "state_code": "AZ",
+      "population": 1680992,
+      "timezone": "America/Phoenix"
+    },
+    {
+      "city": "Philadelphia",
+      "state": "Pennsylvania",
+      "state_code": "PA",
+      "population": 1584064,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "San Antonio",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 1547253,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "San Diego",
+      "state": "California",
+      "state_code": "CA",
+      "population": 1423851,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Dallas",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 1343573,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "San Jose",
+      "state": "California",
+      "state_code": "CA",
+      "population": 1021795,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Austin",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 978908,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Jacksonville",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 911507,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Fort Worth",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 909585,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Columbus",
+      "state": "Ohio",
+      "state_code": "OH",
+      "population": 898553,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Indianapolis",
+      "state": "Indiana",
+      "state_code": "IN",
+      "population": 876384,
+      "timezone": "America/Indiana/Indianapolis"
+    },
+    {
+      "city": "Charlotte",
+      "state": "North Carolina",
+      "state_code": "NC",
+      "population": 885708,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "San Francisco",
+      "state": "California",
+      "state_code": "CA",
+      "population": 881549,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Seattle",
+      "state": "Washington",
+      "state_code": "WA",
+      "population": 753675,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Denver",
+      "state": "Colorado",
+      "state_code": "CO",
+      "population": 715522,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Washington",
+      "state": "District of Columbia",
+      "state_code": "DC",
+      "population": 689545,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Boston",
+      "state": "Massachusetts",
+      "state_code": "MA",
+      "population": 685094,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "El Paso",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 681728,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Detroit",
+      "state": "Michigan",
+      "state_code": "MI",
+      "population": 670031,
+      "timezone": "America/Detroit"
+    },
+    {
+      "city": "Nashville",
+      "state": "Tennessee",
+      "state_code": "TN",
+      "population": 689447,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Portland",
+      "state": "Oregon",
+      "state_code": "OR",
+      "population": 652503,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Memphis",
+      "state": "Tennessee",
+      "state_code": "TN",
+      "population": 651073,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Oklahoma City",
+      "state": "Oklahoma",
+      "state_code": "OK",
+      "population": 695163,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Las Vegas",
+      "state": "Nevada",
+      "state_code": "NV",
+      "population": 651319,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Louisville",
+      "state": "Kentucky",
+      "state_code": "KY",
+      "population": 617638,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Baltimore",
+      "state": "Maryland",
+      "state_code": "MD",
+      "population": 585708,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Milwaukee",
+      "state": "Wisconsin",
+      "state_code": "WI",
+      "population": 590157,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Albuquerque",
+      "state": "New Mexico",
+      "state_code": "NM",
+      "population": 564559,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Tucson",
+      "state": "Arizona",
+      "state_code": "AZ",
+      "population": 548073,
+      "timezone": "America/Phoenix"
+    },
+    {
+      "city": "Fresno",
+      "state": "California",
+      "state_code": "CA",
+      "population": 542107,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Mesa",
+      "state": "Arizona",
+      "state_code": "AZ",
+      "population": 518012,
+      "timezone": "America/Phoenix"
+    },
+    {
+      "city": "Sacramento",
+      "state": "California",
+      "state_code": "CA",
+      "population": 513624,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Atlanta",
+      "state": "Georgia",
+      "state_code": "GA",
+      "population": 498715,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Kansas City",
+      "state": "Missouri",
+      "state_code": "MO",
+      "population": 495327,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Colorado Springs",
+      "state": "Colorado",
+      "state_code": "CO",
+      "population": 478221,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Miami",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 467963,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Raleigh",
+      "state": "North Carolina",
+      "state_code": "NC",
+      "population": 474069,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Omaha",
+      "state": "Nebraska",
+      "state_code": "NE",
+      "population": 486051,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Long Beach",
+      "state": "California",
+      "state_code": "CA",
+      "population": 466742,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Virginia Beach",
+      "state": "Virginia",
+      "state_code": "VA",
+      "population": 459470,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Oakland",
+      "state": "California",
+      "state_code": "CA",
+      "population": 433031,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Minneapolis",
+      "state": "Minnesota",
+      "state_code": "MN",
+      "population": 429954,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Tulsa",
+      "state": "Oklahoma",
+      "state_code": "OK",
+      "population": 413066,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Arlington",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 398854,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Tampa",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 399700,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "New Orleans",
+      "state": "Louisiana",
+      "state_code": "LA",
+      "population": 383997,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Wichita",
+      "state": "Kansas",
+      "state_code": "KS",
+      "population": 389938,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Cleveland",
+      "state": "Ohio",
+      "state_code": "OH",
+      "population": 383793,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Bakersfield",
+      "state": "California",
+      "state_code": "CA",
+      "population": 383579,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Aurora",
+      "state": "Colorado",
+      "state_code": "CO",
+      "population": 379289,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Anaheim",
+      "state": "California",
+      "state_code": "CA",
+      "population": 352497,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Honolulu",
+      "state": "Hawaii",
+      "state_code": "HI",
+      "population": 350964,
+      "timezone": "Pacific/Honolulu"
+    },
+    {
+      "city": "Santa Ana",
+      "state": "California",
+      "state_code": "CA",
+      "population": 334227,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Riverside",
+      "state": "California",
+      "state_code": "CA",
+      "population": 331360,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Corpus Christi",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 326588,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Lexington",
+      "state": "Kentucky",
+      "state_code": "KY",
+      "population": 323780,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Stockton",
+      "state": "California",
+      "state_code": "CA",
+      "population": 312697,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Henderson",
+      "state": "Nevada",
+      "state_code": "NV",
+      "population": 320189,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Saint Paul",
+      "state": "Minnesota",
+      "state_code": "MN",
+      "population": 308096,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "St. Louis",
+      "state": "Missouri",
+      "state_code": "MO",
+      "population": 302838,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Cincinnati",
+      "state": "Ohio",
+      "state_code": "OH",
+      "population": 309317,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Pittsburgh",
+      "state": "Pennsylvania",
+      "state_code": "PA",
+      "population": 302407,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Greensboro",
+      "state": "North Carolina",
+      "state_code": "NC",
+      "population": 296710,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Anchorage",
+      "state": "Alaska",
+      "state_code": "AK",
+      "population": 291247,
+      "timezone": "America/Anchorage"
+    },
+    {
+      "city": "Plano",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 288061,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Lincoln",
+      "state": "Nebraska",
+      "state_code": "NE",
+      "population": 295178,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Orlando",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 307573,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Irvine",
+      "state": "California",
+      "state_code": "CA",
+      "population": 307670,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Newark",
+      "state": "New Jersey",
+      "state_code": "NJ",
+      "population": 311549,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Toledo",
+      "state": "Ohio",
+      "state_code": "OH",
+      "population": 287208,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Durham",
+      "state": "North Carolina",
+      "state_code": "NC",
+      "population": 283506,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Chula Vista",
+      "state": "California",
+      "state_code": "CA",
+      "population": 275487,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Fort Wayne",
+      "state": "Indiana",
+      "state_code": "IN",
+      "population": 270402,
+      "timezone": "America/Indiana/Indianapolis"
+    },
+    {
+      "city": "Jersey City",
+      "state": "New Jersey",
+      "state_code": "NJ",
+      "population": 292449,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "St. Petersburg",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 265098,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Laredo",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 262491,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Madison",
+      "state": "Wisconsin",
+      "state_code": "WI",
+      "population": 269840,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Chandler",
+      "state": "Arizona",
+      "state_code": "AZ",
+      "population": 275987,
+      "timezone": "America/Phoenix"
+    },
+    {
+      "city": "Buffalo",
+      "state": "New York",
+      "state_code": "NY",
+      "population": 278349,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Lubbock",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 258862,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Scottsdale",
+      "state": "Arizona",
+      "state_code": "AZ",
+      "population": 258069,
+      "timezone": "America/Phoenix"
+    },
+    {
+      "city": "Reno",
+      "state": "Nevada",
+      "state_code": "NV",
+      "population": 264165,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Glendale",
+      "state": "Arizona",
+      "state_code": "AZ",
+      "population": 248325,
+      "timezone": "America/Phoenix"
+    },
+    {
+      "city": "Gilbert",
+      "state": "Arizona",
+      "state_code": "AZ",
+      "population": 267918,
+      "timezone": "America/Phoenix"
+    },
+    {
+      "city": "Winston-Salem",
+      "state": "North Carolina",
+      "state_code": "NC",
+      "population": 249545,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "North Las Vegas",
+      "state": "Nevada",
+      "state_code": "NV",
+      "population": 262527,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Norfolk",
+      "state": "Virginia",
+      "state_code": "VA",
+      "population": 238005,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Chesapeake",
+      "state": "Virginia",
+      "state_code": "VA",
+      "population": 249422,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Garland",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 246018,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Irving",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 256684,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Hialeah",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 223109,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Fremont",
+      "state": "California",
+      "state_code": "CA",
+      "population": 230504,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Boise",
+      "state": "Idaho",
+      "state_code": "ID",
+      "population": 235684,
+      "timezone": "America/Boise"
+    },
+    {
+      "city": "Richmond",
+      "state": "Virginia",
+      "state_code": "VA",
+      "population": 230436,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Baton Rouge",
+      "state": "Louisiana",
+      "state_code": "LA",
+      "population": 220236,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Des Moines",
+      "state": "Iowa",
+      "state_code": "IA",
+      "population": 214237,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Spokane",
+      "state": "Washington",
+      "state_code": "WA",
+      "population": 228989,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Modesto",
+      "state": "California",
+      "state_code": "CA",
+      "population": 218464,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Birmingham",
+      "state": "Alabama",
+      "state_code": "AL",
+      "population": 200733,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Tacoma",
+      "state": "Washington",
+      "state_code": "WA",
+      "population": 219346,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Fontana",
+      "state": "California",
+      "state_code": "CA",
+      "population": 208393,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "San Bernardino",
+      "state": "California",
+      "state_code": "CA",
+      "population": 222101,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Moreno Valley",
+      "state": "California",
+      "state_code": "CA",
+      "population": 208634,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Fayetteville",
+      "state": "North Carolina",
+      "state_code": "NC",
+      "population": 211657,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Glendale",
+      "state": "California",
+      "state_code": "CA",
+      "population": 199303,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Huntington Beach",
+      "state": "California",
+      "state_code": "CA",
+      "population": 198711,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Akron",
+      "state": "Ohio",
+      "state_code": "OH",
+      "population": 197597,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Aurora",
+      "state": "Illinois",
+      "state_code": "IL",
+      "population": 197899,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Mobile",
+      "state": "Alabama",
+      "state_code": "AL",
+      "population": 187041,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Little Rock",
+      "state": "Arkansas",
+      "state_code": "AR",
+      "population": 198606,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Amarillo",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 200393,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Augusta",
+      "state": "Georgia",
+      "state_code": "GA",
+      "population": 202081,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Columbus",
+      "state": "Georgia",
+      "state_code": "GA",
+      "population": 206922,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Grand Rapids",
+      "state": "Michigan",
+      "state_code": "MI",
+      "population": 198917,
+      "timezone": "America/Detroit"
+    },
+    {
+      "city": "Montgomery",
+      "state": "Alabama",
+      "state_code": "AL",
+      "population": 200603,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Shreveport",
+      "state": "Louisiana",
+      "state_code": "LA",
+      "population": 187593,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Huntsville",
+      "state": "Alabama",
+      "state_code": "AL",
+      "population": 215006,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Knoxville",
+      "state": "Tennessee",
+      "state_code": "TN",
+      "population": 190740,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Newport News",
+      "state": "Virginia",
+      "state_code": "VA",
+      "population": 186247,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Salt Lake City",
+      "state": "Utah",
+      "state_code": "UT",
+      "population": 199723,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Worcester",
+      "state": "Massachusetts",
+      "state_code": "MA",
+      "population": 206518,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Chattanooga",
+      "state": "Tennessee",
+      "state_code": "TN",
+      "population": 181099,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Providence",
+      "state": "Rhode Island",
+      "state_code": "RI",
+      "population": 190934,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Fort Lauderdale",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 182760,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Overland Park",
+      "state": "Kansas",
+      "state_code": "KS",
+      "population": 195494,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Yonkers",
+      "state": "New York",
+      "state_code": "NY",
+      "population": 211569,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Oxnard",
+      "state": "California",
+      "state_code": "CA",
+      "population": 202063,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Tempe",
+      "state": "Arizona",
+      "state_code": "AZ",
+      "population": 195805,
+      "timezone": "America/Phoenix"
+    },
+    {
+      "city": "Eugene",
+      "state": "Oregon",
+      "state_code": "OR",
+      "population": 176654,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Pembroke Pines",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 171178,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Salem",
+      "state": "Oregon",
+      "state_code": "OR",
+      "population": 178302,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Lancaster",
+      "state": "California",
+      "state_code": "CA",
+      "population": 173516,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Corona",
+      "state": "California",
+      "state_code": "CA",
+      "population": 169868,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Elk Grove",
+      "state": "California",
+      "state_code": "CA",
+      "population": 176124,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Palmdale",
+      "state": "California",
+      "state_code": "CA",
+      "population": 169450,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Salinas",
+      "state": "California",
+      "state_code": "CA",
+      "population": 163542,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Springfield",
+      "state": "Missouri",
+      "state_code": "MO",
+      "population": 169176,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Pasadena",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 154726,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Fort Collins",
+      "state": "Colorado",
+      "state_code": "CO",
+      "population": 169810,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Hayward",
+      "state": "California",
+      "state_code": "CA",
+      "population": 162954,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Pomona",
+      "state": "California",
+      "state_code": "CA",
+      "population": 151713,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Cary",
+      "state": "North Carolina",
+      "state_code": "NC",
+      "population": 174721,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Rockford",
+      "state": "Illinois",
+      "state_code": "IL",
+      "population": 148655,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Alexandria",
+      "state": "Virginia",
+      "state_code": "VA",
+      "population": 159467,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Escondido",
+      "state": "California",
+      "state_code": "CA",
+      "population": 151613,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "McKinney",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 199177,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Kansas City",
+      "state": "Kansas",
+      "state_code": "KS",
+      "population": 156607,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Joliet",
+      "state": "Illinois",
+      "state_code": "IL",
+      "population": 150362,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Sunnyvale",
+      "state": "California",
+      "state_code": "CA",
+      "population": 155805,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Torrance",
+      "state": "California",
+      "state_code": "CA",
+      "population": 147067,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Bridgeport",
+      "state": "Connecticut",
+      "state_code": "CT",
+      "population": 148654,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Lakewood",
+      "state": "Colorado",
+      "state_code": "CO",
+      "population": 155984,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Hollywood",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 154817,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Paterson",
+      "state": "New Jersey",
+      "state_code": "NJ",
+      "population": 159732,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Naperville",
+      "state": "Illinois",
+      "state_code": "IL",
+      "population": 149540,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Syracuse",
+      "state": "New York",
+      "state_code": "NY",
+      "population": 148620,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Mesquite",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 150108,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Dayton",
+      "state": "Ohio",
+      "state_code": "OH",
+      "population": 140407,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Savannah",
+      "state": "Georgia",
+      "state_code": "GA",
+      "population": 147780,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Clarksville",
+      "state": "Tennessee",
+      "state_code": "TN",
+      "population": 166722,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Orange",
+      "state": "California",
+      "state_code": "CA",
+      "population": 139484,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Pasadena",
+      "state": "California",
+      "state_code": "CA",
+      "population": 138699,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Fullerton",
+      "state": "California",
+      "state_code": "CA",
+      "population": 143617,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Killeen",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 153095,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Frisco",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 200509,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Hampton",
+      "state": "Virginia",
+      "state_code": "VA",
+      "population": 137148,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "McAllen",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 143268,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Warren",
+      "state": "Michigan",
+      "state_code": "MI",
+      "population": 139387,
+      "timezone": "America/Detroit"
+    },
+    {
+      "city": "Bellevue",
+      "state": "Washington",
+      "state_code": "WA",
+      "population": 151854,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "West Valley City",
+      "state": "Utah",
+      "state_code": "UT",
+      "population": 140230,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Columbia",
+      "state": "South Carolina",
+      "state_code": "SC",
+      "population": 137300,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Olathe",
+      "state": "Kansas",
+      "state_code": "KS",
+      "population": 140545,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Sterling Heights",
+      "state": "Michigan",
+      "state_code": "MI",
+      "population": 134346,
+      "timezone": "America/Detroit"
+    },
+    {
+      "city": "New Haven",
+      "state": "Connecticut",
+      "state_code": "CT",
+      "population": 134023,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Miramar",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 134721,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Waco",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 139236,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Thousand Oaks",
+      "state": "California",
+      "state_code": "CA",
+      "population": 127690,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Cedar Rapids",
+      "state": "Iowa",
+      "state_code": "IA",
+      "population": 137710,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Charleston",
+      "state": "South Carolina",
+      "state_code": "SC",
+      "population": 150227,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Visalia",
+      "state": "California",
+      "state_code": "CA",
+      "population": 141384,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Topeka",
+      "state": "Kansas",
+      "state_code": "KS",
+      "population": 125904,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Elizabeth",
+      "state": "New Jersey",
+      "state_code": "NJ",
+      "population": 137298,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Gainesville",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 141085,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Thornton",
+      "state": "Colorado",
+      "state_code": "CO",
+      "population": 141867,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Roseville",
+      "state": "California",
+      "state_code": "CA",
+      "population": 147773,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Carrollton",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 133168,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Coral Springs",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 134394,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Stamford",
+      "state": "Connecticut",
+      "state_code": "CT",
+      "population": 135470,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Simi Valley",
+      "state": "California",
+      "state_code": "CA",
+      "population": 126181,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Concord",
+      "state": "California",
+      "state_code": "CA",
+      "population": 129295,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Hartford",
+      "state": "Connecticut",
+      "state_code": "CT",
+      "population": 121054,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Kent",
+      "state": "Washington",
+      "state_code": "WA",
+      "population": 136588,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Lafayette",
+      "state": "Louisiana",
+      "state_code": "LA",
+      "population": 121374,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Midland",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 146038,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Surprise",
+      "state": "Arizona",
+      "state_code": "AZ",
+      "population": 141664,
+      "timezone": "America/Phoenix"
+    },
+    {
+      "city": "Denton",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 139734,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Victorville",
+      "state": "California",
+      "state_code": "CA",
+      "population": 134810,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Evansville",
+      "state": "Indiana",
+      "state_code": "IN",
+      "population": 117298,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Santa Clara",
+      "state": "California",
+      "state_code": "CA",
+      "population": 127647,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Abilene",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 125182,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Athens",
+      "state": "Georgia",
+      "state_code": "GA",
+      "population": 128671,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Vallejo",
+      "state": "California",
+      "state_code": "CA",
+      "population": 126090,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Allentown",
+      "state": "Pennsylvania",
+      "state_code": "PA",
+      "population": 125845,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Norman",
+      "state": "Oklahoma",
+      "state_code": "OK",
+      "population": 128026,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Beaumont",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 115282,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Independence",
+      "state": "Missouri",
+      "state_code": "MO",
+      "population": 123011,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Murfreesboro",
+      "state": "Tennessee",
+      "state_code": "TN",
+      "population": 152769,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Ann Arbor",
+      "state": "Michigan",
+      "state_code": "MI",
+      "population": 123851,
+      "timezone": "America/Detroit"
+    },
+    {
+      "city": "Springfield",
+      "state": "Illinois",
+      "state_code": "IL",
+      "population": 114230,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Berkeley",
+      "state": "California",
+      "state_code": "CA",
+      "population": 124321,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Peoria",
+      "state": "Illinois",
+      "state_code": "IL",
+      "population": 112644,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Provo",
+      "state": "Utah",
+      "state_code": "UT",
+      "population": 116618,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "El Monte",
+      "state": "California",
+      "state_code": "CA",
+      "population": 115775,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Columbia",
+      "state": "Missouri",
+      "state_code": "MO",
+      "population": 126254,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Lansing",
+      "state": "Michigan",
+      "state_code": "MI",
+      "population": 118210,
+      "timezone": "America/Detroit"
+    },
+    {
+      "city": "Fargo",
+      "state": "North Dakota",
+      "state_code": "ND",
+      "population": 125990,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Downey",
+      "state": "California",
+      "state_code": "CA",
+      "population": 113242,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Costa Mesa",
+      "state": "California",
+      "state_code": "CA",
+      "population": 113825,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Wilmington",
+      "state": "North Carolina",
+      "state_code": "NC",
+      "population": 123744,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "High Point",
+      "state": "North Carolina",
+      "state_code": "NC",
+      "population": 114059,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Pompano Beach",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 112046,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Miami Gardens",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 111640,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Temecula",
+      "state": "California",
+      "state_code": "CA",
+      "population": 114761,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Antioch",
+      "state": "California",
+      "state_code": "CA",
+      "population": 115291,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Everett",
+      "state": "Washington",
+      "state_code": "WA",
+      "population": 113834,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Inglewood",
+      "state": "California",
+      "state_code": "CA",
+      "population": 109398,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Centennial",
+      "state": "Colorado",
+      "state_code": "CO",
+      "population": 108418,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Elgin",
+      "state": "Illinois",
+      "state_code": "IL",
+      "population": 114797,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Arvada",
+      "state": "Colorado",
+      "state_code": "CO",
+      "population": 121510,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "Miami Beach",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 92307,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Waterbury",
+      "state": "Connecticut",
+      "state_code": "CT",
+      "population": 108802,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Richardson",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 119469,
+      "timezone": "America/Chicago"
+    },
+    {
+      "city": "Clearwater",
+      "state": "Florida",
+      "state_code": "FL",
+      "population": 117292,
+      "timezone": "America/New_York"
+    },
+    {
+      "city": "Gresham",
+      "state": "Oregon",
+      "state_code": "OR",
+      "population": 114247,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Billings",
+      "state": "Montana",
+      "state_code": "MT",
+      "population": 117116,
+      "timezone": "America/Denver"
+    },
+    {
+      "city": "West Covina",
+      "state": "California",
+      "state_code": "CA",
+      "population": 105080,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "city": "Round Rock",
+      "state": "Texas",
+      "state_code": "TX",
+      "population": 133372,
+      "timezone": "America/Chicago"
+    }
+  ]
+}
