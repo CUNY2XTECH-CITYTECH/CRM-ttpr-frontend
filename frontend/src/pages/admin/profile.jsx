@@ -2,27 +2,96 @@ import { useState, useEffect } from "react";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
 import { useNavigate } from "react-router";
-import { useAuth } from "@/lib/dataContext";
-const StaffProfileUpdate = () => {
+import { useAuth, useClient } from "@/lib/dataContext";
+import { useForm } from "react-hook-form"
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { Edit, Save, X, Camera, User, Mail, Phone, Briefcase, Linkedin } from "lucide-react"
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { validateAdminProfile } from "@/lib/validations";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+
+const AdminProfile = () => {
+  const POSITIONS = ["Director", "Teacher", "Teacher Assistant", "Department Head", "Coordinator", "Administrator"]
+  const DEPARTMENTS = [
+    "Mathematics", "Science", "English", "History", "Art",
+    "Physical Education", "Music", "Computer Science", "Administration",
+  ]
   const { currentUser, token } = useAuth();
+  const { client } = useClient()
   const navigate = useNavigate();
+  const [staff, setStaff] = useState(null);
+
+
+  // LinkedIn URL regex
+
+  const [isEditing, setIsEditing] = useState(false)
+
+  const defaultValues = {
+    name: currentUser?.name || "Username",
+    email: currentUser?.email || "user@example.com",
+    phone: currentUser?.phone || "+1 (xxx) xxx-xxxx",
+    department: staff?.department || "Mathematics",
+    position: staff?.position || "Director",
+    linkedin: staff?.linkedin || "https://linkedin.com/in/example",
+    profileImage: staff?.profileImage || "/placeholder.svg?height=120&width=120",
+  };
+  const form = useForm({
+    resolver: yupResolver(validateAdminProfile),
+    defaultValues,
+  })
+
+  const watchData = form.watch()
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const result = e.target?.result
+        form.setValue("profileImage", result)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleSave = (values) => {
+    console.log("Saved data:", values)
+    setIsEditing(false)
+  }
   useEffect(() => {
-    async () => {
-      if (currentUser?.role !== "admin") {
+    const loadData = async () => {
+      console.log('sd', currentUser)
+      if (currentUser && currentUser.role !== "admin") {
         navigate("/not-authorized");
       }
+      if (!token) {
+        navigate("/login");
+      }
+      let res = await client.admin().fetchOne()
+      if (res.status === 200) {
+        setStaff(res.data[0])
+      }
     };
-  }, []);
+    loadData()
+  }, [token, currentUser]);
 
-  const [staff, setStaff] = useState({
-    name: "",
-    profileImage: "",
-    bio: "",
-    pronouns: "",
-    socialLinks: ["https://linkedin.com/in/staff-member", "", ""],
-    department: "Computer Science",
-    position: "Professor",
-  });
 
   const [imagePreview, setImagePreview] = useState(null);
   const [localTime, setLocalTime] = useState("");
@@ -82,214 +151,196 @@ const StaffProfileUpdate = () => {
     console.log("Staff profile updated:", staff);
     alert("Profile updated successfully!");
   };
-
+  console.log(staff, currentUser, 'sf')
   return (
     <>
       {currentUser ? (
         <Layout user={currentUser}>
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <Topbar title="Staff Profile" mode="create" />
-            <div className="min-h-screen bg-gray-50 flex justify-start p-8">
-              <div className="w-full max-w-2xl">
-                <h1 className="text-2xl font-bold text-gray-800 mb-6">
-                  {localTime}
-                </h1>
 
-                <div className="bg-white rounded-lg shadow p-6 mb-6">
-                  {/* Profile Image and Name */}
-                  <div className="flex items-center space-x-4 mb-6">
-                    <div className="relative">
-                      <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden">
-                        {imagePreview ? (
-                          <img
-                            src={imagePreview}
-                            alt="Profile"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-10 w-10"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                              />
-                            </svg>
+
+          <div className=" px-12 space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+
+                <h4 className='py-2 font-semibold uppercase'>Profile Management</h4>
+                <p className="text-gray-600 mt-1">Manage your account information and preferences</p>
+              </div>
+              <Badge variant="secondary" className="px-3 py-1">
+                Administrator</Badge>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Avatar Card */}
+              <div className="lg:col-span-1">
+                <Card className="border-0 shadow-sm">
+                  <CardContent className="p-6">
+                    <div className="flex flex-col items-center text-center space-y-4">
+                      <div className="relative">
+                        <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
+                          <AvatarImage src={currentUser.profileImage} />
+                          <AvatarFallback className="text-xl bg-blue-100 text-blue-700">
+                            {currentUser.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        {isEditing && (
+                          <label className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-2 cursor-pointer hover:bg-blue-700 shadow-lg">
+                            <Camera className="w-3 h-3" />
+                            <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                          </label>
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-lg text-gray-900">{currentUser.name}</h3>
+                        <p className="text-blue-600 font-medium">{watchData.position}</p>
+                        <p className="text-gray-500 text-sm">{watchData.department}</p>
+                      </div>
+                      <Separator />
+                      <div className="w-full space-y-3 text-sm">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Mail className="w-4 h-4" />
+                          <span className="truncate">{currentUser.email}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Phone className="w-4 h-4" />
+                          <span>{currentUser.phone}</span>
+                        </div>
+                        {currentUser.linkedin && (
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <Linkedin className="w-4 h-4" />
+                            <a href={currentUser.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline truncate">
+                              LinkedIn Profile
+                            </a>
                           </div>
                         )}
                       </div>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="hidden"
-                        id="profileImage"
-                      />
-                      <label
-                        htmlFor="profileImage"
-                        className="absolute -bottom-2 -right-2 bg-blue-500 text-white p-1 rounded-full cursor-pointer hover:bg-blue-600"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </label>
                     </div>
-                    <div className="flex-1">
-                      <input
-                        type="text"
-                        name="name"
-                        value={staff.name}
-                        onChange={handleChange}
-                        placeholder="Full Name"
-                        className="text-xl font-bold w-full px-3 py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500"
-                        required
-                      />
-                      <input
-                        type="text"
-                        name="position"
-                        value={staff.position}
-                        onChange={handleChange}
-                        placeholder="Position"
-                        className="text-gray-600 w-full px-3 py-1 border-b border-gray-300 focus:outline-none focus:border-blue-500 mt-1"
-                      />
-                    </div>
-                  </div>
+                  </CardContent>
+                </Card>
+              </div>
 
-                  {/* Bio */}
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">
-                      Bio
-                    </label>
-                    <textarea
-                      name="bio"
-                      value={staff.bio}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      rows="3"
-                    />
-                  </div>
-
-                  {/* Pronouns and Department */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <label className="block text-gray-700 font-medium mb-2">
-                        Pronouns
-                      </label>
-                      <input
-                        type="text"
-                        name="pronouns"
-                        value={staff.pronouns}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gray-700 font-medium mb-2">
-                        Department
-                      </label>
-                      <select
-                        name="department"
-                        value={staff.department}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="Computer Science">
-                          Computer Science
-                        </option>
-                        <option value="Mathematics">Mathematics</option>
-                        <option value="Physics">Physics</option>
-                        <option value="Biology">Biology</option>
-                        <option value="Chemistry">Chemistry</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Social Accounts */}
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">
-                      Social Accounts
-                    </label>
-                    <div className="space-y-3">
-                      {staff.socialLinks.map((link, index) => (
-                        <div key={index} className="flex items-center">
-                          <select
-                            value={
-                              link.includes("linkedin")
-                                ? "LinkedIn"
-                                : link.includes("twitter")
-                                ? "Twitter"
-                                : "Other"
-                            }
-                            onChange={(e) => {
-                              const platform = e.target.value;
-                              let newLink = link;
-                              if (platform === "LinkedIn")
-                                newLink = "https://linkedin.com/in/";
-                              if (platform === "Twitter")
-                                newLink = "https://twitter.com/";
-                              handleSocialLinkChange(index, newLink);
-                            }}
-                            className="mr-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          >
-                            <option value="LinkedIn">LinkedIn</option>
-                            <option value="Twitter">Twitter</option>
-                            <option value="Other">Other</option>
-                          </select>
-                          <input
-                            type="url"
-                            value={link}
-                            onChange={(e) =>
-                              handleSocialLinkChange(index, e.target.value)
-                            }
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder={`Social link ${index + 1}`}
-                          />
+              {/* Form Card */}
+              <div className="lg:col-span-2">
+                <Card className="border-0 shadow-sm">
+                  <CardHeader className="border-b bg-gray-50/50">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-xl font-semibold text-gray-900">Profile Information</CardTitle>
+                        <p className="text-gray-600 text-sm mt-1">Update your personal and professional details</p>
+                      </div>
+                      {!isEditing ? (
+                        <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
+                          <Edit className="w-4 h-4 mr-2" /> Edit Profile
+                        </Button>
+                      ) : (
+                        <div className="flex gap-2">
+                          <Button type="submit" form="admin-form" className="bg-green-600 hover:bg-green-700">
+                            <Save className="w-4 h-4 mr-2" /> Save Changes
+                          </Button>
+                          <Button onClick={() => { form.reset(defaultValues); setIsEditing(false) }} variant="outline" className="border-gray-300 bg-transparent">
+                            <X className="w-4 h-4 mr-2" /> Cancel
+                          </Button>
                         </div>
-                      ))}
+                      )}
                     </div>
-                  </div>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <Form {...form}>
+                      <form id="admin-form" onSubmit={form.handleSubmit(handleSave)} className="space-y-8">
+                        {/* Personal Info */}
+                        <div>
+                          <div className="flex items-center gap-2 mb-4">
+                            <User className="w-5 h-5 text-gray-500" />
+                            <h3 className="text-lg font-medium text-gray-900">Personal Information</h3>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <FormField name="name" control={form.control} render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Full Name</FormLabel>
+                                <FormControl><Input {...field} disabled={!isEditing} /></FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )} />
+                            <FormField name="email" control={form.control} render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Email Address</FormLabel>
+                                <FormControl><Input type="email" {...field} disabled={!isEditing} /></FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )} />
+                            <FormField name="phone" control={form.control} render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Phone Number</FormLabel>
+                                <FormControl><Input type="tel" {...field} disabled={!isEditing} /></FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )} />
+                            <FormField name="linkedin" control={form.control} render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>LinkedIn Profile</FormLabel>
+                                <FormControl><Input type="url" placeholder="https://linkedin.com/in/username" {...field} disabled={!isEditing} /></FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )} />
+                          </div>
+                        </div>
 
-                  <div className="flex space-x-3">
-                    <button
-                      type="button"
-                      onClick={handleSubmit}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-                    >
-                      Save Profile
-                    </button>
-                    <button
-                      type="button"
-                      className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
+                        <Separator />
+
+                        {/* Professional Info */}
+                        <div>
+                          <div className="flex items-center gap-2 mb-4">
+                            <Briefcase className="w-5 h-5 text-gray-500" />
+                            <h3 className="text-lg font-medium text-gray-900">Professional Information</h3>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <FormField name="department" control={form.control} render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Department</FormLabel>
+                                <Select onValueChange={field.onChange} value={field.value} disabled={!isEditing}>
+                                  <FormControl>
+                                    <SelectTrigger><SelectValue placeholder="Select department" /></SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    {DEPARTMENTS.map((dept) => (
+                                      <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )} />
+                            <FormField name="position" control={form.control} render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Position</FormLabel>
+                                <Select onValueChange={field.onChange} value={field.value} disabled={!isEditing}>
+                                  <FormControl>
+                                    <SelectTrigger><SelectValue placeholder="Select position" /></SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    {POSITIONS.map((pos) => (
+                                      <SelectItem key={pos} value={pos}>{pos}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )} />
+                          </div>
+                        </div>
+                      </form>
+                    </Form>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
         </Layout>
-      ) : (
-        <div></div>
-      )}
+      )
+        : <div></div>}
     </>
-  );
-};
-
-export default StaffProfileUpdate;
+  )
+}
+export default AdminProfile

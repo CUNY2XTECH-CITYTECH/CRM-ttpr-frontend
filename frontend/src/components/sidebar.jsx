@@ -65,7 +65,7 @@ const studentItems = [
 const items = [
   {
     title: "Dashboard",
-    url: "/",
+    url: "/admin/dashboard",
     childLinks: null,
     icon: LayoutDashboard,
   },

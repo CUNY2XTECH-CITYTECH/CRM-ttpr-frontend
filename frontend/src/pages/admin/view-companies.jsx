@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Edit, Trash2 } from "lucide-react";
-import { useAuth } from "@/lib/dataContext";
+import { useAuth, useClient } from "@/lib/dataContext";
 import { useNavigate } from "react-router";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
@@ -20,27 +20,39 @@ export default function ViewCompanies() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { token, currentUser } = useAuth();
+  const { client } = useClient()
   const companiesPerPage = 5;
-
-  useEffect(() => {
-    if (currentUser && currentUser?.role !== "admin") {
-      navigate("/not-authorized");
+  async function fetchCompanies(token) {
+    console.log('func is called', token)
+    setLoading(true);
+    try {
+      const res = await client.companies.fetchAll();
+      if (res.status === 200) {
+        setCompanies(res.data.data);
+      }
+      else{
+        console.log(res.error)
+      }
+    } catch (error) {
+      console.error(error, 'cannot fetch companies');
+    } finally {
+      setLoading(false);
     }
+  }
+  useEffect(() => {
+    const loadData = async () => {
+      if (currentUser && currentUser?.role !== "admin") {
+        navigate("/not-authorized");
+      }
+      if (!token) {
 
-    async function fetchCompanies() {
-      setLoading(true);
-      try {
-        const res = await fetch("/api/companies"); // Your API endpoint here
-        if (!res.ok) throw new Error("Failed to fetch companies");
-        const data = await res.json();
-        setCompanies(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
+        navigate("/login");
+      }
+      if (token) {
+        await fetchCompanies(token);
       }
     }
-    fetchCompanies();
+    loadData()
   }, [token]);
   const totalPages = Math.ceil(companies.length / companiesPerPage);
   const start = (currentPage - 1) * companiesPerPage;
@@ -72,7 +84,7 @@ export default function ViewCompanies() {
 
           <div className="p-6 mt-6 bg-white rounded-lg shadow-sm max-w-7xl mx-auto">
             <h1 className="text-2xl font-bold mb-6">Companies</h1>
-            <Table>
+            <Table className={'w-full'}>
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
@@ -96,7 +108,7 @@ export default function ViewCompanies() {
                     <TableRow key={company.id}>
                       <TableCell>{company.name}</TableCell>
                       <TableCell>{company.email}</TableCell>
-                      <TableCell>{company.mission}</TableCell>
+                      <TableCell>{company.mission.slice(0,40)}...</TableCell>
                       <TableCell>{company.industry}</TableCell>
                       <TableCell>
                         <a
@@ -108,7 +120,7 @@ export default function ViewCompanies() {
                           Visit
                         </a>
                       </TableCell>
-                      <TableCell>{company.location}</TableCell>
+                      <TableCell className={''}>{company.location}</TableCell>
                       <TableCell className="flex justify-end gap-2">
                         <Button
                           variant="outline"

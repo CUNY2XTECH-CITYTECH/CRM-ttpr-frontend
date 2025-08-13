@@ -39,7 +39,6 @@ export class BaseClient {
     };
     try {
       const response = await fetch(url, config);
-      console.log('after fetch',response)
       if (!response.ok) {
         let errorData = null;
         errorData = await response.json();
