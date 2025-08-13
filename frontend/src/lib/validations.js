@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 const websiteRegex = '^(https?:\/\/)?(www\\.)?[a-yup.-Z0-9-]+\\.[a-zA-Z]{2,}(:[0-9]{1,5})?(\/[^\s]*)?$';
-  const linkedinRegex = /^https?:\/\/(www\.)?linkedin\.com\/in\/[A-Za-z0-9._-]+\/?$/
+const linkedinRegex = /^https?:\/\/(www\.)?linkedin\.com\/in\/[A-Za-z0-9._-]+\/?$/
 const zipRegex = '^\d{5}(-\d{4})?$'
 const phoneRegex = '^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}$'
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-yup.-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -38,6 +38,7 @@ export const validateRegisterationForm = yup.object().shape({
   name: yup.string().required(),
   email: yup.string().required("email is required").matches(emailRegex, "Please enter a valid email address"),
   password: yup.string().matches(passwordRegex, "Password must include a digit, a lowercase, an uppercase and a special character").min(8, "password should be longer than 8 characters").required(),
+  confirmPassword:yup.string().required().oneOf([yup.ref('password')],'passwords must match'),
   id: yup.string().matches().required(),
   role: yup.string().required(),
 })

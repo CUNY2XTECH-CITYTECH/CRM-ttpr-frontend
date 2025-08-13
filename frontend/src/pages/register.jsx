@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -16,23 +15,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Users, Briefcase } from "lucide-react";
+import {  Briefcase, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validateRegisterationForm } from "@/lib/validations";
 import {
   FormField,
-  FormDescription,
   FormControl,
   FormLabel,
   FormItem,
   FormMessage,
   Form,
 } from "@/components/ui/form";
-// import { createData } from "@/utils/http-methods"
 import { useNavigate } from "react-router-dom";
 import { useClient } from "@/lib/dataContext";
+import toast from "react-hot-toast";
+
+
+
 export default function Register() {
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
   const { client } = useClient();
   const registerForm = useForm({
@@ -41,20 +45,24 @@ export default function Register() {
       name: "",
       email: "",
       password: "",
+      confirmPassword:"",
       id: "",
       role: "",
     },
   });
+
   const onSubmit = async (e) => {
+    const { confirmPassword, ...submittedData } = e
     if (e) {
       // used http method from utils/http-method.js
-      let res = await client.create("user/create", e);
+      let res = await client.user.create(submittedData)
       // if registeration successed
       if (res.status == 200) {
+        toast.success("successfully registered")
         if (res.data.role === "admin" && res.data.verified === false) {
           navigate("/admin/waiting");
         } else {
-          navigate("/signin");
+          navigate("/login");
         }
       } else if (res.status == 201) {
         navigate("/account-exists");
@@ -111,19 +119,69 @@ export default function Register() {
                   </FormItem>
                 )}
               ></FormField>
+
               <FormField
                 control={registerForm.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem className={"relative"}>
+                  <FormItem className="relative">
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your password" {...field} />
+                      <div className="relative">
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter your password"
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
                     </FormControl>
-                    <FormMessage className={" text-xs py-0  text-start"} />
+                    <FormMessage className="text-xs py-0 text-start" />
                   </FormItem>
                 )}
-              ></FormField>
+              />
+
+              <FormField
+                control={registerForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem className="relative">
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          type={showConfirmPassword? "text" : "password"}
+                          placeholder="Confirm your password"
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                          {showConfirmPassword? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-xs py-0 text-start" />
+                  </FormItem>
+                )}
+              />
+
 
               <FormField
                 control={registerForm.control}
