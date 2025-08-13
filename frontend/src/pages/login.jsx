@@ -2,21 +2,19 @@ import { useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { GraduationCap, Users, Briefcase } from "lucide-react"
+import {Eye,EyeOff } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { validateLoginForm } from "@/lib/validations"
-import { FormField, FormDescription, FormControl, FormLabel, FormItem, FormMessage, Form } from '@/components/ui/form';
+import { FormField,  FormControl, FormLabel, FormItem, FormMessage, Form } from '@/components/ui/form';
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router"
-import { useCookies } from "react-cookie"
-import { useAuth,useClient} from "@/lib/dataContext"
+import { useClient} from "@/lib/dataContext"
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { token,currentUser} = useAuth()
+
+  const [showPassword, setShowPassword] = useState(false);
   const {client} = useClient()
 
   const loginForm = useForm({
@@ -29,7 +27,6 @@ export default function LoginPage() {
   const onSubmit = async (e) => {
     try {
       let res = await client.auth.login(e, { credentials: 'include' })
-      console.log('response',res)
       if (res.status === 200) {
         console.log(res.data.message,'msg')
         toast.success("Logged in successfully")
@@ -78,20 +75,38 @@ export default function LoginPage() {
                   )}
                 >
                 </FormField>
-                <FormField
-                  control={loginForm.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem className={'relative'}>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your password" {...field} />
-                      </FormControl>
-                      <FormMessage className={' text-xs py-0  text-start'} />
-                    </FormItem>
-                  )}
-                >
-                </FormField>
+              <FormField
+                control={loginForm.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem className="relative">
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter your password"
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-xs py-0 text-start" />
+                  </FormItem>
+                )}
+              />
+
+
                 <Button type="submit" className="w-full">
                   Log In</Button>
 
