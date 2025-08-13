@@ -22,6 +22,7 @@ import ViewCompanies from "./pages/admin/view-companies";
 import CreateInternships from "./pages/admin/create-internships";
 import AdminProfile from "./pages/admin/profile";
 import Dashboard from "./pages/admin/dashboard";
+import Department from "./api/department";
 function App() {
   return (
     <>
@@ -36,7 +37,8 @@ function App() {
           <Route path='/admin/profile' element={<AdminProfile/>} />
           <Route path="/admin/create-internships" element={<CreateInternships/>} />
           <Route path='/admin/create-appointments' element={<Appointment />} />
-
+          <Route path='/department' element={<Department />} />
+          
           <Route path='/admin/view-companies' element={<ViewCompanies/>} />
           <Route path="/admin/waiting" element={<Waiting />} />
           {/* <Route path="/admin" element={<AdminHome/>} /> */}

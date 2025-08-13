@@ -15,18 +15,17 @@ import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
 export default function ViewCompanies() {
   const [companies, setCompanies] = useState([]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { token, currentUser } = useAuth();
-  const { client } = useClient()
+  const { client } = useClient() // use this
   const companiesPerPage = 5;
   async function fetchCompanies(token) {
     console.log('func is called', token)
     setLoading(true);
     try {
-      const res = await client.companies.fetchAll();
+      const res = await client.companies.fetchAll(); // use client to fetch
       if (res.status === 200) {
         setCompanies(res.data.data);
       }
