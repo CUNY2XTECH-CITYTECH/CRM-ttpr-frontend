@@ -54,7 +54,6 @@ const CreateCompanies = () => {
 
   const onSubmit = (values) => {
     console.log("v", values);
-  };
   return (
     <>
       {currentUser ? (
@@ -230,4 +229,5 @@ const CreateCompanies = () => {
     </>
   );
 };
+}
 export default CreateCompanies;
