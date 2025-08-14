@@ -13,31 +13,31 @@ import { useAuth, useClient } from "@/lib/dataContext";
 import { useNavigate } from "react-router";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
-export default function ViewCompanies() {
-  const [companies, setCompanies] = useState([]);
+export default function ViewAppointments() {
+  const [appointments, setAppointments] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { token, currentUser } = useAuth();
   const { client } = useClient()
-  const companiesPerPage = 5;
-  async function fetchCompanies(token) {
+  const appointmentsPerPage = 5;
+  async function fetchAppointments(token) {
     console.log('func is called', token)
     setLoading(true);
-    try {
-      const res = await client.companies.fetchAll();
-      if (res.status === 200) {
-        setCompanies(res.data.data);
-      }
-      else{
-        console.log(res.error)
-      }
-    } catch (error) {
-      console.error(error, 'cannot fetch companies');
-    } finally {
-      setLoading(false);
-    }
+    // try {
+    //   const res = await client.appointments.fetchAll();
+    //   if (res.status === 200) {
+    //     setAppointments(res.data.data);
+    //   }
+    //   else{
+    //     console.log(res.error)
+    //   }
+    // } catch (error) {
+    //   console.error(error, 'cannot fetch appointments');
+    // } finally {
+    //   setLoading(false);
+    // }
   }
   useEffect(() => {
     const loadData = async () => {
@@ -49,33 +49,32 @@ export default function ViewCompanies() {
         navigate("/login");
       }
       if (token) {
-        await fetchCompanies(token);
+        await fetchAppointments(token);
       }
     }
     loadData()
   }, [token]);
-  const totalPages = Math.ceil(companies.length / companiesPerPage);
-  const start = (currentPage - 1) * companiesPerPage;
-  const currentCompanies = companies.slice(start, start + companiesPerPage);
+  const totalPages = Math.ceil(appointments.length / appointmentsPerPage);
+  const start = (currentPage - 1) * appointmentsPerPage;
+  const currentAppointments = appointments.slice(start, start + appointmentsPerPage);
   const handleEdit = (id) => {
     alert(`Edit company with ID: ${id}`);
     // Replace with your real edit logic or navigation
   };
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this company?")) return;
-    try {
-      const res = await fetch(`/api/companies/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Delete failed");
-      setCompanies((prev) => prev.filter((c) => c.id !== id));
-      if (currentCompanies.length === 1 && currentPage > 1) {
-        setCurrentPage((p) => p - 1);
-      }
-    } catch (error) {
-      alert("Failed to delete company");
-      console.error(error);
-    }
+    // try {
+    //   const res = await fetch(`/api/appointments/${id}`, { method: "DELETE" });
+    //   if (!res.ok) throw new Error("Delete failed");
+    //   setAppointments((prev) => prev.filter((c) => c.id !== id));
+    //   if (currentAppointments.length === 1 && currentPage > 1) {
+    //     setCurrentPage((p) => p - 1);
+    //   }
+    // } catch (error) {
+    //   alert("Failed to delete company");
+    //   console.error(error);
+    // }
   };
-  if (loading) return <p className="p-6 text-center">Loading...</p>;
   return (
     <>
       {currentUser ? (
@@ -84,7 +83,8 @@ export default function ViewCompanies() {
 
           <div className="p-6 mt-6 bg-white rounded-lg shadow-sm max-w-7xl mx-auto">
 
-        <h4 className='py-2 font-semibold uppercase'>Companies</h4>
+        <h4 className='py-2 font-semibold uppercase'>Appointments</h4>
+            {loading ? <p className="p-6 text-center">Loading...</p>:
             <Table className={'w-full'}>
               <TableHeader>
                 <TableRow>
@@ -98,14 +98,14 @@ export default function ViewCompanies() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentCompanies.length === 0 ? (
+                {currentAppointments.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-6">
-                      No companies found.
+                      No appointments found.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  currentCompanies.map((company) => (
+                  currentAppointments.map((company) => (
                     <TableRow key={company.id}>
                       <TableCell>{company.name}</TableCell>
                       <TableCell>{company.email}</TableCell>
@@ -145,6 +145,7 @@ export default function ViewCompanies() {
                 )}
               </TableBody>
             </Table>
+            }
             {/* Pagination */}
             <div className="flex justify-between items-center mt-6">
               <Button

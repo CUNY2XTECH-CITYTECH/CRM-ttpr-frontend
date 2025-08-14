@@ -1,9 +1,7 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
-  SidebarHeader,
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarGroupLabel,
@@ -14,18 +12,11 @@ import {
 } from "@/components/ui/sidebar";
 import {
   Calendar,
-  Home,
   LayoutDashboard,
-  Inbox,
-  Search,
   Settings,
   Building2,
   Rows4,
   Users,
-  ChevronDown,
-  SquarePlus,
-  List,
-  Building,
   Handshake, CalendarDays, Server,
   BuildingIcon
 } from "lucide-react";
@@ -132,7 +123,7 @@ const items = [
 
   {
     title: "Students",
-    url: "#",
+    url: "/admin/view-students",
     childLinks: null,
     icon: Users,
   },
