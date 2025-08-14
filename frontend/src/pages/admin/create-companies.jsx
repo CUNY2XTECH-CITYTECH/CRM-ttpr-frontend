@@ -229,4 +229,5 @@ const CreateCompanies = () => {
     </>
   );
 };
+}
 export default CreateCompanies;
