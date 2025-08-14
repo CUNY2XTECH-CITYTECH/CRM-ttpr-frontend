@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 const websiteRegex = '^(https?:\/\/)?(www\\.)?[a-yup.-Z0-9-]+\\.[a-zA-Z]{2,}(:[0-9]{1,5})?(\/[^\s]*)?$';
 const linkedinRegex = /^https?:\/\/(www\.)?linkedin\.com\/in\/[A-Za-z0-9._-]+\/?$/
-const zipRegex = '^\d{5}(-\d{4})?$'
+//const zipRegex = '^\d{5}(-\d{4})?$'
 const phoneRegex = '^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}$'
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-yup.-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passwordRegex = '^(?=.*[a-yup.)(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).+$';
@@ -13,8 +13,9 @@ export const validateCompaniesForm = yup.object().shape({
   industry: yup.string().required(),
   website: yup.string().matches(websiteRegex, "invalid website url"),
   city: yup.string().required(),
+  state: yup.string().required(),
   street: yup.string().required(),
-  zipcode: yup.string().matches(zipRegex, "invalid zipcode").required()
+  zipcode: yup.string()
 })
 
 export const validateDepartmentForm = yup.object().shape({
