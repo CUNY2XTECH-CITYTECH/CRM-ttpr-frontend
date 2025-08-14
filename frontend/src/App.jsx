@@ -26,15 +26,19 @@ import ViewAppointments from "./pages/admin/view-appointments";
 import ViewStudents from "./pages/admin/view-students";
 import ViewStaff from "./pages/admin/view-staffs";
 import ViewInternships from "./pages/admin/view-internships";
+import { ComingSoon } from "./pages/ComingSoon";
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
+
+          <Route path="/coming-soon" element={<ComingSoon/>} />
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
+
           <Route path='/admin/create-companies' element={<CreateCompanies />} />
           <Route path='/admin/update-companies' element={<UpdateCompanies />} />
           <Route path='/admin/view-students' element={<ViewStudents />} />

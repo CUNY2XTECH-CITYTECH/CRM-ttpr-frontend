@@ -13,7 +13,7 @@ export const DataContextProvider = ({ children }) => {
 
   const logout = async() => {
     const logoutAttempt = await client.auth.logout({credentials:'include'})
-    console.log('trying to logut',logoutAttempt)
+    console.log('trying to logout',logoutAttempt)
     setCurrentUser(null)
   };
 

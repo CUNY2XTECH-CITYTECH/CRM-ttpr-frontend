@@ -36,13 +36,13 @@ const studentItems = [
   },
   {
     title: "Calendar",
-    url: "/calendar",
+    url: "/coming-soon",
     childLinks: null,
     icon: CalendarDays,
   },
   {
     title: "Techstacks",
-    url: "/techstacks",
+    url: "/coming-soon",
     childLinks: null,
     icon: Server,
   },
