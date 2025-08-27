@@ -27,44 +27,44 @@ import ViewStudents from "./pages/admin/view-students";
 import ViewStaff from "./pages/admin/view-staffs";
 import ViewInternships from "./pages/admin/view-internships";
 import { ComingSoon } from "./pages/ComingSoon";
+import ProtectedRoute from "./pages/protected";
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
+            <Route path="/error" element={<InfoPage />} />
+            <Route path="/not-authorized" element={<InfoPage />} />
+            <Route path="/account-exists" element={<InfoPage />} />
 
-          <Route path="/coming-soon" element={<ComingSoon/>} />
-          <Route path="/admin" element={<AdminHome />} />
-          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
+          <Route element={<ProtectedRoute allowRoutes={['admin']} />} >
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path='/admin/create-companies' element={<CreateCompanies />} />
+            <Route path='/admin/view-companies/:id' element={<UpdateCompanies />} />
+            <Route path='/admin/view-students' element={<ViewStudents />} />
+            <Route path='/admin/view-staffs' element={<ViewStaff />} />
+            <Route path="/admin" element={<AdminHome />} />
+            <Route path='/admin/profile' element={<AdminProfile />} />
+            <Route path="/admin/create-internships" element={<CreateInternships />} />
+            <Route path="/admin/view-internships" element={<ViewInternships />} />
+            <Route path='/admin/create-appointments' element={<Appointment />} />
+            < Route path='/admin/view-appointments' element={<ViewAppointments />} />
+            <Route path='/admin/view-companies' element={<ViewCompanies />} />
+            <Route path="/admin/waiting" element={<Waiting />} />
+            <Route path="/admin" element={<AdminHome />} />
+          </Route>
 
-          <Route path='/admin/create-companies' element={<CreateCompanies />} />
-          <Route path='/admin/update-companies' element={<UpdateCompanies />} />
-          <Route path='/admin/view-students' element={<ViewStudents />} />
-          <Route path='/admin/view-staffs' element={<ViewStaff />} />
-
-          <Route path='/admin/profile' element={<AdminProfile />} />
-          <Route path="/admin/create-internships" element={<CreateInternships />} />
-         <Route path="/admin/view-internships" element={<ViewInternships/>} />
-
-          <Route path='/admin/create-appointments' element={<Appointment />} />
-          < Route path='/admin/view-appointments' element={<ViewAppointments/>} />
-
-
-          <Route path='/admin/view-companies' element={<ViewCompanies />} />
-          <Route path="/admin/waiting" element={<Waiting />} />
-          <Route path="/admin" element={<AdminHome/>} /> 
-          <Route path="/" element={<StudentHome />} />
-          <Route path='/profile' element={<StudentProfileUpdate />} />
-          <Route path="/form" element={<MultiStepForm />} />
-          <Route path="/onboard" element={<StudentOnboarding />} />
-          <Route path="/error" element={<InfoPage />} />
-          <Route path="/not-authorized" element={<InfoPage />} />
-          <Route path="/account-exists" element={<InfoPage />} />
-          <Route path="/internships" element={<Internships />} />
-          <Route path="/internships/apply/:id" element={<JobApplication />} />
-
+          <Route element={<ProtectedRoute allowRoutes={['student']} />} >
+            <Route path="/" element={<StudentHome />} />
+            <Route path='/profile' element={<StudentProfileUpdate />} />
+            <Route path="/form" element={<MultiStepForm />} />
+            <Route path="/onboard" element={<StudentOnboarding />} />
+            <Route path="/internships" element={<Internships />} />
+            <Route path="/internships/apply/:id" element={<JobApplication />} />
+          </Route>
         </Routes>
         <Toaster />
       </BrowserRouter>

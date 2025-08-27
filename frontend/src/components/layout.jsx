@@ -8,10 +8,10 @@ function Layout({ children,user}) {
     <SidebarProvider >
 
       <AppSidebar role={user.role} />
-      <main className="w-full">
+      <main className="w-full box-border">
         <Header CloseSidebar={<SidebarTrigger />} currentUser={user} role={"staff"} />
         {/* <SidebarTrigger /> */}
-        <div className="px-12 py-4 box-border">{children}</div>
+        <div className="px-12 py-4 ">{children}</div>
       </main>
     </SidebarProvider>
   );

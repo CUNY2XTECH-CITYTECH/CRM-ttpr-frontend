@@ -8,12 +8,12 @@ const DataContext = createContext(null);
 export const DataContextProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["access_token"]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading,setLoading] = useState(true)
   const token = cookies.access_token;
   const client = new Client(token);
-
-  const logout = async() => {
-    const logoutAttempt = await client.auth.logout({credentials:'include'})
-    console.log('trying to logout',logoutAttempt)
+  const logout = async () => {
+    const logoutAttempt = await client.auth.logout({ credentials: 'include' })
+    console.log('trying to logout', logoutAttempt)
     setCurrentUser(null)
   };
 
@@ -23,9 +23,11 @@ export const DataContextProvider = ({ children }) => {
         const userData = await fetchUserData(client, token);
         if (userData) {
           setCurrentUser(userData.data[0]);
+          setLoading(false)
         }
       } else {
         setCurrentUser(null); // Clear user data if no token
+        setLoading(true)
       }
     };
     loadData();
@@ -35,6 +37,7 @@ export const DataContextProvider = ({ children }) => {
     client: client,
     currentUser: currentUser, // Provide the fetched data
     token: cookies.access_token,
+    loading,
     logout,
 
   };
@@ -51,6 +54,6 @@ export const useClient = () => {
 };
 
 export const useAuth = () => {
-  const { token, currentUser,logout } = useContext(DataContext);
-  return { token, currentUser,logout };
+  const { token, currentUser, logout,loading } = useContext(DataContext);
+  return { token, currentUser, logout,loading };
 };

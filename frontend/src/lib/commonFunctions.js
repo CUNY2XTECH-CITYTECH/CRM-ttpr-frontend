@@ -4,7 +4,6 @@ export const fetchUserData = async (client, token) => {
   }
 
   const currentSession = await client.user.fetchOne();
-  console.log("CURRENT SESSION", currentSession)
 
 
   const invalidOrExpire = currentSession.status !== 200 || currentSession.status === 403;

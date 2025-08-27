@@ -28,7 +28,6 @@ export default function LoginPage() {
     try {
       let res = await client.auth.login(e, { credentials: 'include' })
       if (res.status === 200) {
-        console.log(res.data.message, 'msg')
         toast.success("Logged in successfully")
         if (res.data?.message?.role === 'admin') {
           navigate('/admin')
