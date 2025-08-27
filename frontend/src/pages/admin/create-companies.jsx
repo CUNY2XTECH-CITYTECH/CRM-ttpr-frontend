@@ -1,6 +1,6 @@
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
-import {toast} from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 import {
   FormField,
   FormDescription,
@@ -26,15 +26,33 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useAuth, useClient } from "@/lib/dataContext";
 import { useNavigate } from "react-router";
-import { SuggestionInput } from "@/components/suggestion-input";
+import { Check, ChevronsUpDown } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Combobox } from "@/components/combobox";
+
 const CreateCompanies = () => {
   const { token, currentUser } = useAuth();
 
   const [industries, setIndustries] = useState([])
   const [states, setStates] = useState([])
-
+  const [open, setOpen] = useState(false)
   const [cities, setCities] = useState([])
   const { client } = useClient()
+
   const navigate = useNavigate();
   // const [view, setView] = useState('row')
   const companiesForm = useForm({
@@ -51,30 +69,15 @@ const CreateCompanies = () => {
       zipcode: "",
     },
   });
-  const selectedState = useWatch({
-    control: companiesForm.control,
-    name: "state", // Field name to watch
-  });
-  console.log('watching'.selectedState)
-  const handleSelect = (suggestion) => {
-    console.log("Selected:", suggestion)
-    // Handle the selected suggestion
-  }
   useEffect(() => {
     const loadData = async () => {
       let res = await client.industry.fetchAll()
       if (res.status === 200) {
+        console.log(res.data.data.industries, 'ind')
         setIndustries(res.data.data.industries)
       }
-      let cityres = await client.stateCities.fetchCities()
-      if (cityres.status === 200) {
-        console.log(cityres.data, 'city')
-        setCities(cityres.data)
-      }
-      let stateres = await client.stateCities.fetchStates()
-      console.log(stateres, 'wow')
+      let stateres= await client.stateCities.fetchStates()
       if (stateres.status === 200) {
-        console.log(stateres.data, stateres.data.states[0].abbreviation, 'state')
         setStates(stateres.data.states)
       }
     }
@@ -87,13 +90,23 @@ const CreateCompanies = () => {
     }
     loadData()
   }, [token]);
-
+ const getCities = async (state) => {
+    console.log('state', state)
+    let res = await client.stateCities.fetchCitiesByState(state)
+    if (res.status === 200) {
+      console.log(res.data.data, 'city')
+      setCities(res.data.data)
+    }
+    }
   const onSubmit = async (values) => {
-    console.log("v", values);
-    let res = await client.companies.create(values,{credentials:'include'})
+    let res = await client.companies.create(values, { credentials: 'include' })
     // if registeration successed
+    console.log('sre', res)
     if (res.status == 200) {
       toast.success("successfully created company")
+    }
+    else if (res.status == 201) {
+      toast.info("Company with this email already exists")
     }
     else {
       toast.error("Error creating company")
@@ -172,21 +185,7 @@ const CreateCompanies = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Choose Industry</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange}>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Choose Industry" {...field} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {industries?.length > 0 &&
-                                industries.map((industry) =>
-                                  <SelectItem value={industry._id}>{industry.industryName}</SelectItem>
-                                )
-                              }
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-
+                        <Combobox dataList={industries} controller={field} type="industry"/>
                         <FormMessage
                           className={"text-xs absolute -bottom-5 left-0"}
                         />
@@ -221,54 +220,21 @@ const CreateCompanies = () => {
                     name="state"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Choose State</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange}>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Choose State" {...field} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {states?.length > 0 &&
-                                states.map((state, key) =>
 
-                                  <SelectItem key={key} value={state.name}>{state.abbreviation}</SelectItem>
-                                )}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                     <FormLabel>Choose State</FormLabel>
+                        <Combobox dataList={states} controller={field} type="state" getCities={getCities}/>
+
                       </FormItem>
                     )}
                   ></FormField>
 
-                  {/*SuggestionInput
-                  //   placeholder="Search for topics..."
-                  //   onSelect={handleSelect}
-                  //   className="mb-4"
-                  //   state={selectedState}
-                  // />*/}
                   <FormField
                     control={companiesForm.control}
                     name="city"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Choose City</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange}>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Theme" {...field} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {cities?.length > 0 &&
-                                cities.map((state, key) =>
-
-                                  <SelectItem value={state} key={key}>{state}</SelectItem>
-                                )}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
+                        <Combobox dataList={cities} controller={field} type="city" />
                         <FormMessage
                           className={"text-xs absolute -bottom-5 left-0"}
                         />

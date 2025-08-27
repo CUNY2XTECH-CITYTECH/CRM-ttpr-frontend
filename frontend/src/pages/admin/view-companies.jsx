@@ -13,6 +13,8 @@ import { useAuth, useClient } from "@/lib/dataContext";
 import { useNavigate } from "react-router";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
+import toast from "react-hot-toast";
+
 export default function ViewCompanies() {
   const [companies, setCompanies] = useState([]);
 
@@ -23,12 +25,11 @@ export default function ViewCompanies() {
   const { client } = useClient()
   const companiesPerPage = 5;
   async function fetchCompanies(token) {
-    console.log('func is called', token)
     setLoading(true);
     try {
       const res = await client.companies.fetchAll();
       if (res.status === 200) {
-        setCompanies(res.data.data);
+        setCompanies(res.data);
       }
       else{
         console.log(res.error)
@@ -41,24 +42,25 @@ export default function ViewCompanies() {
   }
   useEffect(() => {
     const loadData = async () => {
-      if (currentUser && currentUser?.role !== "admin") {
-        navigate("/not-authorized");
-      }
-      if (!token) {
-
-        navigate("/login");
-      }
       if (token) {
         await fetchCompanies(token);
       }
     }
     loadData()
-  }, [token]);
+  }, []);
   const totalPages = Math.ceil(companies.length / companiesPerPage);
   const start = (currentPage - 1) * companiesPerPage;
   const currentCompanies = companies.slice(start, start + companiesPerPage);
-  const handleEdit = (id) => {
-    alert(`Edit company with ID: ${id}`);
+  const handleEdit = async(id) => {
+    navigate(`/admin/view-companies/${id}`)
+    //  try {
+    //   const res = await client.companies.update(id,{credentials:'include'});
+    //   console.log(res,'updated')
+    // } catch (error) {
+    //   toast.error("Failed to update company");
+    //   console.error(error);
+    // }
+    //
     // Replace with your real edit logic or navigation
   };
   const handleDelete = async (id) => {
@@ -80,17 +82,17 @@ export default function ViewCompanies() {
     <>
       {currentUser ? (
         <Layout user={currentUser}>
-          <Topbar title="Add New Company" mode="read" />
+          <Topbar title="Add New Company" mode="read" link="/admin/create-companies"/>
 
-          <div className="p-6 mt-6 bg-white rounded-lg shadow-sm max-w-7xl mx-auto">
+          <div className="p-6 mt-6 bg-white rounded-lg shadow-sm mx-auto">
 
         <h4 className='py-2 font-semibold uppercase'>Companies</h4>
-            <Table className={'w-full'}>
+            <div className="w-full">
+            <Table className={''}>
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
-                  <TableHead>Mission</TableHead>
                   <TableHead>Industry</TableHead>
                   <TableHead>Website</TableHead>
                   <TableHead>Location</TableHead>
@@ -106,10 +108,9 @@ export default function ViewCompanies() {
                   </TableRow>
                 ) : (
                   currentCompanies.map((company) => (
-                    <TableRow key={company.id}>
+                    <TableRow key={company._id}>
                       <TableCell>{company.name}</TableCell>
                       <TableCell>{company.email}</TableCell>
-                      <TableCell>{company.mission.slice(0,40)}...</TableCell>
                       <TableCell>{company.industry}</TableCell>
                       <TableCell>
                         <a
@@ -126,7 +127,7 @@ export default function ViewCompanies() {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => handleEdit(company.id)}
+                          onClick={() => handleEdit(company._id)}
                           aria-label="Edit company"
                         >
                           <Edit className="w-4 h-4" />
@@ -145,6 +146,7 @@ export default function ViewCompanies() {
                 )}
               </TableBody>
             </Table>
+            </div>
             {/* Pagination */}
             <div className="flex justify-between items-center mt-6">
               <Button

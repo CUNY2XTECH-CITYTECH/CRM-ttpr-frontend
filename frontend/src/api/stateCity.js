@@ -5,13 +5,18 @@ export class StateCityClient extends BaseClient {
     super(undefined, token)
   }
   async fetchCities() {
-    // get all user
+    // get all cities 
     const res = await this.get('cities');
+    return res
+  }
+  async fetchCitiesByState(state) {
+    // get cities by state 
+    const res = await this.get('cities/'+state);
     return res
   }
 
   async fetchStates() {
-    // get all user
+    // get all states 
     const res = await this.get('states');
     return res
   }
