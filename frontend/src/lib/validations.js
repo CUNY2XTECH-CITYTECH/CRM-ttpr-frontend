@@ -9,6 +9,11 @@ export const validateCompaniesForm = yup.object().shape({
   // email, mission, industry,website,city, yup.pcode, street
   name: yup.string().min(3).required(),
   email: yup.string().required("email is required").matches(emailRegex, "Please enter a valid email address"),
+  contactName: yup.string().min(3).required(),
+  contactEmail: yup.string().required("email is required").matches(emailRegex, "Please enter a valid email address"),
+  contactPosition: yup.string().min(3).required(),
+  contactDepartment: yup.string().min(3).required(),
+  contactPhone: yup.string().matches(phoneRegex, "invalid phone number"),
   mission: yup.string().max(200),
   industry: yup.string().required(),
   website: yup.string().matches(websiteRegex, "invalid website url"),

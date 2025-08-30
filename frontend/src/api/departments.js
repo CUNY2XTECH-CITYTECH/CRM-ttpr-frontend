@@ -1,15 +1,15 @@
 import { BaseClient } from "./server";
-export class IndustryClient extends BaseClient {
+export class DepartmentClient extends BaseClient {
   constructor(token) {
     super(undefined, token)
   }
   async fetchAll() {
     // get all user
-    const res = await this.get('industry');
+    const res = await this.get('department');
     return res
   }
   async fetchOne(id) {
-    const res = await this.get('industry/'+id);
+    const res = await this.get('department/'+id);
       return res
 
   }
@@ -17,21 +17,20 @@ export class IndustryClient extends BaseClient {
   async create(data) {
     // get all user
 
-    const res = await this.post('industry/create');
+    const res = await this.post('department/create',data); 
     return res;
   }
 
   async update() {
     // get all user
 
-    const res = await this.post('industry/update');
+    const res = await this.post('department/update');
     return res
   }
 
   async delete() {
     // get all user
-
-    const res = await this.post('industry/delete');
+    const res = await this.post('department/delete');
     return res  }
 }
 

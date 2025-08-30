@@ -15,42 +15,20 @@ import { useForm, useWatch } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validateCompaniesForm } from "@/lib/validations";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useAuth, useClient } from "@/lib/dataContext";
 import { useNavigate } from "react-router";
-import { Check, ChevronsUpDown } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { Combobox } from "@/components/combobox";
+import { CreatableSelect } from "@/components/creatable-select";
 
 const CreateCompanies = () => {
   const { token, currentUser } = useAuth();
-
+  const [departments, setDepartments] = useState([])
   const [industries, setIndustries] = useState([])
   const [states, setStates] = useState([])
-  const [open, setOpen] = useState(false)
   const [cities, setCities] = useState([])
+  const [positions, setPositions] = useState([])
   const { client } = useClient()
 
   const navigate = useNavigate();
@@ -60,6 +38,11 @@ const CreateCompanies = () => {
     defaultValues: {
       name: "",
       email: "",
+      contactName: "",
+      contactEmail: "",
+      contactPosition: "",
+      contactDepartment: "",
+      contactPhone: "",
       mission: "",
       industry: "",
       website: "",
@@ -69,18 +52,23 @@ const CreateCompanies = () => {
       zipcode: "",
     },
   });
-  useEffect(() => {
-    const loadData = async () => {
-      let res = await client.industry.fetchAll()
-      if (res.status === 200) {
-        console.log(res.data.data.industries, 'ind')
-        setIndustries(res.data.data.industries)
-      }
-      let stateres= await client.stateCities.fetchStates()
-      if (stateres.status === 200) {
-        setStates(stateres.data.states)
-      }
+  const { setValue } = companiesForm
+  const loadData = async () => {
+    let res = await client.industries.fetchAll()
+    if (res && res.status === 200) {
+      setIndustries(res.data.industries)
     }
+    let stateres = await client.stateCities.fetchStates()
+    if (stateres.status === 200) {
+      setStates(stateres.data.states)
+    }
+    let deptres = await client.departments.fetchAll()
+    console.log('deptres', deptres)
+    if (deptres && deptres.status === 200) {
+      setDepartments(deptres.data.departments)
+    }
+  }
+  useEffect(() => {
 
     if (currentUser && currentUser?.role !== "admin") {
       navigate("/not-authorized");
@@ -90,14 +78,25 @@ const CreateCompanies = () => {
     }
     loadData()
   }, [token]);
- const getCities = async (state) => {
+
+  const handleCreate = (setFunc, setVal, inputValue, type) => {
+    const newOption = { name: inputValue };
+    setFunc((prev) => [...prev, newOption]);
+    console.log('inputValue', inputValue)
+    setVal(type, inputValue, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
+  const getCities = async (state) => {
     console.log('state', state)
     let res = await client.stateCities.fetchCitiesByState(state)
     if (res.status === 200) {
       console.log(res.data.data, 'city')
       setCities(res.data.data)
     }
-    }
+  }
   const onSubmit = async (values) => {
     let res = await client.companies.create(values, { credentials: 'include' })
     // if registeration successed
@@ -161,6 +160,108 @@ const CreateCompanies = () => {
                     )}
                   ></FormField>
                 </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <FormField
+                    control={companiesForm.control}
+                    name="contactName"
+                    render={({ field }) => (
+                      <FormItem className={"relative"}>
+                        <FormLabel>Contact Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Contact Name" {...field} />
+                        </FormControl>
+                        <FormMessage
+                          className={"text-xs absolute -bottom-5 left-0"}
+                        />
+                      </FormItem>
+                    )}
+                  ></FormField>
+                  <FormField
+                    control={companiesForm.control}
+                    name="contactEmail"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Contact Person Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Contact Person Email" {...field} />
+                        </FormControl>
+                        <FormMessage
+                          className={"text-xs absolute -bottom-5 left-0"}
+                        />
+                      </FormItem>
+                    )}
+                  ></FormField>
+
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+
+                  <FormField
+                    control={companiesForm.control}
+                    name="contactPosition"
+                    render={({ field }) => (
+                      <FormItem className={"relative"}>
+                        <FormLabel>Contact Person Position</FormLabel>
+                        <FormControl>
+                          <CreatableSelect
+                            options={positions}
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            onCreateOption={(inputValue) => handleCreate(setPositions, setValue, inputValue, 'contactPosition')}
+                            placeholder="Enter or Select position ..."
+                            searchPlaceholder="Search positions..."
+                            createLabel="Create new position"
+                            className="w-full"
+                          />
+                        </FormControl>
+                        <FormMessage
+                          className={"text-xs absolute -bottom-5 left-0"}
+                        />
+                      </FormItem>
+                    )}
+                  ></FormField>
+                  <FormField
+                    control={companiesForm.control}
+                    name="contactDepartment"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Contact Person Department</FormLabel>
+                        <FormControl>
+                          <CreatableSelect
+                            options={departments}
+                            form={companiesForm}
+                            controller={field}
+                            onCreateOption={(inputValue) => handleCreate(setDepartments, setValue, inputValue, 'contactDepartment')}
+                            placeholder="Enter or Select department..."
+                            searchPlaceholder="Search departments..."
+                            createLabel="Create new department"
+                            className="w-full"
+                          />
+
+                        </FormControl>
+                        <FormMessage
+                          className={"text-xs absolute -bottom-5 left-0"}
+                        />
+                      </FormItem>
+                    )}
+                  ></FormField>
+                </div>
+                <div>
+                  <FormField
+                    control={companiesForm.control}
+                    name="contactPhone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Contact Person Phone</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Contact Person Phone Number" {...field} />
+                        </FormControl>
+                        <FormMessage
+                          className={"text-xs absolute -bottom-5 left-0"}
+                        />
+                      </FormItem>
+                    )}
+                  ></FormField>
+                </div>
                 <div>
                   <FormField
                     control={companiesForm.control}
@@ -185,7 +286,7 @@ const CreateCompanies = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Choose Industry</FormLabel>
-                        <Combobox dataList={industries} controller={field} type="industry"/>
+                        <Combobox form={companiesForm} dataList={industries} controller={field} type="industry" />
                         <FormMessage
                           className={"text-xs absolute -bottom-5 left-0"}
                         />
@@ -220,10 +321,8 @@ const CreateCompanies = () => {
                     name="state"
                     render={({ field }) => (
                       <FormItem>
-
-                     <FormLabel>Choose State</FormLabel>
-                        <Combobox dataList={states} controller={field} type="state" getCities={getCities}/>
-
+                        <FormLabel>Choose State</FormLabel>
+                        <Combobox dataList={states} controller={field} type="state" getCities={getCities} />
                       </FormItem>
                     )}
                   ></FormField>
@@ -243,7 +342,6 @@ const CreateCompanies = () => {
                   ></FormField>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-
                   <FormField
                     control={companiesForm.control}
                     name="street"

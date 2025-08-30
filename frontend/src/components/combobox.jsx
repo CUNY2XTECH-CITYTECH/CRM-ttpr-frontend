@@ -19,9 +19,8 @@ import {
 
 
 
-export function Combobox({ dataList, type, controller, getCities = null }) {
+export function Combobox({ dataList, type, controller,form=null, getCities = null }) {
   const [open, setOpen] = React.useState(false)
-  console.log('controller.value', controller.value,dataList)
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -32,7 +31,7 @@ export function Combobox({ dataList, type, controller, getCities = null }) {
           className="w-[200px] justify-between"
         >
           {
-            ((val = dataList.find(d => (typeof d === 'string' ? d === controller.value : d?.name === controller.value))) =>
+            ((val = dataList?.find(d => (typeof d === 'string' ? d === controller.value : d?.name === controller.value))) =>
               typeof val === 'string' ? val : val?.name || `Select ${type}`)()
           }
           <ChevronsUpDown className="opacity-50" />
@@ -44,13 +43,17 @@ export function Combobox({ dataList, type, controller, getCities = null }) {
           <CommandList>
             <CommandEmpty>No {type} found.</CommandEmpty>
             <CommandGroup>
-              {dataList.map((data, key) => (
+              {dataList?.map((data, key) => (
                 <CommandItem
                   key={typeof(data)==='string'?key:data?._id || data?.name }
                   value={typeof(data)=='string'?data:data?.name }
                   onSelect={(currentValue) => {
                     controller.onChange(currentValue === controller.value ? "" : currentValue)
                     setOpen(false)
+                    form && form.setValue(type,data?._id,{
+                      shouldValidate: true,
+                      shouldDirty: true
+                    } )
                     getCities && getCities(currentValue)
                   }}
 
