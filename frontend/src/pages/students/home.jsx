@@ -16,8 +16,8 @@ export default function StudentHome() {
   const navigate = useNavigate()
   const navlinks = [
     { name: "Internships", icon: <Handshake className="text-xl" />, path: '/internships' },
-    { name: "Calendar", icon: <CalendarDays className="text-xl" />, path: '/calendar' },
-    { name: "Techstacks", icon: <Server className="text-xl" />, path: '/techstacks' },
+    { name: "Calendar", icon: <CalendarDays className="text-xl" />, path: '/coming-soon' },
+    { name: "Techstacks", icon: <Server className="text-xl" />, path: '/coming-soon' },
     { name: "profile", icon: <Settings className="text-xl" />, path: '/profile' },
   ]
   useEffect(() => {

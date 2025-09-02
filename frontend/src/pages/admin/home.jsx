@@ -17,11 +17,11 @@ export default function AdminHome() {
     { name: "Students", icon: <GraduationCap className="text-xl" />, path: "/admin/view-students" },
     { name: "Companies", icon: <Building className="text-xl" />, path: "/admin/view-companies" },
     { name: "Internships", icon: <Handshake className="text-xl" />, path: "/admin/view-internships" },
-    { name: "Calendar", icon: <CalendarDays className="text-xl" />, path: "/admin/calendar" },
+    { name: "Calendar", icon: <CalendarDays className="text-xl" />, path: "/coming-soon" },
     { name: "Appointment", icon: <TableProperties className="text-xl" />, path: "/admin/view-appointments" },
-    { name: "Document", icon: <FileText className="text-xl" />, path: "/admin/view-documents" },
-    { name: "Techstacks", icon: <Server className="text-xl" />, path: "/admin/view-techstacks" },
-    { name: "Skills", icon: <ShieldUser className="text-xl" />, path: "/admin/view-skills" },
+    { name: "Document", icon: <FileText className="text-xl" />, path: "/coming-soon" },
+    { name: "Techstacks", icon: <Server className="text-xl" />, path: "/coming-soon" },
+    { name: "Skills", icon: <ShieldUser className="text-xl" />, path: "/coming-soon" },
     { name: "Settings", icon: <Settings className="text-xl" />, path: "/admin/profile" },
 
 

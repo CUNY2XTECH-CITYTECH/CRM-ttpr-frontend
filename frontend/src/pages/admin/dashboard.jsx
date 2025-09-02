@@ -167,11 +167,11 @@ export default function Dashboard() {
                           label: "Students",
                         },
                       }}
-                      className="h-[200px]"
+                      className="h-[200px] max-w-[200px]"
                     >
                       <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
-                          <Pie data={departmentData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="students">
+                          <Pie data={departmentData} cx="50%" cy="50%" innerRadius={40} outerRadius={80} dataKey="students">
                             {departmentData.map((entry, index) => (
                               <Cell key={`cell-${index}`} fill={entry.fill} />
                             ))}

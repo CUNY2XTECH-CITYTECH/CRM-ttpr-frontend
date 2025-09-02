@@ -15,10 +15,10 @@ export class UserClient extends BaseClient {
 
   }
 
-  async create() {
+  async create(data) {
     // get all user
 
-    const res = await this.post('users/create');
+    const res = await this.post('users/create',data);
     return res;
   }
 
