@@ -19,7 +19,7 @@ import {
 
 
 
-export function Combobox({ dataList, type, controller,form=null, getCities = null }) {
+export function Combobox({ error,dataList, type, controller,form=null, getCities = null }) {
   const [open, setOpen] = React.useState(false)
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -28,10 +28,10 @@ export function Combobox({ dataList, type, controller,form=null, getCities = nul
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className={cn("w-[200px] justify-between", error && "border-destructive text-destructive")}
         >
           {
-            ((val = dataList?.find(d => (typeof d === 'string' ? d === controller.value : d?.name === controller.value))) =>
+            ((val = dataList?.find(d => (typeof d === 'string' ? d === controller.value : d?._id=== controller.value || d?.name===controller.value))) =>
               typeof val === 'string' ? val : val?.name || `Select ${type}`)()
           }
           <ChevronsUpDown className="opacity-50" />

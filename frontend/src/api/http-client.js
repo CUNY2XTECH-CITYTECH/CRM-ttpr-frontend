@@ -3,6 +3,7 @@ import { AuthServiceClient } from "./auth";
 import { CompaniesClient } from "./companies";
 import { DepartmentClient } from "./departments";
 import { IndustryClient } from "./industries";
+import { PositionClient } from "./positions";
 import { StateCityClient } from "./stateCity";
 import { UserClient } from "./user";
 
@@ -16,10 +17,15 @@ export class Client {
     this.industries = new IndustryClient(this.token)
     this.stateCities = new StateCityClient(this.token)
     this.departments = new DepartmentClient(this.token)
+    this.positions = new PositionClient(this.token)
   }
   user() {
     return this.user;
   }
+  positions() {
+    return this.positions;
+  }
+
   departments() {
     return this.departments;
   }

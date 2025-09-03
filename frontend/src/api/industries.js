@@ -17,7 +17,7 @@ export class IndustryClient extends BaseClient {
   async create(data) {
     // get all user
 
-    const res = await this.post('industry/create');
+    const res = await this.post('industry/create',data);
     return res;
   }
 

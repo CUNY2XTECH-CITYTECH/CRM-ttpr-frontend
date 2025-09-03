@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 export function CreatableSelect({
   options,
   form,
+  error,
   controller,
   onCreateOption,
   placeholder = "Select option...",
@@ -21,7 +22,7 @@ export function CreatableSelect({
   const [open, setOpen] = React.useState(false)
   const [searchValue, setSearchValue] = React.useState("")
 
-  const selectedOption = options.find((option) => option.name === controller?.value)
+  const selectedOption = options.find((option) => option.name === controller?.value || option._id === controller?.value)
 
   const filteredOptions = options.filter((option) => option.name?.toLowerCase().includes(searchValue.toLowerCase()))
 
@@ -30,13 +31,14 @@ export function CreatableSelect({
   const showCreateOption = searchValue && !exactMatch && onCreateOption
 
 
-  const handleCreate = () => {
+  const handleCreateFunction = async() => {
     if (searchValue && onCreateOption) {
-      onCreateOption(searchValue)
-      console.log("Created option:", searchValue)
-      controller?.onChange?.(searchValue)
       setOpen(false)
       setSearchValue("")
+      const option = await onCreateOption(searchValue)
+      console.log("Created option:", option)
+      controller.onChange(option._id? option._id : "select an option")
+
     }
   }
 
@@ -47,7 +49,7 @@ export function CreatableSelect({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("w-full justify-between", className)}
+          className={cn("w-full justify-between", className, error && "border-destructive text-destructive", disabled && "cursor-not-allowed bg-gray-100")}
           disabled={disabled}
         >
           {selectedOption ? selectedOption.name : placeholder}
@@ -61,7 +63,7 @@ export function CreatableSelect({
             <CommandEmpty>
               {showCreateOption ? (
                 <div className="p-2">
-                  <Button variant="ghost" className="w-full justify-start" onClick={handleCreate}>
+                  <Button variant="ghost" className="w-full justify-start" onClick={handleCreateFunction}>
                     <Plus className="mr-2 h-4 w-4" />
                     {createLabel} "{searchValue}"
                   </Button>
@@ -76,13 +78,14 @@ export function CreatableSelect({
                   <CommandItem key={option?._id || option?.name}
                     value={option.name}
                     onSelect={(val) => {
-                      controller.onChange(val === controller.value ? "" : val)
+                      console.log("Selected option now:", val,controller.value, option?._id)
+                      controller.onChange(val) 
                       setOpen(false)
                       form && form.setValue(controller.name, option?._id, { shouldValidate: true, shouldDirty: true })
                       setSearchValue("")
                     }
                     }>
-                    <Check className={cn("mr-2 h-4 w-4", controller?.value === option.name ? "opacity-100" : "opacity-0")} />
+                    <Check className={cn("mr-2 h-4 w-4", controller?.value === option._id || controller?.value === option.name? "opacity-100" : "opacity-0")} />
                     {option.name}
                   </CommandItem>
                 ))}
@@ -90,7 +93,7 @@ export function CreatableSelect({
             )}
             {showCreateOption && filteredOptions.length > 0 && (
               <CommandGroup>
-                <CommandItem onSelect={handleCreate}>
+                <CommandItem onSelect={handleCreateFunction}>
                   <Plus className="mr-2 h-4 w-4" />
                   {createLabel} "{searchValue}"
                 </CommandItem>

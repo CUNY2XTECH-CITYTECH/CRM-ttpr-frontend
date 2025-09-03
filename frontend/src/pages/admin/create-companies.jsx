@@ -67,6 +67,12 @@ const CreateCompanies = () => {
     if (deptres && deptres.status === 200) {
       setDepartments(deptres.data.departments)
     }
+    let posres = await client.positions.fetchAll()
+    console.log('posres', posres)
+    if (posres && posres.status === 200) {
+      setPositions(posres.data.positions)
+    }
+
   }
   useEffect(() => {
 
@@ -79,28 +85,49 @@ const CreateCompanies = () => {
     loadData()
   }, [token]);
 
-  const handleCreate = (setFunc, setVal, inputValue, type) => {
+  const handleCreate = async (setFunc, setVal, inputValue, type) => {
     const newOption = { name: inputValue };
+    let id = ''
+    switch (type) {
+      case 'contactPosition':
+        const createPos = await client.positions.create(newOption)
+        console.log('createPos', createPos)
+        if (createPos.status === 200) {
+          id = createPos.data.positions._id
+        }; break;
+      case 'contactDepartment':
+        const createDept = await client.departments.create(newOption)
+        console.log('createDept', createDept)
+        if (createDept.status === 200) {
+          id = createDept.data.departments._id
+        }; break;
+      case 'industry':
+        const createInd = await client.industries.create(newOption)
+        console.log('createInd', createInd)
+        if (createInd.status === 200) {
+          id = createInd.data.industries._id
+        }; break;
+      default:
+        break;
+    }
+    newOption._id = id
     setFunc((prev) => [...prev, newOption]);
-    console.log('inputValue', inputValue)
-    setVal(type, inputValue, {
+    setVal(type, newOption._id, {
       shouldValidate: true,
       shouldDirty: true,
     });
+    return newOption
   };
 
   const getCities = async (state) => {
-    console.log('state', state)
     let res = await client.stateCities.fetchCitiesByState(state)
     if (res.status === 200) {
-      console.log(res.data.data, 'city')
       setCities(res.data.data)
     }
   }
   const onSubmit = async (values) => {
     let res = await client.companies.create(values, { credentials: 'include' })
     // if registeration successed
-    console.log('sre', res)
     if (res.status == 200) {
       toast.success("successfully created company")
     }
@@ -111,9 +138,6 @@ const CreateCompanies = () => {
       toast.error("Error creating company")
     }
   }
-  const onError = (err) => {
-    console.log(err, 'err')
-  }
   return (
     <>
       {currentUser ? (
@@ -122,8 +146,8 @@ const CreateCompanies = () => {
           <div className="w-[80%] m-auto py-4">
             <Form {...companiesForm}>
               <form
-                onSubmit={companiesForm.handleSubmit(onSubmit, onError)}
-                className="grid space-y-8"
+                onSubmit={companiesForm.handleSubmit(onSubmit)}
+                className="grid space-y-2"
               >
                 <Button type="submit" className={"ml-auto"}>
                   Save
@@ -132,30 +156,34 @@ const CreateCompanies = () => {
                   <FormField
                     control={companiesForm.control}
                     name="name"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem className={"relative"}>
                         <FormLabel>Company Name</FormLabel>
                         <FormControl>
                           <Input placeholder="Company Name" {...field} />
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {fieldState.error ?
+                          <FormMessage
+                            className={" text-xs -mt-1 "}
+                          /> : <div className="h-4 w-full">
+                          </div>}
                       </FormItem>
                     )}
                   ></FormField>
                   <FormField
                     control={companiesForm.control}
                     name="email"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Company Email</FormLabel>
                         <FormControl>
                           <Input placeholder="Company Email" {...field} />
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {fieldState.error ?
+                          <FormMessage
+                            className={" text-xs -mt-1 "}
+                          /> : <div className="h-4 w-full">
+                          </div>}
                       </FormItem>
                     )}
                   ></FormField>
@@ -164,30 +192,38 @@ const CreateCompanies = () => {
                   <FormField
                     control={companiesForm.control}
                     name="contactName"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem className={"relative"}>
                         <FormLabel>Contact Name</FormLabel>
                         <FormControl>
                           <Input placeholder="Contact Name" {...field} />
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {fieldState.error ?
+                          <FormMessage
+                            className={" text-xs -mt-1 "}
+                          /> : <div className="h-4 w-full">
+                          </div>}
+
                       </FormItem>
                     )}
                   ></FormField>
                   <FormField
                     control={companiesForm.control}
                     name="contactEmail"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Contact Person Email</FormLabel>
                         <FormControl>
                           <Input placeholder="Contact Person Email" {...field} />
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
@@ -198,14 +234,15 @@ const CreateCompanies = () => {
                   <FormField
                     control={companiesForm.control}
                     name="contactPosition"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem className={"relative"}>
                         <FormLabel>Contact Person Position</FormLabel>
                         <FormControl>
                           <CreatableSelect
+                            form={companiesForm}
+                            error={fieldState.error}
                             options={positions}
-                            value={field.value}
-                            onValueChange={field.onChange}
+                            controller={field}
                             onCreateOption={(inputValue) => handleCreate(setPositions, setValue, inputValue, 'contactPosition')}
                             placeholder="Enter or Select position ..."
                             searchPlaceholder="Search positions..."
@@ -213,22 +250,28 @@ const CreateCompanies = () => {
                             className="w-full"
                           />
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
                   <FormField
                     control={companiesForm.control}
                     name="contactDepartment"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Contact Person Department</FormLabel>
                         <FormControl>
                           <CreatableSelect
                             options={departments}
                             form={companiesForm}
+                            error={fieldState.error}
                             controller={field}
                             onCreateOption={(inputValue) => handleCreate(setDepartments, setValue, inputValue, 'contactDepartment')}
                             placeholder="Enter or Select department..."
@@ -238,9 +281,14 @@ const CreateCompanies = () => {
                           />
 
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
@@ -249,15 +297,20 @@ const CreateCompanies = () => {
                   <FormField
                     control={companiesForm.control}
                     name="contactPhone"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Contact Person Phone</FormLabel>
                         <FormControl>
                           <Input placeholder="Contact Person Phone Number" {...field} />
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
@@ -266,15 +319,20 @@ const CreateCompanies = () => {
                   <FormField
                     control={companiesForm.control}
                     name="mission"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Company Mission</FormLabel>
                         <FormControl>
                           <Textarea placeholder="Company Mission" {...field} />
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
@@ -283,13 +341,29 @@ const CreateCompanies = () => {
                   <FormField
                     control={companiesForm.control}
                     name="industry"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Choose Industry</FormLabel>
-                        <Combobox form={companiesForm} dataList={industries} controller={field} type="industry" />
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
+                        <CreatableSelect
+                          form={companiesForm}
+                          options={industries}
+                          error={fieldState.error}
+                          controller={field}
+                          onCreateOption={(inputValue) => handleCreate(setIndustries, setValue, inputValue, 'industry')}
+                          placeholder="Select industry..."
+                          searchPlaceholder="Search industry..."
+                          createLabel="Create new industry"
+                          className="w-full"
                         />
+
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
@@ -298,7 +372,7 @@ const CreateCompanies = () => {
                   <FormField
                     control={companiesForm.control}
                     name="website"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Company Website URL</FormLabel>
                         <FormControl>
@@ -307,9 +381,14 @@ const CreateCompanies = () => {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
@@ -319,10 +398,18 @@ const CreateCompanies = () => {
                   <FormField
                     control={companiesForm.control}
                     name="state"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Choose State</FormLabel>
-                        <Combobox dataList={states} controller={field} type="state" getCities={getCities} />
+                        <Combobox error={fieldState.error} dataList={states} controller={field} type="state" getCities={getCities} />
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
@@ -330,13 +417,18 @@ const CreateCompanies = () => {
                   <FormField
                     control={companiesForm.control}
                     name="city"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Choose City</FormLabel>
-                        <Combobox dataList={cities} controller={field} type="city" />
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        <Combobox error={fieldState.error} dataList={cities} controller={field} type="city" />
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
@@ -345,30 +437,41 @@ const CreateCompanies = () => {
                   <FormField
                     control={companiesForm.control}
                     name="street"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Street</FormLabel>
                         <FormControl>
                           <Input placeholder="xxx street" {...field} />
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
                   <FormField
                     control={companiesForm.control}
                     name="zipcode"
-                    render={({ field }) => (
+                    render={({ field, fieldState }) => (
                       <FormItem>
                         <FormLabel>Zipcode</FormLabel>
                         <FormControl>
                           <Input placeholder="xxxxxx-xxxx" {...field} />
+
                         </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
+                        {
+                          fieldState.error ?
+                            <FormMessage
+                              className={" text-xs -mt-1 "}
+                            />
+                            : <div className="h-4 w-full">
+                            </div>
+                        }
                       </FormItem>
                     )}
                   ></FormField>
