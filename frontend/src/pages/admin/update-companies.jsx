@@ -12,9 +12,9 @@ import {
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validateCompaniesForm } from "@/lib/validations";
+import { Combobox } from "@/components/combobox";
 import {
   Select,
   SelectContent,
@@ -37,7 +37,8 @@ const UpdateCompanies = () => {
   const [company, setCompany] = useState(null)
   const [states, setStates] = useState([])
   const [cities, setCities] = useState([])
-  const [formkey,setFormkey] = useState(0)
+  const [currentState, setCurrentState] = useState("")
+  const [formkey, setFormkey] = useState(0)
   const [industries, setIndustries] = useState([])
   // const [view, setView] = useState row')
   const companiesForm = useForm({
@@ -46,30 +47,33 @@ const UpdateCompanies = () => {
       name: "",
       email: "",
       mission: "",
-      industry:"",
+      industry: "",
       website: "",
       city: "",
-      street:"",
-      zipcode:"",
+      street: "",
+      zipcode: "",
     },
   });
   const fetchCurrentCompany = async () => {
     try {
       const currentCompany = await client.companies.fetchOne(id)
-      console.log(currentCompany)
       if (currentCompany.status === 200) {
-        console.log('c', currentCompany.data)
         const location = currentCompany.data.location.split(",")
+        const industry_name = await client.industries.fetchOne(currentCompany.data.industry);
         const companyData = {
           ...currentCompany.data,
+          industry: industry_name.data?.industries.name,
           city: location[1],
           street: location[0],
-          zipcode: location[2]
+          state: location[2],
+          zipcode: location[3]
         }
         setCompany(companyData);
+        setCurrentState(location[2])
+        await getCities(location[2])
         companiesForm.reset(companyData)
         setIsLoading(false)
-        setFormkey(prev=>prev+1)
+        setFormkey(prev => prev + 1)
       }
     }
     catch (err) {
@@ -77,23 +81,33 @@ const UpdateCompanies = () => {
       toast.error("error occurred")
     }
   }
-    const loadData = async () => {
-      let res = await client.industry.fetchAll()
-      if (res.status === 200) {
-        setIndustries(res.data.data.industries)
-      }
-      let cityres = await client.stateCities.fetchCities()
-      if (cityres.status === 200) {
-        console.log(cityres.data, 'city')
-        setCities(cityres.data)
-      }
-      let stateres = await client.stateCities.fetchStates()
-      console.log(stateres, 'wow')
-      if (stateres.status === 200) {
-        console.log(stateres.data, stateres.data.states[0].abbreviation, 'state')
-        setStates(stateres.data.states)
-      }
+  const getCities = async (state) => {
+    console.log('state', state)
+    let res = await client.stateCities.fetchCitiesByState(state)
+    if (res.status === 200) {
+      console.log(res.data.data, 'city')
+      setCities(res.data.data)
     }
+  }
+
+  const loadData = async () => {
+    let res = await client.industries.fetchAll()
+    if (res.status === 200) {
+      console.log(res.data, 'ind')
+      setIndustries(res.data.industries)
+    }
+    let cityres = await client.stateCities.fetchCities()
+    if (cityres.status === 200) {
+      console.log(cityres.data, 'city')
+      setCities(cityres.data)
+    }
+    let stateres = await client.stateCities.fetchStates()
+    console.log(stateres, 'wow')
+    if (stateres.status === 200) {
+      console.log(stateres.data, stateres.data.states[0].abbreviation, 'state')
+      setStates(stateres.data.states)
+    }
+  }
 
 
   useEffect(() => {
@@ -156,6 +170,7 @@ const UpdateCompanies = () => {
                   control={companiesForm.control}
                   name="mission"
                   render={({ field }) => (
+                    console.log(field, 'mission'),
                     <FormItem>
                       <FormLabel>Company Mission</FormLabel>
                       <FormControl>
@@ -168,35 +183,21 @@ const UpdateCompanies = () => {
                   )}
                 ></FormField>
               </div>
-                <div>
-                  <FormField
-                    control={companiesForm.control}
-                    name="industry"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Choose Industry</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} defaultValue={"Finance"} >
-                            <SelectTrigger className="w-full ">
-                              <SelectValue placeholder="Choose Industry" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {industries?.length > 0 &&
-                                industries.map((industry) =>
-                                  <SelectItem key={industry._id} value={industry.industryName}>{industry.industryName}</SelectItem>
-                                )
-                              }
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
-                      </FormItem>
-                    )}
-                  ></FormField>
-                </div>
+              <div>
+                <FormField
+                  control={companiesForm.control}
+                  name="industry"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Choose Industry</FormLabel>
+                      <Combobox dataList={industries} controller={field} type="industry" />
+                      <FormMessage
+                        className={"text-xs absolute -bottom-5 left-0"}
+                      />
+                    </FormItem>
+                  )}
+                ></FormField>
+              </div>
               <div>
                 <FormField
                   control={companiesForm.control}
@@ -217,67 +218,38 @@ const UpdateCompanies = () => {
                   )}
                 ></FormField>
               </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <FormField
-                    control={companiesForm.control}
-                    name="state"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Choose State</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Choose State"  />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {states?.length > 0 &&
-                                states.map((state, key) =>
+              <div className="grid grid-cols-2 gap-2">
+                <FormField
+                  control={companiesForm.control}
+                  name="state"
+                  render={({ field }) => (
+                    <FormItem>
 
-                                  <SelectItem key={key} value={state.abbreviation}>{state.abbreviation}</SelectItem>
-                                )}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
-                      </FormItem>
-                    )}
-                  ></FormField>
+                      <FormLabel>Choose State</FormLabel>
+                      <Combobox dataList={states} controller={field} type="state" getCities={getCities} />
+                      <FormMessage
+                        className={"text-xs absolute -bottom-5 left-0"}
+                      />
+                    </FormItem>
+                  )}
+                ></FormField>
 
-                  {/*SuggestionInput
-                  //   placeholder="Search for topics..."
-                  //   onSelect={handleSelect}
-                  //   className="mb-4"
-                  //   state={selectedState}
-                  // />*/}
-                  <FormField
-                    control={companiesForm.control}
-                    name="city"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{field.value}</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Choose City" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {cities?.length > 0 &&
-                                cities.map((state, key) =>
+                <FormField
+                  control={companiesForm.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem>
 
-                                  <SelectItem value={state} key={key}>{state}</SelectItem>
-                                )}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage
-                          className={"text-xs absolute -bottom-5 left-0"}
-                        />
-                      </FormItem>
-                    )}
-                  ></FormField>
-                </div>
+                      <FormLabel>Choose City</FormLabel>
+                      <Combobox dataList={cities} controller={field} type="city"  />
+
+                      <FormMessage
+                        className={"text-xs absolute -bottom-5 left-0"}
+                      />
+                    </FormItem>
+                  )}
+                ></FormField>
+              </div>
 
               <div className="grid grid-cols-3 gap-2">
                 <FormField
