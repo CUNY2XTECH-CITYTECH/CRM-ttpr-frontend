@@ -42,13 +42,11 @@ export class BaseClient {
       if (!response.ok) {
         let errorData = null;
         errorData = await response.json();
+        console.log("errorData", errorData);
         let errorMessage =
           errorData?.message ||
           response.statusText ||
           `Request failed with ${response.status}`;
-        // return new HTTPClientError(
-        //   errorMessage, response.status, response.statusText, errorData?.toString()
-        // )
         return {
           error: errorMessage,
           status: response.status,

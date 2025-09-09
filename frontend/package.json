@@ -30,6 +30,7 @@
     "date-fns": "^4.1.0",
     "lucide-react": "^0.525.0",
     "motion": "^12.23.12",
+    "papaparse": "^5.5.3",
     "react": "^19.1.0",
     "react-cookie": "^8.0.1",
     "react-day-picker": "^9.8.1",

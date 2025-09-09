@@ -41,13 +41,13 @@ export default function ViewInternships() {
   }
   useEffect(() => {
     const loadData = async () => {
-      if (currentUser && currentUser?.role !== "admin") {
-        navigate("/not-authorized");
-      }
-      if (!token) {
-
-        navigate("/login");
-      }
+      // if (currentUser && currentUser?.role !== "admin") {
+      //   navigate("/not-authorized");
+      // }
+      // if (!token) {
+      //
+      //   navigate("/login");
+      // }
       if (token) {
         await fetchInternships(token);
       }
