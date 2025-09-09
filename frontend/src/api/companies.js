@@ -20,6 +20,11 @@ export class CompaniesClient extends BaseClient {
     const res = await this.post('company/create',data,optionalHeader);
     return res;
   }
+  async createMany(data,optionalHeader) {
+    console.log(data,'data in create many')
+    const res = await this.post('company/createMany',data,optionalHeader);
+    return res;
+  }
 
   async update(data,optionalHeader) {
     // get all user

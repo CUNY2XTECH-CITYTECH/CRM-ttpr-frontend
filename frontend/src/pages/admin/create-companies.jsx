@@ -21,6 +21,7 @@ import { useAuth, useClient } from "@/lib/dataContext";
 import { useNavigate } from "react-router";
 import { Combobox } from "@/components/combobox";
 import { CreatableSelect } from "@/components/creatable-select";
+import { handleCreate } from "@/lib/commonFunctions";
 
 const CreateCompanies = () => {
   const { token, currentUser } = useAuth();
@@ -63,63 +64,20 @@ const CreateCompanies = () => {
       setStates(stateres.data.states)
     }
     let deptres = await client.departments.fetchAll()
-    console.log('deptres', deptres)
     if (deptres && deptres.status === 200) {
       setDepartments(deptres.data.departments)
     }
     let posres = await client.positions.fetchAll()
-    console.log('posres', posres)
     if (posres && posres.status === 200) {
       setPositions(posres.data.positions)
     }
 
   }
   useEffect(() => {
-
-    if (currentUser && currentUser?.role !== "admin") {
-      navigate("/not-authorized");
-    }
-    if (!token) {
-      navigate('/login')
-    }
-    loadData()
+        loadData()
   }, [token]);
 
-  const handleCreate = async (setFunc, setVal, inputValue, type) => {
-    const newOption = { name: inputValue };
-    let id = ''
-    switch (type) {
-      case 'contactPosition':
-        const createPos = await client.positions.create(newOption)
-        console.log('createPos', createPos)
-        if (createPos.status === 200) {
-          id = createPos.data.positions._id
-        }; break;
-      case 'contactDepartment':
-        const createDept = await client.departments.create(newOption)
-        console.log('createDept', createDept)
-        if (createDept.status === 200) {
-          id = createDept.data.departments._id
-        }; break;
-      case 'industry':
-        const createInd = await client.industries.create(newOption)
-        console.log('createInd', createInd)
-        if (createInd.status === 200) {
-          id = createInd.data.industries._id
-        }; break;
-      default:
-        break;
-    }
-    newOption._id = id
-    setFunc((prev) => [...prev, newOption]);
-    setVal(type, newOption._id, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-    return newOption
-  };
-
-  const getCities = async (state) => {
+   const getCities = async (state) => {
     let res = await client.stateCities.fetchCitiesByState(state)
     if (res.status === 200) {
       setCities(res.data.data)
@@ -128,12 +86,13 @@ const CreateCompanies = () => {
   const onSubmit = async (values) => {
     let res = await client.companies.create(values, { credentials: 'include' })
     // if registeration successed
+    console.log('create company response', res)
     if (res.status == 200) {
       toast.success("successfully created company")
     }
     else if (res.status == 201) {
       toast.info("Company with this email already exists")
-    }
+   }
     else {
       toast.error("Error creating company")
     }
@@ -243,8 +202,8 @@ const CreateCompanies = () => {
                             error={fieldState.error}
                             options={positions}
                             controller={field}
-                            onCreateOption={(inputValue) => handleCreate(setPositions, setValue, inputValue, 'contactPosition')}
-                            placeholder="Enter or Select position ..."
+                            onCreateOption={(inputValue) => handleCreate(client,setPositions, setValue, inputValue, 'contactPosition')}
+                            placeholder="Select position ..."
                             searchPlaceholder="Search positions..."
                             createLabel="Create new position"
                             className="w-full"
@@ -273,8 +232,8 @@ const CreateCompanies = () => {
                             form={companiesForm}
                             error={fieldState.error}
                             controller={field}
-                            onCreateOption={(inputValue) => handleCreate(setDepartments, setValue, inputValue, 'contactDepartment')}
-                            placeholder="Enter or Select department..."
+                            onCreateOption={(inputValue) => handleCreate(client,setDepartments, setValue, inputValue, 'contactDepartment')}
+                            placeholder="Select department..."
                             searchPlaceholder="Search departments..."
                             createLabel="Create new department"
                             className="w-full"
@@ -349,7 +308,7 @@ const CreateCompanies = () => {
                           options={industries}
                           error={fieldState.error}
                           controller={field}
-                          onCreateOption={(inputValue) => handleCreate(setIndustries, setValue, inputValue, 'industry')}
+                          onCreateOption={(inputValue) => handleCreate(client,setIndustries, setValue, inputValue, 'industry')}
                           placeholder="Select industry..."
                           searchPlaceholder="Search industry..."
                           createLabel="Create new industry"

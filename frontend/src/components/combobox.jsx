@@ -48,6 +48,7 @@ export function Combobox({ error,dataList, type, controller,form=null, getCities
                   key={typeof(data)==='string'?key:data?._id || data?.name }
                   value={typeof(data)=='string'?data:data?.name }
                   onSelect={(currentValue) => {
+                    console.log({currentValue,controller},'currentValue')
                     controller.onChange(currentValue === controller.value ? "" : currentValue)
                     setOpen(false)
                     form && form.setValue(type,data?._id,{

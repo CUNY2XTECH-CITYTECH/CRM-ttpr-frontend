@@ -24,7 +24,7 @@ export default function ViewCompanies() {
   const { token, currentUser } = useAuth();
   const { client } = useClient()
   const companiesPerPage = 5;
-  async function fetchCompanies(token) {
+  async function fetchCompanies() {
     setLoading(true);
     try {
       const res = await client.companies.fetchAll();
@@ -60,15 +60,6 @@ export default function ViewCompanies() {
   const currentCompanies = companies.slice(start, start + companiesPerPage);
   const handleEdit = async (id) => {
     navigate(`/admin/view-companies/${id}`)
-    //  try {
-    //   const res = await client.companies.update(id,{credentials:'include'});
-    //   console.log(res,'updated')
-    // } catch (error) {
-    //   toast.error("Failed to update company");
-    //   console.error(error);
-    // }
-    //
-    // Replace with your real edit logic or navigation
   };
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this company?")) return;
@@ -80,7 +71,7 @@ export default function ViewCompanies() {
         setCurrentPage((p) => p - 1);
       }
     } catch (error) {
-      alert("Failed to delete company");
+      toast.error("Failed to delete company");
       console.error(error);
     }
   };
@@ -116,6 +107,7 @@ export default function ViewCompanies() {
                   ) : (
                     currentCompanies.map((company) => (
                       <TableRow key={company._id}>
+                          {console.log(company,'c')}
                         <TableCell>{company.name}</TableCell>
                         <TableCell>{company.email}</TableCell>
                         <TableCell>{company.industry}</TableCell>

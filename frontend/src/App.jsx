@@ -33,10 +33,9 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-            <Route path="/error" element={<InfoPage />} />
-            <Route path="/not-authorized" element={<InfoPage />} />
-            <Route path="/account-exists" element={<InfoPage />} />
-
+          <Route path="/error" element={<InfoPage />} />
+          <Route path="/not-authorized" element={<InfoPage />} />
+          <Route path="/account-exists" element={<InfoPage />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />

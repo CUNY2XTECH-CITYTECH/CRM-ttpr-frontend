@@ -9,26 +9,22 @@ import {
   FormMessage,
   Form,
 } from "@/components/ui/form";
+import { CreatableSelect } from "@/components/creatable-select";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validateCompaniesForm } from "@/lib/validations";
 import { Combobox } from "@/components/combobox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router";
 import { useAuth, useClient } from "@/lib/dataContext";
 import toast from "react-hot-toast";
-
+import { handleCreate } from "@/lib/commonFunctions";
 const UpdateCompanies = () => {
+  const [positions, setPositions] = useState([])
+  const [departments, setDepartments] = useState([])
   const { id } = useParams()
   const { currentUser } = useAuth();
   const { client } = useClient()
@@ -46,35 +42,60 @@ const UpdateCompanies = () => {
     defaultValues: {
       name: "",
       email: "",
+      contactName: "",
+      contactEmail: "",
+      contactPosition: "",
+      contactDepartment: "",
+      contactPhone: "",
       mission: "",
       industry: "",
       website: "",
       city: "",
+      state: "",
       street: "",
       zipcode: "",
     },
   });
+
+  const { setValue } = companiesForm
   const fetchCurrentCompany = async () => {
     try {
       const currentCompany = await client.companies.fetchOne(id)
       if (currentCompany.status === 200) {
-        const location = currentCompany.data.location.split(",")
+        console.log('currentCompany', currentCompany)
+        let { location, industry, ...rest } = currentCompany.data
+        const locationArr = location.split(",")
         const industry_name = await client.industries.fetchOne(currentCompany.data.industry);
+        console.log('is state exist',states, states.find(s => s.abbreviation=== (locationArr[2] ? locationArr[2].trim() : '')))
         const companyData = {
-          ...currentCompany.data,
+          ...rest,
           industry: industry_name.data?.industries.name,
-          city: location[1],
-          street: location[0],
-          state: location[2],
-          zipcode: location[3]
+          city: locationArr[1] ? locationArr[1].trim() : '',
+          street: locationArr[0] ? locationArr[0].trim() : '',
+          state: states.find(s => s.abbreviation=== (locationArr[2] ? locationArr[2].trim() : ''))?.name || (locationArr[2] ? locationArr[2].trim() : ''),
+          zipcode: locationArr[3] ? locationArr[3].trim() : ''
         }
-        setCompany(companyData);
-        setCurrentState(location[2])
-        await getCities(location[2])
-        companiesForm.reset(companyData)
-        setIsLoading(false)
-        setFormkey(prev => prev + 1)
+        if (companyData) {
+          await getCities(companyData.state || '')
+          setCompany(companyData);
+          console.log('state', companyData.state)
+          setCurrentState(companyData.state || '')
+          companiesForm.reset(companyData)
+          setIsLoading(false)
+          setFormkey(prev => prev + 1)
+        }
       }
+      let posres = await client.positions.fetchAll()
+      if (posres && posres.status === 200) {
+        setPositions(posres.data.positions)
+      }
+
+      let deptres = await client.departments.fetchAll()
+      if (deptres && deptres.status === 200) {
+        setDepartments(deptres.data.departments)
+      }
+
+
     }
     catch (err) {
       console.log(err)
@@ -82,10 +103,8 @@ const UpdateCompanies = () => {
     }
   }
   const getCities = async (state) => {
-    console.log('state', state)
     let res = await client.stateCities.fetchCitiesByState(state)
     if (res.status === 200) {
-      console.log(res.data.data, 'city')
       setCities(res.data.data)
     }
   }
@@ -93,30 +112,35 @@ const UpdateCompanies = () => {
   const loadData = async () => {
     let res = await client.industries.fetchAll()
     if (res.status === 200) {
-      console.log(res.data, 'ind')
       setIndustries(res.data.industries)
     }
     let cityres = await client.stateCities.fetchCities()
     if (cityres.status === 200) {
-      console.log(cityres.data, 'city')
       setCities(cityres.data)
     }
     let stateres = await client.stateCities.fetchStates()
-    console.log(stateres, 'wow')
     if (stateres.status === 200) {
-      console.log(stateres.data, stateres.data.states[0].abbreviation, 'state')
       setStates(stateres.data.states)
     }
   }
 
 
   useEffect(() => {
-    fetchCurrentCompany()
     loadData()
+    fetchCurrentCompany()
   }, []);
 
-  const onSubmit = (values) => {
-    console.log("v", values);
+  const onSubmit = async (values) => {
+    try {
+      let tryUpdate = await client.companies.update(values,{credentials:'include'})
+      if (tryUpdate.status === 200) {
+        toast.success("Company updated successfully")
+      }
+    }
+    catch (err) {
+      console.log(err)
+      toast.error("error occurred")
+    }
   };
   if (isLoading) return <div>Loading...</div>
   return (
@@ -127,7 +151,7 @@ const UpdateCompanies = () => {
           <Form {...companiesForm} key={formkey}>
             <form
               onSubmit={companiesForm.handleSubmit(onSubmit)}
-              className="grid space-y-8"
+              className="grid space-y-2"
             >
               <Button type="submit" className={"ml-auto"}>
                 Save
@@ -136,31 +160,139 @@ const UpdateCompanies = () => {
                 <FormField
                   control={companiesForm.control}
                   name="name"
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <FormItem className={"relative"}>
                       <FormLabel>Company Name</FormLabel>
                       <FormControl>
                         <Input placeholder="Company Name" {...field} />
                       </FormControl>
-
-                      <FormMessage
-                        className={"text-xs absolute -bottom-5 left-0"}
-                      />
+                      {fieldState.error ?
+                        <FormMessage
+                          className={" text-xs -mt-1 "}
+                        /> : <div className="h-4 w-full">
+                        </div>}
                     </FormItem>
                   )}
                 ></FormField>
                 <FormField
                   control={companiesForm.control}
                   name="email"
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <FormItem>
                       <FormLabel>Company Email</FormLabel>
                       <FormControl>
                         <Input placeholder="Company Email" {...field} />
                       </FormControl>
-                      <FormMessage
-                        className={"text-xs absolute -bottom-5 left-0"}
-                      />
+                      {fieldState.error ?
+                        <FormMessage
+                          className={" text-xs -mt-1 "}
+                        /> : <div className="h-4 w-full">
+                        </div>}
+
+                    </FormItem>
+                  )}
+                ></FormField>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <FormField
+                  control={companiesForm.control}
+                  name="contactName"
+                  render={({ field, fieldState }) => (
+                    <FormItem className={"relative"}>
+                      <FormLabel>Contact Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Contact Name" {...field} />
+                      </FormControl>
+                      {fieldState.error ?
+                        <FormMessage
+                          className={" text-xs -mt-1 "}
+                        /> : <div className="h-4 w-full">
+                        </div>}
+
+                    </FormItem>
+                  )}
+                ></FormField>
+                <FormField
+                  control={companiesForm.control}
+                  name="contactEmail"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>Contact Person Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Contact Person Email" {...field} />
+                      </FormControl>
+                      {
+                        fieldState.error ?
+                          <FormMessage
+                            className={" text-xs -mt-1 "}
+                          />
+                          : <div className="h-4 w-full">
+                          </div>
+                      }
+                    </FormItem>
+                  )}
+                ></FormField>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+
+                <FormField
+                  control={companiesForm.control}
+                  name="contactPosition"
+                  render={({ field, fieldState }) => (
+                    <FormItem className={"relative"}>
+                      <FormLabel>Contact Person Position</FormLabel>
+                      <FormControl>
+                        <CreatableSelect
+                          form={companiesForm}
+                          error={fieldState.error}
+                          options={positions}
+                          controller={field}
+                          onCreateOption={(inputValue) => handleCreate(client,setPositions, setValue, inputValue, 'contactPosition')}
+                          placeholder="Enter or Select position ..."
+                          searchPlaceholder="Search positions..."
+                          createLabel="Create new position"
+                          className="w-full"
+                        />
+                      </FormControl>
+                      {
+                        fieldState.error ?
+                          <FormMessage
+                            className={" text-xs -mt-1 "}
+                          />
+                          : <div className="h-4 w-full">
+                          </div>
+                      }
+                    </FormItem>
+                  )}
+                ></FormField>
+                <FormField
+                  control={companiesForm.control}
+                  name="contactDepartment"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>Contact Person Department</FormLabel>
+                      <FormControl>
+                        <CreatableSelect
+                          options={departments}
+                          form={companiesForm}
+                          error={fieldState.error}
+                          controller={field}
+                          onCreateOption={(inputValue) => handleCreate(client,setDepartments, setValue, inputValue, 'contactDepartment')}
+                          placeholder="Enter or Select department..."
+                          searchPlaceholder="Search departments..."
+                          createLabel="Create new department"
+                          className="w-full"
+                        />
+
+                      </FormControl>
+                      {
+                        fieldState.error ?
+                          <FormMessage
+                            className={" text-xs -mt-1 "}
+                          />
+                          : <div className="h-4 w-full">
+                          </div>
+                      }
                     </FormItem>
                   )}
                 ></FormField>
@@ -168,17 +300,42 @@ const UpdateCompanies = () => {
               <div>
                 <FormField
                   control={companiesForm.control}
+                  name="contactPhone"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>Contact Person Phone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Contact Person Phone Number" {...field} />
+                      </FormControl>
+                      {
+                        fieldState.error ?
+                          <FormMessage
+                            className={" text-xs -mt-1 "}
+                          />
+                          : <div className="h-4 w-full">
+                          </div>
+                      }
+                    </FormItem>
+                  )}
+                ></FormField>
+              </div>
+
+              <div>
+                <FormField
+                  control={companiesForm.control}
                   name="mission"
-                  render={({ field }) => (
-                    console.log(field, 'mission'),
+                  render={({ field, fieldState }) => (
                     <FormItem>
                       <FormLabel>Company Mission</FormLabel>
                       <FormControl>
                         <Textarea placeholder="Company Mission" {...field} />
                       </FormControl>
-                      <FormMessage
-                        className={"text-xs absolute -bottom-5 left-0"}
-                      />
+                      {fieldState.error ?
+                        <FormMessage
+                          className={" text-xs -mt-1 "}
+                        /> : <div className="h-4 w-full">
+                        </div>}
+
                     </FormItem>
                   )}
                 ></FormField>
@@ -187,13 +344,28 @@ const UpdateCompanies = () => {
                 <FormField
                   control={companiesForm.control}
                   name="industry"
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <FormItem>
                       <FormLabel>Choose Industry</FormLabel>
-                      <Combobox dataList={industries} controller={field} type="industry" />
-                      <FormMessage
-                        className={"text-xs absolute -bottom-5 left-0"}
-                      />
+                        <CreatableSelect
+                          form={companiesForm}
+                          options={industries}
+                          error={fieldState.error}
+                          controller={field}
+                          onCreateOption={(inputValue) => handleCreate(client,setIndustries, setValue, inputValue, 'industry')}
+                          placeholder="Select industry..."
+                          searchPlaceholder="Search industry..."
+                          createLabel="Create new industry"
+                          className="w-full"
+                        />
+
+
+                      {fieldState.error ?
+                        <FormMessage
+                          className={" text-xs -mt-1 "}
+                        /> : <div className="h-4 w-full">
+                        </div>}
+
                     </FormItem>
                   )}
                 ></FormField>
@@ -202,7 +374,7 @@ const UpdateCompanies = () => {
                 <FormField
                   control={companiesForm.control}
                   name="website"
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <FormItem>
                       <FormLabel>Company Website URL</FormLabel>
                       <FormControl>
@@ -211,9 +383,14 @@ const UpdateCompanies = () => {
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage
-                        className={"text-xs absolute -bottom-5 left-0"}
-                      />
+                      {fieldState.error ?
+                        <FormMessage
+                          className={" text-xs -mt-1 "}
+                        /> : <div className="h-4 w-full">
+                        </div>}
+
+
+
                     </FormItem>
                   )}
                 ></FormField>
@@ -222,14 +399,18 @@ const UpdateCompanies = () => {
                 <FormField
                   control={companiesForm.control}
                   name="state"
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <FormItem>
 
                       <FormLabel>Choose State</FormLabel>
                       <Combobox dataList={states} controller={field} type="state" getCities={getCities} />
-                      <FormMessage
-                        className={"text-xs absolute -bottom-5 left-0"}
-                      />
+                      {fieldState.error ?
+                        <FormMessage
+                          className={" text-xs -mt-1 "}
+                        /> : <div className="h-4 w-full">
+                        </div>}
+
+
                     </FormItem>
                   )}
                 ></FormField>
@@ -237,48 +418,58 @@ const UpdateCompanies = () => {
                 <FormField
                   control={companiesForm.control}
                   name="city"
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <FormItem>
 
                       <FormLabel>Choose City</FormLabel>
-                      <Combobox dataList={cities} controller={field} type="city"  />
+                      <Combobox dataList={cities} controller={field} type="city" />
+                      {fieldState.error ?
+                        <FormMessage
+                          className={" text-xs -mt-1 "}
+                        /> : <div className="h-4 w-full">
+                        </div>}
 
-                      <FormMessage
-                        className={"text-xs absolute -bottom-5 left-0"}
-                      />
+
                     </FormItem>
                   )}
                 ></FormField>
               </div>
 
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 <FormField
                   control={companiesForm.control}
                   name="street"
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <FormItem>
                       <FormLabel>Street</FormLabel>
                       <FormControl>
                         <Input placeholder="xxx street" {...field} />
                       </FormControl>
-                      <FormMessage
-                        className={"text-xs absolute -bottom-5 left-0"}
-                      />
+                      {fieldState.error ?
+                        <FormMessage
+                          className={" text-xs -mt-1 "}
+                        /> : <div className="h-4 w-full">
+                        </div>}
+
+
                     </FormItem>
                   )}
                 ></FormField>
                 <FormField
                   control={companiesForm.control}
                   name="zipcode"
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <FormItem>
                       <FormLabel>Zipcode</FormLabel>
                       <FormControl>
                         <Input placeholder="xxxxxx-xxxx" {...field} />
                       </FormControl>
-                      <FormMessage
-                        className={"text-xs absolute -bottom-5 left-0"}
-                      />
+                      {fieldState.error ?
+                        <FormMessage
+                          className={" text-xs -mt-1 "}
+                        /> : <div className="h-4 w-full">
+                        </div>}
+
                     </FormItem>
                   )}
                 ></FormField>

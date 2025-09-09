@@ -46,10 +46,6 @@ export const DataContextProvider = ({ children }) => {
 
 export const useClient = () => {
   const { client } = useContext(DataContext);
-  if (client) {
-    console.log("error");
-  }
-
   return { client };
 };
 

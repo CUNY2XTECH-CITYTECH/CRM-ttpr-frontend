@@ -36,9 +36,9 @@ export default function Appointment() {
     },
   });
   useEffect(() => {
-    if (currentUser && currentUser?.role !== "admin") {
-      navigate("/not-authorized");
-    }
+    // if (currentUser && currentUser?.role !== "admin") {
+    //   navigate("/not-authorized");
+    // }
   }, [token]);
 
   const onSubmit = (data) => {};
