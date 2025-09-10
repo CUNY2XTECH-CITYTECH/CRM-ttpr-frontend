@@ -115,6 +115,10 @@ export class BaseClient {
   put(endpoint, body, options) {
     return this.request(endpoint, "PUT", body, options);
   }
+  patch(endpoint, body, options) {
+    return this.request(endpoint, "PATCH", body, options);
+  }
+
   /**
    * @param {1} api-endpoint (example: user/)
    * @param {2} body - data

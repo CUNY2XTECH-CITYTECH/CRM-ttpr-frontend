@@ -1,16 +1,11 @@
-import React, { useEffect } from 'react'
-import { Button } from "@/components/ui/button"
-import { Select } from '@radix-ui/react-select'
+import React from 'react'
 import { Header } from '@/components/header'
-import { useState } from 'react'
-import { useNavigate } from 'react-router'
-import { LayoutDashboard, GraduationCap, Users, Briefcase, Settings, FileText, Handshake, CalendarDays, Building, Server, TableProperties, ShieldUser } from 'lucide-react'
-import { href } from 'react-router'
+import { Link, useNavigate } from 'react-router'
+import { LayoutDashboard, GraduationCap,  Settings, FileText, Handshake, CalendarDays, Building, Server, TableProperties, ShieldUser } from 'lucide-react'
 import { useAuth } from '@/lib/dataContext'
 
 export default function AdminHome() {
-  const { token, currentUser } = useAuth()
-  const navigate = useNavigate()
+  const {  currentUser } = useAuth()
 
   const navlinks = [
     { name: "Dashboard", icon: <LayoutDashboard className="text-xl" />, path: "/admin/dashboard" },
@@ -27,17 +22,6 @@ export default function AdminHome() {
 
   ];
 
-  useEffect(() => {
-    console.log(currentUser, 'cu')
-    if (currentUser && currentUser.role !== 'admin') {
-      navigate('/not-authorized')
-    }
-    if (!token) {
-      navigate('/login')
-    }
-  }, [token])
-
-
   return (
     <div className='min-h-screen'>
 
@@ -48,7 +32,7 @@ export default function AdminHome() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {navlinks.map((link) => (
 
-            <a href={link.path} key={link.name}>
+            <Link to={link.path} key={link.name}>
               <div
                 key={link.name}
                 className="bg-white shadow-md rounded-xl p-6 w-40 h-32 flex flex-col items-center justify-center hover:shadow-lg transition">
@@ -58,7 +42,7 @@ export default function AdminHome() {
                 </span>
               </div>
 
-            </a>
+            </Link>
           ))}
 
         </div>

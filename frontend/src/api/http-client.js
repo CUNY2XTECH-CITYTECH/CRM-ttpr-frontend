@@ -1,9 +1,11 @@
 import { AdminClient } from "./admin";
 import { AuthServiceClient } from "./auth";
 import { CompaniesClient } from "./companies";
-import { IndustryClient } from "./industries";
+import { IndustryClient } from "./industry";
 import { StateCityClient } from "./stateCity";
 import { UserClient } from "./user";
+import { DepartmentClient } from "./department";
+
 
 export class Client {
   constructor(token) {
@@ -14,12 +16,17 @@ export class Client {
     this.adminProfile = new AdminClient(this.token)
     this.industry = new IndustryClient(this.token)
     this.stateCities = new StateCityClient(this.token)
+    this.department = new DepartmentClient(this.token)
+    //add department client here
   }
   user() {
     return this.user;
   }
   industry() {
     return this.industry;
+  }
+  department() {
+    return this.department;
   }
 
   companies() {

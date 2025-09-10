@@ -16,8 +16,8 @@ import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validateDepartmentForm } from "@/lib/validations";
 import { Button } from "@/components/ui/button";
-
 import { useAuth } from "@/lib/dataContext";
+import { DepartmentClient } from "@/api/department";
 export default function CreateDepartments() {
   const { currentUser, token } = useAuth();
   const departmentForm = useForm({
@@ -29,6 +29,22 @@ export default function CreateDepartments() {
   });
   const onSubmit = (values) => {
     console.log("v", values);
+    const deptClient = new DepartmentClient(token);
+    deptClient
+      .createDepartment(values)
+      .then((res) => {
+        console.log("res", res);
+        if (res.status === 201) {
+          alert("Department created successfully");
+          departmentForm.reset();
+        } else {
+          alert("Error creating department");
+        }
+      })
+      .catch((err) => {
+        console.error("err", err);
+        alert("Error creating department");
+      });
   };
 
   useEffect(() => {

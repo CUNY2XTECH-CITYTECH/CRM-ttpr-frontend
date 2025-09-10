@@ -77,7 +77,6 @@ const AdminProfile = () => {
   }
   useEffect(() => {
     const loadData = async () => {
-      console.log('sd', currentUser)
       if (currentUser && currentUser.role !== "admin") {
         navigate("/not-authorized");
       }
@@ -98,9 +97,7 @@ const AdminProfile = () => {
 
   // Update local time
   useEffect(() => {
-    if (currentUser && currentUser.role !== "admin") {
-      navigate("/login");
-    }
+
     const updateTime = () => {
       setLocalTime(
         new Date().toLocaleTimeString([], {

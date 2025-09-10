@@ -141,7 +141,6 @@ export default function Dashboard() {
                       }}
                       className="h-[300px]"
                     >
-                      <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={internshipData}>
                           <XAxis dataKey="month" />
                           <YAxis />
@@ -149,7 +148,6 @@ export default function Dashboard() {
                           <Bar dataKey="applied" fill="var(--color-chart-1)" radius={4} />
                           <Bar dataKey="accepted" fill="var(--color-chart-2)" radius={4} />
                         </BarChart>
-                      </ResponsiveContainer>
                     </ChartContainer>
                   </CardContent>
                 </Card>
@@ -169,7 +167,6 @@ export default function Dashboard() {
                       }}
                       className="h-[200px] max-w-[200px]"
                     >
-                      <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                           <Pie data={departmentData} cx="50%" cy="50%" innerRadius={40} outerRadius={80} dataKey="students">
                             {departmentData.map((entry, index) => (
@@ -178,7 +175,6 @@ export default function Dashboard() {
                           </Pie>
                           <ChartTooltip content={<ChartTooltipContent />} />
                         </PieChart>
-                      </ResponsiveContainer>
                     </ChartContainer>
                     <div className="mt-4 space-y-2">
                       {departmentData.map((dept, index) => (
