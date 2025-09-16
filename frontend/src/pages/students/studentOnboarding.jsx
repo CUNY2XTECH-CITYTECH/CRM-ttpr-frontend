@@ -1,99 +1,14 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Check, Info } from "lucide-react";
 import { useNavigate } from "react-router"
 import { useAuth } from "@/lib/dataContext";
 import { Button } from "@/components/ui/button";
-const initialSteps = [
-  {
-    key: "interests",
-    label: "What are your interests?",
-    hint: "This helps us personalize your experience.",
-    icon: "🎯",
-    options: [
-      "Gaming",
-      "Photography",
-      "Volunteering",
-      "Science Club",
-      "Robotics",
-      "Music",
-      "Writing",
-      "Sports",
-      "Student Government",
-      "Theatre/Drama",
-      "Environmental Club",
-      "Entrepreneurship",
-      "Social Justice",
-      "Finance & Investing",
-      "Anime & Comics",
-      "Esports",
-      "Debate Team",
-      "Cultural Clubs",
-      "Hackathons",
-      "Campus Events",
-    ],
-  },
-  {
-    key: "roles",
-    label: "What job roles are you interested in?",
-    hint: "We’ll connect you with mentors and jobs that match.",
-    icon: "💼",
-    options: [
-      "Frontend Developer",
-      "Backend Developer",
-      "Full Stack Developer",
-      "Data Analyst",
-      "Data Scientist",
-      "Cybersecurity Analyst",
-      "UX/UI Designer",
-      "Mobile App Developer",
-      "Cloud Engineer",
-      "Machine Learning Engineer",
-      "Game Developer",
-      "IT Support Specialist",
-      "DevOps Engineer",
-      "Product Manager",
-      "Project Manager",
-      "Systems Administrator",
-      "AI Researcher",
-      "Business Analyst",
-      "Technical Writer",
-      "Database Administrator",
-    ],
-  },
-  {
-    key: "skills",
-    label: "What are your top skillsets?",
-    hint: "Let us know your strengths!",
-    icon: "🛠️",
-    options: [
-      "Python",
-      "JavaScript",
-      "Java",
-      "C++",
-      "HTML/CSS",
-      "SQL",
-      "React",
-      "Node.js",
-      "Figma",
-      "Excel",
-      "Canva",
-      "Public Speaking",
-      "Networking (Cisco)",
-      "Linux",
-      "Adobe Photoshop",
-      "Machine Learning",
-      "Git/GitHub",
-      "Leadership",
-      "Time Management",
-      "Problem Solving",
-    ],
-  },
-];
+import { useClient } from '@/lib/dataContext'
 
 export default function StudentOnboarding() {
 
-
+  const { client } = useClient()
   const { token, currentUser } = useAuth();
   const navigate = useNavigate()
   const [step, setStep] = useState(0);
@@ -102,13 +17,87 @@ export default function StudentOnboarding() {
     roles: [],
     skills: [],
   });
+  const [position, setPosition] = useState([])
+
+  const [steps,setSteps] = useState([
+    {
+      key: "interests",
+      label: "What are your interests?",
+      hint: "This helps us personalize your experience.",
+      icon: "🎯",
+      options: [
+        "Gaming",
+        "Photography",
+        "Volunteering",
+        "Science Club",
+        "Robotics",
+        "Music",
+        "Writing",
+        "Sports",
+        "Student Government",
+        "Theatre/Drama",
+        "Environmental Club",
+        "Entrepreneurship",
+        "Social Justice",
+        "Finance & Investing",
+        "Anime & Comics",
+        "Esports",
+        "Debate Team",
+        "Cultural Clubs",
+        "Hackathons",
+        "Campus Events",
+      ],
+    },
+    {
+      key: "roles",
+      label: "What job roles are you interested in?",
+      hint: "We’ll connect you with mentors and jobs that match.",
+      icon: "💼",
+      options: [
+        "Software Engineer",
+        "Data Scientist",
+        "Product Manager",
+        "UX/UI Designer",
+        "Marketing Specialist",
+        "Sales Representative",
+        "Business Analyst",
+      ]},
+    {
+      key: "skills",
+      label: "What are your top skillsets?",
+      hint: "Let us know your strengths!",
+      icon: "🛠️",
+      options: [
+        "Python",
+        "JavaScript",
+        "Java",
+        "C++",
+        "HTML/CSS",
+        "SQL",
+        "React",
+        "Node.js",
+        "Figma",
+        "Excel",
+        "Canva",
+        "Public Speaking",
+        "Networking (Cisco)",
+        "Linux",
+        "Adobe Photoshop",
+        "Machine Learning",
+        "Git/GitHub",
+        "Leadership",
+        "Time Management",
+        "Problem Solving",
+      ],
+    },
+  ]);
   const [dynamicOptions, setDynamicOptions] = useState(
-    initialSteps.map((s) => s.options)
+    steps.map((s) => s.options)
   );
   const [customInput, setCustomInput] = useState("");
   const [isReview, setIsReview] = useState(false);
 
-  const currentStep = initialSteps[step];
+  const currentStep = steps[step];
   const currentOptions = dynamicOptions[step];
   const selected = formData[currentStep.key];
 
@@ -124,8 +113,10 @@ export default function StudentOnboarding() {
     });
   };
 
-  const addCustomOption = () => {
+  const addCustomOption = async() => {
     const val = customInput.trim();
+    const upload_options = await client.positions.create({ name: val })
+    console.log('upload_options',upload_options)
     if (val && !currentOptions.includes(val)) {
       const updatedOptions = [...currentOptions, val];
       const newDynamicOptions = [...dynamicOptions];
@@ -137,7 +128,7 @@ export default function StudentOnboarding() {
   };
 
   const handleNext = () => {
-    if (step < initialSteps.length - 1) {
+    if (step < steps?.length - 1) {
       setStep(step + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
@@ -149,13 +140,37 @@ export default function StudentOnboarding() {
   const handleBack = () => {
     if (step > 0) setStep(step - 1);
   };
+  const loadData = async () => {
+    const posres = await client.positions.fetchAll()
+    console.log('positions', posres)
+    if (posres && posres.status === 200) {
+      setPosition(posres.data.positions)
+      setSteps((prevSteps) => {
+        const updatedSteps = [...prevSteps];
+        const roleStepIndex = updatedSteps.findIndex(step => step.key === 'roles');
+        if (roleStepIndex !== -1) {
+          updatedSteps[roleStepIndex] = {
+            ...updatedSteps[roleStepIndex],
+            options: posres.data.positions.map(pos => pos.name)
+          };
+        }
+        return updatedSteps;
+      }
+      )
+      setDynamicOptions((prevOptions) => {
+        const updatedOptions = [...prevOptions];
+        const roleStepIndex = steps?.findIndex(step => step.key === 'roles');
+        if (roleStepIndex !== -1) {
+          updatedOptions[roleStepIndex] = posres.data.positions.map(pos => pos.name);
+        }
+        return updatedOptions;
+      }
+      );
+
+    }
+  }
   useEffect(() => {
-    if (currentUser && currentUser?.role !== "admin") {
-      navigate("/not-authorized");
-    }
-    if(!token){
-        navigate('/login') 
-    }
+    loadData()
   }, [token]);
 
 
@@ -168,11 +183,11 @@ export default function StudentOnboarding() {
             <motion.div
               className="bg-indigo-500 h-2 rounded-full"
               initial={{ width: 0 }}
-              animate={{ width: `${((step + 1) / initialSteps.length) * 100}%` }}
+              animate={{ width: `${((step + 1) / steps?.length) * 100}%` }}
               transition={{ duration: 0.5 }}
               aria-valuenow={step + 1}
               aria-valuemin={1}
-              aria-valuemax={initialSteps.length}
+              aria-valuemax={steps?.length}
               role="progressbar"
             />
           </div>
@@ -204,11 +219,10 @@ export default function StudentOnboarding() {
                   type="button"
                   onClick={() => toggleOption(currentStep.key, opt)}
                   disabled={isDisabled}
-                  className={`px-4 py-1.5 rounded-full border text-sm flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                    isSelected
-                      ? "bg-green-600 text-white border-green-600"
-                      : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                  }`}
+                  className={`px-4 py-1.5 rounded-full border text-sm flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${isSelected
+                    ? "bg-green-600 text-white border-green-600"
+                    : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    }`}
                   aria-pressed={isSelected}
                 >
                   {isSelected && <Check size={14} aria-hidden="true" />}
@@ -261,13 +275,12 @@ export default function StudentOnboarding() {
                 type="button"
                 disabled={selected.length === 0}
                 onClick={handleNext}
-                className={`px-6 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 ${
-                  selected.length === 0
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-indigo-600 text-white hover:bg-indigo-700"
-                }`}
+                className={`px-6 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 ${selected.length === 0
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+                  }`}
               >
-                {step < initialSteps.length - 1 ? "Continue →" : "Finish 🎉"}
+                {step < steps?.length - 1 ? "Continue →" : "Finish 🎉"}
               </button>
             </div>
           </div>
@@ -276,22 +289,22 @@ export default function StudentOnboarding() {
         <div className="text-center space-y-6">
           <h2 className="text-3xl font-bold">Welcome {currentUser?.name}  🎉</h2>
           <p className="text-gray-600">We have set all your personalization in your profile.</p>
-              <div className="flex gap-3 ">
-          <Button
-            type="button"
-            onClick={()=>navigate('/profile')}
-            className="cursor-pointer text-sm mt-4 ml-auto"
-          >
-           Go to my profile 
-          </Button>
+          <div className="flex gap-3 ">
+            <Button
+              type="button"
+              onClick={() => navigate('/profile')}
+              className="cursor-pointer text-sm mt-4 ml-auto"
+            >
+              Go to my profile
+            </Button>
 
-          <Button
-            type="button"
-            onClick={()=>navigate('/')}
-            className="text-sm mt-4 cursor-pointer mr-auto"
-          >
-           Go to my dashboard 
-          </Button>
+            <Button
+              type="button"
+              onClick={() => navigate('/')}
+              className="text-sm mt-4 cursor-pointer mr-auto"
+            >
+              Go to my dashboard
+            </Button>
           </div>
         </div>
       )}

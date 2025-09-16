@@ -23,14 +23,21 @@ export default function ViewCompanies() {
   const { token, currentUser } = useAuth();
   const { client } = useClient() // use this
   const companiesPerPage = 5;
-  async function fetchCompanies(token) {
+  async function fetchCompanies() {
     setLoading(true);
     try {
       const res = await client.companies.fetchAll(); // use client to fetch
       if (res.status === 200) {
+       // after waiting for all industries to be fetched, set the companies state
+        await Promise.all(res.data.map(async (company) => {
+          const industry_name = await client.industries.fetchOne(company.industry);
+          company.industry = industry_name.data?.industries.name
+        })
+        )
+       
         setCompanies(res.data);
       }
-      else{
+      else {
         console.log(res.error)
       }
     } catch (error) {
@@ -50,17 +57,8 @@ export default function ViewCompanies() {
   const totalPages = Math.ceil(companies.length / companiesPerPage);
   const start = (currentPage - 1) * companiesPerPage;
   const currentCompanies = companies.slice(start, start + companiesPerPage);
-  const handleEdit = async(id) => {
+  const handleEdit = async (id) => {
     navigate(`/admin/view-companies/${id}`)
-    //  try {
-    //   const res = await client.companies.update(id,{credentials:'include'});
-    //   console.log(res,'updated')
-    // } catch (error) {
-    //   toast.error("Failed to update company");
-    //   console.error(error);
-    // }
-    //
-    // Replace with your real edit logic or navigation
   };
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this company?")) return;
@@ -72,7 +70,7 @@ export default function ViewCompanies() {
         setCurrentPage((p) => p - 1);
       }
     } catch (error) {
-      alert("Failed to delete company");
+      toast.error("Failed to delete company");
       console.error(error);
     }
   };
@@ -81,70 +79,71 @@ export default function ViewCompanies() {
     <>
       {currentUser ? (
         <Layout user={currentUser}>
-          <Topbar title="Add New Company" mode="read" link="/admin/create-companies"/>
+          <Topbar title="Add New Company" mode="read" link="/admin/create-companies" />
 
           <div className="p-6 mt-6 bg-white rounded-lg shadow-sm mx-auto">
 
-        <h4 className='py-2 font-semibold uppercase'>Companies</h4>
+            <h4 className='py-2 font-semibold uppercase'>Companies</h4>
             <div className="w-full">
-            <Table className={''}>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Industry</TableHead>
-                  <TableHead>Website</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {currentCompanies.length === 0 ? (
+              <Table className={''}>
+                <TableHeader>
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-6">
-                      No companies found.
-                    </TableCell>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Industry</TableHead>
+                    <TableHead>Website</TableHead>
+                    <TableHead>Location</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
-                ) : (
-                  currentCompanies.map((company) => (
-                    <TableRow key={company._id}>
-                      <TableCell>{company.name}</TableCell>
-                      <TableCell>{company.email}</TableCell>
-                      <TableCell>{company.industry}</TableCell>
-                      <TableCell>
-                        <a
-                          href={company.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          Visit
-                        </a>
-                      </TableCell>
-                      <TableCell className={''}>{company.location}</TableCell>
-                      <TableCell className="flex justify-end gap-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => handleEdit(company._id)}
-                          aria-label="Edit company"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          onClick={() => handleDelete(company.id)}
-                          aria-label="Delete company"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                </TableHeader>
+                <TableBody>
+                  {currentCompanies.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="text-center py-6">
+                        No companies found.
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+                  ) : (
+                    currentCompanies.map((company) => (
+                      <TableRow key={company._id}>
+                          {console.log(company,'c')}
+                        <TableCell>{company.name}</TableCell>
+                        <TableCell>{company.email}</TableCell>
+                        <TableCell>{company.industry}</TableCell>
+                        <TableCell>
+                          <a
+                            href={company.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline"
+                          >
+                            Visit
+                          </a>
+                        </TableCell>
+                        <TableCell className={''}>{company.location}</TableCell>
+                        <TableCell className="flex justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleEdit(company._id)}
+                            aria-label="Edit company"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            onClick={() => handleDelete(company.id)}
+                            aria-label="Delete company"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
             </div>
             {/* Pagination */}
             <div className="flex justify-between items-center mt-6">

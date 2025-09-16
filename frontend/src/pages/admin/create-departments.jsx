@@ -17,7 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { validateDepartmentForm } from "@/lib/validations";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/dataContext";
-import { DepartmentClient } from "@/api/department";
+
 export default function CreateDepartments() {
   const { currentUser, token } = useAuth();
   const departmentForm = useForm({
@@ -48,13 +48,13 @@ export default function CreateDepartments() {
   };
 
   useEffect(() => {
-    if (currentUser && currentUser?.role !== "admin") {
-      navigate("/not-authorized");
-    }
-    if(!token){
-        navigate('/login') 
-    }
-
+    // if (currentUser && currentUser?.role !== "admin") {
+    //   navigate("/not-authorized");
+    // }
+    // if(!token){
+    //     navigate('/login') 
+    // }
+    //
   }, [token]);
 
   return (

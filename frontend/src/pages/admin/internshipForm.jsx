@@ -34,14 +34,14 @@ export default function InternshipForm() {
     console.log(data)
   }
   useEffect(() => {
-    console.log('current', currentUser)
-    if (currentUser?.role !== 'admin') {
-      navigate('/not-authorized')
-    }
-    if(!token){
-
-      navigate('/login')
-    }
+    // console.log('current', currentUser)
+    // if (currentUser?.role !== 'admin') {
+    //   navigate('/not-authorized')
+    // }
+    // if(!token){
+    //
+    //   navigate('/login')
+    // }
   }, [token])
 
 

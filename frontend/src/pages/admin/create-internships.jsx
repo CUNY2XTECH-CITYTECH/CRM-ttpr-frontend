@@ -42,13 +42,13 @@ export default function CreateInternships() {
     console.log(data);
   };
   useEffect(() => {
-    console.log("current", currentUser);
-    if (currentUser && currentUser?.role !== "admin") {
-      navigate("/not-authorized");
-    }
-    if(!token){
-        navigate('/login') 
-    }
+    // console.log("current", currentUser);
+    // if (currentUser && currentUser?.role !== "admin") {
+    //   navigate("/not-authorized");
+    // }
+    // if(!token){
+    //     navigate('/login') 
+    // }
 
   }, [token]);
 

@@ -77,9 +77,9 @@ const AdminProfile = () => {
   }
   useEffect(() => {
     const loadData = async () => {
-      if (currentUser && currentUser.role !== "admin") {
-        navigate("/not-authorized");
-      }
+      // if (currentUser && currentUser.role !== "admin") {
+      //   navigate("/not-authorized");
+      // }
       if (!token) {
         navigate("/login");
       }

@@ -28,18 +28,17 @@ import ViewStaff from "./pages/admin/view-staffs";
 import ViewInternships from "./pages/admin/view-internships";
 import { ComingSoon } from "./pages/ComingSoon";
 import ProtectedRoute from "./pages/protected";
-import { DepartmentClient } from "./api/department";
-import { IndustryClient } from "./api/industry";
+import { Sidebar } from "lucide-react";
+
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-            <Route path="/error" element={<InfoPage />} />
-            <Route path="/not-authorized" element={<InfoPage />} />
-            <Route path="/account-exists" element={<InfoPage />} />
-
+          <Route path="/error" element={<InfoPage />} />
+          <Route path="/not-authorized" element={<InfoPage />} />
+          <Route path="/account-exists" element={<InfoPage />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
@@ -59,7 +58,9 @@ function App() {
             <Route path="/admin/waiting" element={<Waiting />} />
             <Route path="/admin" element={<AdminHome />} />
             <Route path="/admin/create-departments" element={<CreateDepartments />} />
-            <Route path="/admin/create-industry" element={<CreateDepartments />} />
+            
+            <Route path = "/admin/techstacks" element = {<Sidebar/>} />
+            
           </Route>
 
           <Route element={<ProtectedRoute allowRoutes={['student']} />} >

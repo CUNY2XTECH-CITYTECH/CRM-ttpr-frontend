@@ -1,11 +1,12 @@
 import { AdminClient } from "./admin";
 import { AuthServiceClient } from "./auth";
 import { CompaniesClient } from "./companies";
-import { IndustryClient } from "./industry";
+import { DepartmentClient } from "./departments";
+
+import { PositionClient } from "./positions";
 import { StateCityClient } from "./stateCity";
 import { UserClient } from "./user";
-import { DepartmentClient } from "./department";
-
+import { TechStacksClient } from "./techstacks";
 
 export class Client {
   constructor(token) {
@@ -14,19 +15,28 @@ export class Client {
     this.auth = new AuthServiceClient()
     this.companies = new CompaniesClient(this.token)
     this.adminProfile = new AdminClient(this.token)
-    this.industry = new IndustryClient(this.token)
+  
     this.stateCities = new StateCityClient(this.token)
-    this.department = new DepartmentClient(this.token)
-    //add department client here
+    this.departments = new DepartmentClient(this.token)
+    this.positions = new PositionClient(this.token)
+    this.techstacks = new TechStacksClient(this.token)
   }
   user() {
     return this.user;
   }
-  industry() {
-    return this.industry;
+  techstacks() {
+    return this.techstacks;
   }
-  department() {
-    return this.department;
+  
+  positions() {
+    return this.positions;
+  }
+
+  departments() {
+    return this.departments;
+  }
+  industries() {
+    return this.industry;
   }
 
   companies() {
