@@ -38,6 +38,7 @@ Then, you can run "npm run dev"
 
 ### basic template for react components or pages
 
+```ts
 import React from 'react'
 function YourPageName(){
  return (<>
@@ -45,6 +46,7 @@ function YourPageName(){
 </>)
 }
 export default YourPageName
+```
 
 ### used libraries and tools
 - shadcn ui (https://ui.shadcn.com/docs/components)
