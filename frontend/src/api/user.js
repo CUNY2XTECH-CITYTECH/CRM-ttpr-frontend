@@ -9,6 +9,11 @@ export class UserClient extends BaseClient {
     const res = await this.get('users');
     return res
   }
+  async fetchByQuery(query,value) {
+    // get all user
+    const res = await this.get(`users?${query}=${value}`);
+    return res
+  }
   async fetchOne() {
     const res = await this.get('users/me');
       return res

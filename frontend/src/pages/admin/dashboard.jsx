@@ -1,8 +1,8 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Header } from '@/components/header'
 import { useNavigate } from 'react-router'
-import { useAuth } from '@/lib/dataContext'
-import { Card, CardContent, CardHeader, CardTitle,CardDescription} from "@/components/ui/card"
+import { useAuth, useClient } from '@/lib/dataContext'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -11,13 +11,7 @@ import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, ResponsiveContainer }
 import { Users, Building2, GraduationCap, Briefcase, Bell, Calendar, TrendingUp, UserCheck, Clock } from "lucide-react"
 import Layout from '@/components/layout'
 
-// Mock data
-const statsData = [
-  { name: "Staff", value: 45, icon: Users, color: "text-blue-600", bgColor: "bg-blue-50" },
-  { name: "Students", value: 1247, icon: GraduationCap, color: "text-green-600", bgColor: "bg-green-50" },
-  { name: "Companies", value: 89, icon: Building2, color: "text-purple-600", bgColor: "bg-purple-50" },
-  { name: "Internships", value: 324, icon: Briefcase, color: "text-orange-600", bgColor: "bg-orange-50" },
-]
+
 
 const internshipData = [
   { month: "Jan", applied: 45, accepted: 32 },
@@ -48,6 +42,16 @@ const todayAppointments = [
 ]
 export default function Dashboard() {
   const { token, currentUser } = useAuth()
+  const { client } = useClient()
+  const [stats, setStats] = useState(
+    [
+      { name: "Staff", value: 45, icon: Users, color: "text-blue-600", bgColor: "bg-blue-50" },
+      { name: "Students", value: 1247, icon: GraduationCap, color: "text-green-600", bgColor: "bg-green-50" },
+      { name: "Companies", value: 89, icon: Building2, color: "text-purple-600", bgColor: "bg-purple-50" },
+      { name: "Internships", value: 324, icon: Briefcase, color: "text-orange-600", bgColor: "bg-orange-50" },
+    ]
+  )
+
   const navigate = useNavigate()
   const [selectedTimeframe, setSelectedTimeframe] = useState("month")
 
@@ -55,14 +59,28 @@ export default function Dashboard() {
     console.log(`${action} approval for ID: ${id}`)
     // Handle approval logic here
   }
+  const loadData = async () => {
+    let staff = await client.user.fetchByQuery('role', 'admin')
+    let students = await client.user.fetchByQuery('role', 'student')
+    if (staff.status === 200) {
+      setStats((prev) => {
+        let newStats = [...prev]
+        newStats[0].value = staff.data.length
+        return newStats
+    }
+      )
+    }
+    if (students.status === 200) {
+      setStats((prev)=>{
+       let newStats = [...prev]
+        newStats[1].value = students.data.length
+        return newStats
+      })
+    }
+  }
   useEffect(() => {
     console.log(currentUser, 'cu')
-    // if (currentUser && currentUser.role !== 'admin') {
-    //   navigate('/not-authorized')
-    // }
-    // if (!token) {
-    //   navigate('/login')
-    // }
+    loadData()
   }, [token])
 
 
@@ -95,7 +113,7 @@ export default function Dashboard() {
             <div className="p-6 space-y-6">
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {statsData.map((stat) => {
+                {stats.map((stat) => {
                   const Icon = stat.icon
                   return (
                     <Card key={stat.name} className="relative overflow-hidden">
@@ -141,13 +159,13 @@ export default function Dashboard() {
                       }}
                       className="h-[300px]"
                     >
-                        <BarChart data={internshipData}>
-                          <XAxis dataKey="month" />
-                          <YAxis />
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <Bar dataKey="applied" fill="var(--color-chart-1)" radius={4} />
-                          <Bar dataKey="accepted" fill="var(--color-chart-2)" radius={4} />
-                        </BarChart>
+                      <BarChart data={internshipData}>
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="applied" fill="var(--color-chart-1)" radius={4} />
+                        <Bar dataKey="accepted" fill="var(--color-chart-2)" radius={4} />
+                      </BarChart>
                     </ChartContainer>
                   </CardContent>
                 </Card>
@@ -167,14 +185,14 @@ export default function Dashboard() {
                       }}
                       className="h-[200px] max-w-[200px]"
                     >
-                        <PieChart>
-                          <Pie data={departmentData} cx="50%" cy="50%" innerRadius={40} outerRadius={80} dataKey="students">
-                            {departmentData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.fill} />
-                            ))}
-                          </Pie>
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                        </PieChart>
+                      <PieChart>
+                        <Pie data={departmentData} cx="50%" cy="50%" innerRadius={40} outerRadius={80} dataKey="students">
+                          {departmentData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                          ))}
+                        </Pie>
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                      </PieChart>
                     </ChartContainer>
                     <div className="mt-4 space-y-2">
                       {departmentData.map((dept, index) => (

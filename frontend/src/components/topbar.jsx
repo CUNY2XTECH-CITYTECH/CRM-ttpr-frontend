@@ -5,7 +5,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Input } from './ui/input'
 import Papa from 'papaparse'
 import { useClient } from '@/lib/dataContext'
-export const Topbar = ({ title, view = null, creatable = true, setView = null, mode, link = null }) => {
+import toast from 'react-hot-toast'
+export const Topbar = ({ title, view = null, creatable = true, setView = null, mode, setReload, link = null }) => {
   const [dataset, setDataset] = useState(null)
   const navigate = useNavigate()
   const { client } = useClient()
@@ -24,8 +25,13 @@ export const Topbar = ({ title, view = null, creatable = true, setView = null, m
       complete: async function(results) {
         switch (type) {
           case 'company':
-            const tryUpload = await client.companies.createMany({ data: results.data})
-            console.log(tryUpload,results.data,'tryupload')
+            const tryUpload = await client.companies.createMany({ data: results.data })
+            if (!tryUpload.data) {
+              toast.error('Some entries were not uploaded due to duplication.')
+            }
+              toast.success('Uploaded successfully')
+            setReload(prev => !prev)
+            ;
             break;
           default:
             break;
@@ -33,10 +39,8 @@ export const Topbar = ({ title, view = null, creatable = true, setView = null, m
 
       },
       error: function(error) {
-        console.log(error, 'error')
+        console.log(error, 'parsing error')
       }
-    })
-    await result.then(async (res) => {
     })
   }
   return (
