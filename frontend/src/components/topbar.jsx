@@ -54,7 +54,7 @@ export const Topbar = ({ title, view = null, creatable = true, setView = null, m
       </div>
       {mode === 'read' ?
         <div className='border-t border-gray-200 py-4 flex gap-1 justify-between'>
-          {creatable ?
+          {creatable && 
             <div className='flex gap-2'>
               <Button><Link to={link}>Create new</Link></Button>
               <Button className={'relative'}>
@@ -62,9 +62,8 @@ export const Topbar = ({ title, view = null, creatable = true, setView = null, m
                 <Input type='file' className='absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer' onChange={uploadCSV} />
               </Button>
             </div>
-            : <div></div>
           }
-          <div className='flex p-1 gap-1 border border-gray-200 rounded-lg'>
+          <div className='flex p-1 gap-1 border border-gray-200 rounded-lg ml-auto'>
             <Button onClick={changeView && changeView} variant={'secondary'} className={'border border-transparent hover:border-gray-300 cursor-pointer'}>
               <LayoutGrid />
             </Button>

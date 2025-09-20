@@ -4,8 +4,10 @@ import { useAuth } from '@/lib/dataContext'
 import '@/styles/animation.css'
 function ProtectedRoute({ allowRoutes }) {
   const { currentUser, loading, token } = useAuth()
-  console.log(currentUser, 'current user in protected route')
-  if (!token) {
+  if (!token ) {
+    return <Navigate to="/login" replace />
+  }
+  if(!token && !currentUser){
     return <Navigate to="/login" replace />
   }
   if (loading) return <div className="h-screen w-full grid items-center justify-items-center"><div className="loader"></div></div>;

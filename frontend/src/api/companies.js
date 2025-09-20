@@ -9,11 +9,14 @@ export class CompaniesClient extends BaseClient {
     return res
   }
   async fetchOne(id) {
-    const res = await this.get('company/' + id);
+    const res = await this.get('company/detail/' + id);
     return res
 
   }
-
+  async fetchMatrix(){
+    const res = await this.get('company/getMatrix');
+      return res
+  }
   async create(data, optionalHeader) {
     // get all user
 

@@ -65,12 +65,12 @@ const items = [
     url: "#",
     childLinks: [
       {
-        title: "create companies",
+        title: "add companies",
         url: "/admin/create-companies",
       }
       ,
       {
-        title: "view companies",
+        title: "manage companies",
         url: "/admin/view-companies",
       }
 
@@ -81,12 +81,12 @@ const items = [
     title: "Internships",
     url: "#",
     childLinks: [{
-      title: "create internships",
+      title: "add internships",
       url: "/admin/create-internships",
     }
       ,
     {
-      title: "view internships",
+      title: "manage internships",
       url: "/admin/view-internships",
     }],
     icon: Rows4,
@@ -95,12 +95,12 @@ const items = [
     title: "Departments",
     url: "#",
     childLinks: [{
-      title: "create departments",
+      title: "add departments",
       url: "/admin/create-departments",
     }
       ,
     {
-      title: "view departments",
+      title: "manage departments",
       url: "/admin/view-departments",
     }],
     icon: BuildingIcon,
@@ -110,14 +110,14 @@ const items = [
     title: "Staffs",
     url: "#",
     childLinks: [{
-      title: "create staffs",
-      url: "/admin/create-staffs",
-    }
-      ,
-    {
       title: "view staffs",
       url: "/admin/view-staffs",
-    }],
+    },
+{
+      title: "manage staff requests",
+      url: "/admin/view-staff-requests",
+    }
+    ],
     icon: Users,
   },
 
@@ -137,12 +137,12 @@ const items = [
     title: "Appointments",
     url: "#",
     childLinks: [{
-      title: "create appointments",
+      title: "add appointments",
       url: "/admin/create-appointments",
     }
       ,
     {
-      title: "view appointments",
+      title: "manage appointments",
       url: "/admin/view-appointments",
     }],
     icon: Calendar,

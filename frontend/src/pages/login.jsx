@@ -27,7 +27,6 @@ export default function LoginPage() {
   const onSubmit = async (e) => {
     try {
       let res = await client.auth.login(e, { credentials: 'include' })
-      console.log(res,'ress')
       if (res.status === 200) {
         toast.success("Logged in successfully")
         if (res.data?.message?.role === 'admin') {

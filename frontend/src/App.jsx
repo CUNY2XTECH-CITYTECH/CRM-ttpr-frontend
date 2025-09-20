@@ -28,6 +28,7 @@ import ViewStaff from "./pages/admin/view-staffs";
 import ViewInternships from "./pages/admin/view-internships";
 import { ComingSoon } from "./pages/ComingSoon";
 import ProtectedRoute from "./pages/protected";
+import ViewStaffRequests from "./pages/admin/view-staff-requests";
 function App() {
   return (
     <>
@@ -53,6 +54,7 @@ function App() {
             < Route path='/admin/view-appointments' element={<ViewAppointments />} />
             <Route path='/admin/view-companies' element={<ViewCompanies />} />
             <Route path="/admin/waiting" element={<Waiting />} />
+            <Route path="/admin/view-staff-requests" element={<ViewStaffRequests/>} />
             <Route path="/admin" element={<AdminHome />} />
           </Route>
 
