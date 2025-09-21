@@ -1,8 +1,8 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Header } from '@/components/header'
 import { useNavigate } from 'react-router'
-import { useAuth } from '@/lib/dataContext'
-import { Card, CardContent, CardHeader, CardTitle,CardDescription} from "@/components/ui/card"
+import { useAuth, useClient } from '@/lib/dataContext'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -11,13 +11,7 @@ import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, ResponsiveContainer }
 import { Users, Building2, GraduationCap, Briefcase, Bell, Calendar, TrendingUp, UserCheck, Clock } from "lucide-react"
 import Layout from '@/components/layout'
 
-// Mock data
-const statsData = [
-  { name: "Staff", value: 45, icon: Users, color: "text-blue-600", bgColor: "bg-blue-50" },
-  { name: "Students", value: 1247, icon: GraduationCap, color: "text-green-600", bgColor: "bg-green-50" },
-  { name: "Companies", value: 89, icon: Building2, color: "text-purple-600", bgColor: "bg-purple-50" },
-  { name: "Internships", value: 324, icon: Briefcase, color: "text-orange-600", bgColor: "bg-orange-50" },
-]
+
 
 const internshipData = [
   { month: "Jan", applied: 45, accepted: 32 },
@@ -35,11 +29,6 @@ const departmentData = [
   { name: "Design", students: 200, fill: "var(--color-chart-4)" },
 ]
 
-const pendingApprovals = [
-  { id: 1, name: "Sarah Johnson", email: "sarah.j@email.com", role: "Admin", department: "HR", time: "2 hours ago" },
-  { id: 2, name: "Michael Chen", email: "m.chen@email.com", role: "Admin", department: "IT", time: "4 hours ago" },
-  { id: 3, name: "Emily Davis", email: "e.davis@email.com", role: "Admin", department: "Finance", time: "1 day ago" },
-]
 
 const todayAppointments = [
   { id: 1, student: "Alex Thompson", company: "TechCorp", time: "10:00 AM", type: "Interview" },
@@ -48,21 +37,66 @@ const todayAppointments = [
 ]
 export default function Dashboard() {
   const { token, currentUser } = useAuth()
+  const { client } = useClient()
+  const [pendingApprovals, setPendingApprovals] = useState([])
+  const [stats, setStats] = useState(
+    [
+      { name: "Staff Users", value: 45, icon: Users, color: "text-blue-600", bgColor: "bg-blue-50" },
+      { name: "Student Users", value: 1247, icon: GraduationCap, color: "text-green-600", bgColor: "bg-green-50" },
+      { name: "Companies", value: 89, icon: Building2, color: "text-purple-600", bgColor: "bg-purple-50" },
+      { name: "Internships", value: 324, icon: Briefcase, color: "text-orange-600", bgColor: "bg-orange-50" },
+    ]
+  )
+
   const navigate = useNavigate()
   const [selectedTimeframe, setSelectedTimeframe] = useState("month")
 
-  const handleApproval = (id, action) => {
-    console.log(`${action} approval for ID: ${id}`)
-    // Handle approval logic here
+  const handleApproval = async (id, action) => {
+    const approving = await client.user.actionPendingStaff(id, { action }, { credentials: 'include' })
+    console.log(approving, '..')
+    if (approving.status === 200) {
+      if (action === 'approve') {
+        setStats((prev) => {
+          let newStats = [...prev]
+          newStats[0].value += 1
+          return newStats
+        })
+        setPendingApprovals((prev) => prev.filter((item) => item._id !== id))
+      }
+      else {
+        setPendingApprovals((prev) => prev.filter((item) => item._id !== id))
+      }
+        const sendingEmail = await client.auth.sendEmail({
+          to: res.data.staff.email,
+          action: action
+      }, { credentials: 'include' })
+
+        console.log(sendingEmail, '..sending')
+
+    }
+  }
+  const loadData = async () => {
+    let students = await client.user.fetchStudents()
+    let fetchPendingStaffs = await client.user.fetchPendingStaffs()
+    let matrix = await client.user.fetchMatrix()
+    if (fetchPendingStaffs.status === 200) {
+      setPendingApprovals(fetchPendingStaffs.data.pendingStaffs)
+    }
+    let companies = await client.companies.fetchMatrix()
+    if (matrix.status === 200) {
+      let data = matrix.data
+      setStats((prev) => {
+        let newStats = [...prev]
+        newStats[0].value = data.staffCount
+        newStats[1].value = data.studentCount
+        newStats[2].value = companies.status === 200 ? companies.data.companyCount : prev[2].value
+        return newStats
+      })
+    }
   }
   useEffect(() => {
     console.log(currentUser, 'cu')
-    // if (currentUser && currentUser.role !== 'admin') {
-    //   navigate('/not-authorized')
-    // }
-    // if (!token) {
-    //   navigate('/login')
-    // }
+    loadData()
   }, [token])
 
 
@@ -78,10 +112,7 @@ export default function Dashboard() {
                   <p className="text-gray-600">Welcome back, manage your CRM platform</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <Button variant="outline" size="sm">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Today
-                  </Button>
+
                   <div className="relative">
                     <Bell className="h-5 w-5 text-gray-600" />
                     <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
@@ -95,11 +126,11 @@ export default function Dashboard() {
             <div className="p-6 space-y-6">
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {statsData.map((stat) => {
+                {stats.map((stat) => {
                   const Icon = stat.icon
                   return (
-                    <Card key={stat.name} className="relative overflow-hidden">
-                      <CardContent className="p-6">
+                    <Card key={stat._id} className="relative overflow-hidden">
+                      <CardContent className="">
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-sm font-medium text-gray-600">{stat.name}</p>
@@ -109,10 +140,11 @@ export default function Dashboard() {
                             <Icon className={`h-6 w-6 ${stat.color}`} />
                           </div>
                         </div>
-                        <div className="mt-4 flex items-center text-sm">
-                          <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-                          <span className="text-green-600 font-medium">+12%</span>
-                          <span className="text-gray-600 ml-1">from last month</span>
+                        <div>
+                          <div className="mt-4 flex items-center text-sm">
+                            <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
+                            <span className="text-green-600 font-medium">+12%</span></div>
+                          <span className="text-gray-600 ml-1 text-xs">from last month</span>
                         </div>
                       </CardContent>
                     </Card>
@@ -141,13 +173,13 @@ export default function Dashboard() {
                       }}
                       className="h-[300px]"
                     >
-                        <BarChart data={internshipData}>
-                          <XAxis dataKey="month" />
-                          <YAxis />
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <Bar dataKey="applied" fill="var(--color-chart-1)" radius={4} />
-                          <Bar dataKey="accepted" fill="var(--color-chart-2)" radius={4} />
-                        </BarChart>
+                      <BarChart data={internshipData}>
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="applied" fill="var(--color-chart-1)" radius={4} />
+                        <Bar dataKey="accepted" fill="var(--color-chart-2)" radius={4} />
+                      </BarChart>
                     </ChartContainer>
                   </CardContent>
                 </Card>
@@ -167,14 +199,14 @@ export default function Dashboard() {
                       }}
                       className="h-[200px] max-w-[200px]"
                     >
-                        <PieChart>
-                          <Pie data={departmentData} cx="50%" cy="50%" innerRadius={40} outerRadius={80} dataKey="students">
-                            {departmentData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.fill} />
-                            ))}
-                          </Pie>
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                        </PieChart>
+                      <PieChart>
+                        <Pie data={departmentData} cx="50%" cy="50%" innerRadius={40} outerRadius={80} dataKey="students">
+                          {departmentData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                          ))}
+                        </Pie>
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                      </PieChart>
                     </ChartContainer>
                     <div className="mt-4 space-y-2">
                       {departmentData.map((dept, index) => (
@@ -202,8 +234,13 @@ export default function Dashboard() {
                     <CardDescription>Registration requests awaiting approval</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
+                    {pendingApprovals.length === 0 && (
+                      <div className="flex flex-col items-center justify-center py-20 ">
+                        <p className="text-gray-600">No pending approvals</p>
+                      </div>
+                    )}
                     {pendingApprovals.map((approval) => (
-                      <div key={approval.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div key={approval._id} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex items-center space-x-3">
                           <Avatar>
                             <AvatarImage src={`/placeholder.svg?height=40&width=40&query=${approval.name}`} />
@@ -215,7 +252,7 @@ export default function Dashboard() {
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <p className="font-medium text-gray-900">{approval.name}</p>
+                            <p className="font-medium text-gray-900">{approval.name[0].toUpperCase() + approval.name.slice(1)}</p>
                             <p className="text-sm text-gray-600">{approval.email}</p>
                             <div className="flex items-center mt-1">
                               <Badge variant="secondary" className="text-xs mr-2">
@@ -227,16 +264,23 @@ export default function Dashboard() {
                         </div>
                         <div className="flex items-center space-x-2">
                           <span className="text-xs text-gray-500">{approval.time}</span>
-                          <Button size="sm" variant="outline" onClick={() => handleApproval(approval.id, "reject")}>
+                          <Button size="sm" variant="destructive" className={'cursor-pointer'} onClick={() => handleApproval(approval._id, "reject")}>
                             Reject
                           </Button>
-                          <Button size="sm" onClick={() => handleApproval(approval.id, "approve")}>
+                          <Button className={'bg-green-600 hover:bg-green-700 cursor-pointer'} size="sm" onClick={() => handleApproval(approval._id, "approve")}>
                             Approve
                           </Button>
                         </div>
                       </div>
                     ))}
+
                   </CardContent>
+                  <CardFooter className="mt-auto">
+
+                    <Button className="w-full cursor-pointer" onClick={() => navigate('/admin/view-staff-requests')}>
+                      View All Pending Requests
+                    </Button>
+                  </CardFooter>
                 </Card>
 
                 {/* Today's Appointments */}
@@ -284,19 +328,19 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <Button variant="outline" className="h-20 flex-col bg-transparent">
+                    <Button onClick={() => navigate('/admin/view-staffs')} variant="outline" className="h-20 flex-col bg-transparent cursor-pointer">
                       <Users className="h-6 w-6 mb-2" />
                       Manage Staff
                     </Button>
-                    <Button variant="outline" className="h-20 flex-col bg-transparent">
+                    <Button onClick={() => navigate("/admin/view-students")} variant="outline" className="h-20 flex-col bg-transparent cursor-pointer">
                       <GraduationCap className="h-6 w-6 mb-2" />
                       View Students
                     </Button>
-                    <Button variant="outline" className="h-20 flex-col bg-transparent">
+                    <Button onClick={() => navigate("/admin/create-companies")} variant="outline" className="h-20 flex-col bg-transparent cursor-pointer">
                       <Building2 className="h-6 w-6 mb-2" />
                       Add Company
                     </Button>
-                    <Button variant="outline" className="h-20 flex-col bg-transparent">
+                    <Button onClick={() => navigate("/admin/create-internships")} variant="outline" className="h-20 flex-col bg-transparent cursor-pointer">
                       <Briefcase className="h-6 w-6 mb-2" />
                       Post Internship
                     </Button>

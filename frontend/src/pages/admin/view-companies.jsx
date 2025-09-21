@@ -13,29 +13,40 @@ import { useAuth, useClient } from "@/lib/dataContext";
 import { useNavigate } from "react-router";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import toast from "react-hot-toast";
-
+import '@/styles/animation.css'
 export default function ViewCompanies() {
   const [companies, setCompanies] = useState([]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { token, currentUser } = useAuth();
   const { client } = useClient()
+  const [reload, setReload] = useState(false)
   const companiesPerPage = 5;
   async function fetchCompanies() {
     setLoading(true);
     try {
       const res = await client.companies.fetchAll();
       if (res.status === 200) {
-       // after waiting for all industries to be fetched, set the companies state
+        // after waiting for all industries to be fetched, set the companies state
         await Promise.all(res.data.map(async (company) => {
           const industry_name = await client.industries.fetchOne(company.industry);
           company.industry = industry_name.data?.industries.name
         })
         )
-       
+
         setCompanies(res.data);
       }
       else {
@@ -45,6 +56,7 @@ export default function ViewCompanies() {
       console.error(error, 'cannot fetch companies');
     } finally {
       setLoading(false);
+      setReload(false)
     }
   }
   useEffect(() => {
@@ -54,33 +66,37 @@ export default function ViewCompanies() {
       }
     }
     loadData()
-  }, []);
+  }, [reload]);
   const totalPages = Math.ceil(companies.length / companiesPerPage);
   const start = (currentPage - 1) * companiesPerPage;
   const currentCompanies = companies.slice(start, start + companiesPerPage);
   const handleEdit = async (id) => {
     navigate(`/admin/view-companies/${id}`)
   };
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this company?")) return;
+
+  const handleDelete = async (id, name) => {
+    console.log(id, 'id to delete')
     try {
-      const res = await fetch(`/api/companies/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Delete failed");
-      setCompanies((prev) => prev.filter((c) => c.id !== id));
-      if (currentCompanies.length === 1 && currentPage > 1) {
-        setCurrentPage((p) => p - 1);
+      const res = await client.companies.deleteOne(id, { credentials: 'include' });
+      if (res.status !== 200) toast.error(`Deleting ${name} failed`);
+      else {
+        toast.success(`${name} is deleted successfully`);
+        setCompanies((prev) => prev.filter((c) => c._id !== id));
+        if (currentCompanies.length === 1 && currentPage > 1) {
+          setCurrentPage((p) => p - 1);
+        }
       }
     } catch (error) {
       toast.error("Failed to delete company");
       console.error(error);
     }
   };
-  if (loading) return <p className="p-6 text-center">Loading...</p>;
+  if (loading) return <div className="h-screen w-full grid items-center justify-items-center"><div className="loader"></div></div>;
   return (
     <>
       {currentUser ? (
         <Layout user={currentUser}>
-          <Topbar title="Add New Company" mode="read" link="/admin/create-companies" />
+          <Topbar title="Add New Company" mode="read" setReload={setReload} link="/admin/create-companies" />
 
           <div className="p-6 mt-6 bg-white rounded-lg shadow-sm mx-auto">
 
@@ -107,7 +123,7 @@ export default function ViewCompanies() {
                   ) : (
                     currentCompanies.map((company) => (
                       <TableRow key={company._id}>
-                          {console.log(company,'c')}
+                        {console.log(company, 'c')}
                         <TableCell>{company.name}</TableCell>
                         <TableCell>{company.email}</TableCell>
                         <TableCell>{company.industry}</TableCell>
@@ -131,14 +147,29 @@ export default function ViewCompanies() {
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
-                          <Button
-                            variant="destructive"
-                            size="icon"
-                            onClick={() => handleDelete(company.id)}
-                            aria-label="Delete company"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+
+                          <AlertDialog >
+                            <AlertDialogTrigger asChild>
+                              <Button className="bg-destructive hover:bg-red-800">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will permanently delete company <b>{company.name}</b>'s data
+                                  from our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(company._id, company.name)}>Continue</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+
+                          </AlertDialog>
                         </TableCell>
                       </TableRow>
                     ))
@@ -168,7 +199,9 @@ export default function ViewCompanies() {
                 Next
               </Button>
             </div>
+
           </div>
+
         </Layout>
       ) : (
         <div></div>

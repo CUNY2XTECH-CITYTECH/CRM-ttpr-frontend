@@ -6,6 +6,7 @@ import { IndustryClient } from "./industries";
 import { PositionClient } from "./positions";
 import { StateCityClient } from "./stateCity";
 import { UserClient } from "./user";
+import { BaseClient } from "./server";
 
 export class Client {
   constructor(token) {
@@ -18,6 +19,7 @@ export class Client {
     this.stateCities = new StateCityClient(this.token)
     this.departments = new DepartmentClient(this.token)
     this.positions = new PositionClient(this.token)
+    this.sendEmail = new EmailClient(this.token)
   }
   user() {
     return this.user;
@@ -49,4 +51,14 @@ export class Client {
     return this.token;
   }
 }
-
+// for email
+export class EmailClient extends BaseClient {
+  constructor(token) {
+    super(undefined, token)
+  }
+  async sendEmail(data) {
+    // send email 
+    const res = await this.post('email/send', data);
+    return res
+  }
+}

@@ -123,6 +123,7 @@ export class BaseClient {
    * @param {3} options like authorization
    */
   delete(endpoint, body, options) {
+    console.log(endpoint, body, options, "delete called");
     return this.request(endpoint, "DELETE", body, options);
   }
 }

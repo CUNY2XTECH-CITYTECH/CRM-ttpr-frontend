@@ -4,12 +4,13 @@ export const fetchUserData = async (client, token) => {
   }
 
   const currentSession = await client.user.fetchOne();
-  console.log('currentSession', currentSession.status)
+  console.log('currentSession', currentSession?.status)
 
   const invalidOrExpire = currentSession.status !== 200 || currentSession.status === 403;
 
   if (invalidOrExpire) {
-    const refreshData = await client.auth.refresh({ userId: currentSession.data.userId }, {
+    console.log('user Id bearning',currentSession);
+    const refreshData = await client.auth.refresh({ userId: currentSession?.data?.userId }, {
       credentials: 'include'
     });
     console.log('refreshData', refreshData)

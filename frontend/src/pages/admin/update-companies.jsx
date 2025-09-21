@@ -9,6 +9,7 @@ import {
   FormMessage,
   Form,
 } from "@/components/ui/form";
+import '@/styles/animation.css'
 import { CreatableSelect } from "@/components/creatable-select";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -58,18 +59,17 @@ const UpdateCompanies = () => {
   });
 
   const { setValue } = companiesForm
-  const fetchCurrentCompany = async () => {
+  const fetchCurrentCompany = async (ind,states) => {
     try {
       const currentCompany = await client.companies.fetchOne(id)
       if (currentCompany.status === 200) {
-        console.log('currentCompany', currentCompany)
         let { location, industry, ...rest } = currentCompany.data
         const locationArr = location.split(",")
-        const industry_name = await client.industries.fetchOne(currentCompany.data.industry);
-        console.log('is state exist',states, states.find(s => s.abbreviation=== (locationArr[2] ? locationArr[2].trim() : '')))
+        const industry_name = ind.find(indu => indu._id === industry || indu.name === industry)?._id
+        console.log({industry_name,industry,ind})
         const companyData = {
           ...rest,
-          industry: industry_name.data?.industries.name,
+          industry: industry_name,
           city: locationArr[1] ? locationArr[1].trim() : '',
           street: locationArr[0] ? locationArr[0].trim() : '',
           state: states.find(s => s.abbreviation=== (locationArr[2] ? locationArr[2].trim() : ''))?.name || (locationArr[2] ? locationArr[2].trim() : ''),
@@ -78,7 +78,6 @@ const UpdateCompanies = () => {
         if (companyData) {
           await getCities(companyData.state || '')
           setCompany(companyData);
-          console.log('state', companyData.state)
           setCurrentState(companyData.state || '')
           companiesForm.reset(companyData)
           setIsLoading(false)
@@ -122,16 +121,17 @@ const UpdateCompanies = () => {
     if (stateres.status === 200) {
       setStates(stateres.data.states)
     }
+    await fetchCurrentCompany(res.data.industries,stateres.data.states)
   }
 
 
   useEffect(() => {
     loadData()
-    fetchCurrentCompany()
   }, []);
 
   const onSubmit = async (values) => {
     try {
+      console.log(values,'values')
       let tryUpdate = await client.companies.update(values,{credentials:'include'})
       if (tryUpdate.status === 200) {
         toast.success("Company updated successfully")
@@ -142,7 +142,7 @@ const UpdateCompanies = () => {
       toast.error("error occurred")
     }
   };
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <div className="h-screen grid justify-items-center items-center"><div className="loader"></div></div>
   return (
     <>
       <Layout user={currentUser}>

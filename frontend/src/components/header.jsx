@@ -30,8 +30,8 @@ export const Header = ({ currentUser, CloseSidebar, hideSearchbar = false }) => 
   const [keyword, setKeyword] = useState("");
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
-  const logoutUser = async () => {
-    await logout()
+  const logoutUser = () => {
+    logout()
   }
   return (
     <div className="w-full flex gap-2 md:gap-3 justify-between border-box px-14 py-3 border-b border-solid border-gray-200 shadow-sm">
