@@ -15,7 +15,7 @@ export class AuthServiceClient extends BaseClient {
     const res = await this.post('refresh', data,optionalHeader);
     return res
 
-  }
+  } 
 }
 
 
