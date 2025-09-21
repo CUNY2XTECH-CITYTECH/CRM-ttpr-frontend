@@ -14,16 +14,31 @@ import {
   FormMessage,
   Form,
 } from "@/components/ui/form";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import Layout from "../../components/layout";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { validateAppointmentForm } from "@/lib/validations";
 import { useNavigate } from "react-router";
-import { useAuth } from "@/lib/dataContext";
+import { useAuth, useClient } from "@/lib/dataContext";
+import { toast } from "react-hot-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 export default function Appointment() {
   const { currentUser, token } = useAuth();
+  const { client } = useClient();
   const [view, setView] = useState("create");
+  const [companies, setCompanies] = useState([]);
+  const [staffMembers, setStaffMembers] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   const appointmentForm = useForm({
     resolver: yupResolver(validateAppointmentForm),
     defaultValues: {
@@ -32,16 +47,83 @@ export default function Appointment() {
       date: new Date(),
       time: "",
       location: "",
-      attendees: "",
+      company: "",
+      staff: "",
+      client: "",
+      notes: "",
     },
   });
+
   useEffect(() => {
     if (currentUser && currentUser?.role !== "admin") {
       navigate("/not-authorized");
     }
+    fetchDropdownData();
   }, [token]);
 
-  const onSubmit = (data) => {};
+  const fetchDropdownData = async () => {
+    try {
+      // Fetch companies
+      const companiesRes = await client.companies.fetchAll();
+      if (companiesRes.status === 200) {
+        setCompanies(companiesRes.data.data);
+      }
+
+      // Fetch staff members (users with staff role)
+      const staffRes = await client.users.fetchAll();
+      if (staffRes.status === 200) {
+        setStaffMembers(staffRes.data.data.filter(user => user.role === "staff"));
+      }
+
+      // Fetch clients (users with client role)
+      if (staffRes.status === 200) {
+        setClients(staffRes.data.data.filter(user => user.role === "client"));
+      }
+    } catch (error) {
+      console.error("Error fetching dropdown data:", error);
+      toast.error("Failed to load form data");
+    }
+  };
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      // Combine date and time
+      const startTime = new Date(data.date);
+      const [hours, minutes] = data.time.split(':');
+      startTime.setHours(parseInt(hours), parseInt(minutes));
+      
+      const endTime = new Date(startTime);
+      endTime.setHours(startTime.getHours() + 1); // Default 1 hour appointment
+
+      const appointmentData = {
+        title: data.title,
+        description: data.description,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        company: data.company,
+        staff: data.staff,
+        client: data.client,
+        location: data.location,
+        notes: data.notes
+      };
+
+      const res = await client.appointments.create(appointmentData);
+      
+      if (res.status === 200) {
+        toast.success("Appointment created successfully!");
+        appointmentForm.reset();
+        navigate("/appointments/view");
+      } else {
+        toast.error("Failed to create appointment");
+      }
+    } catch (error) {
+      console.error("Error creating appointment:", error);
+      toast.error("Failed to create appointment");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -53,9 +135,6 @@ export default function Appointment() {
             title="Schedule New Appointment"
             mode="create"
           />
-          <Button type="submit" className=" mt-6 float-right">
-            Schedule Appointment
-          </Button>
           <div className="w-[80%] m-auto py-4">
             <Form {...appointmentForm}>
               <div className="flex flex-col items-center mb-6">
@@ -122,13 +201,89 @@ export default function Appointment() {
                         />
                       </FormControl>
                       <FormDescription>
-                        Optional: Add details about the meeting agenda or
-                        purpose
+                        Optional: Add details about the meeting agenda or purpose
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
+                <div className="grid grid-cols-3 gap-4">
+                  <FormField
+                    control={appointmentForm.control}
+                    name="company"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Company</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select company" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {companies.map((company) => (
+                              <SelectItem key={company._id} value={company._id}>
+                                {company.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={appointmentForm.control}
+                    name="staff"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Staff Member</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select staff" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {staffMembers.map((staff) => (
+                              <SelectItem key={staff._id} value={staff._id}>
+                                {staff.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={appointmentForm.control}
+                    name="client"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Client</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select client" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {clients.map((client) => (
+                              <SelectItem key={client._id} value={client._id}>
+                                {client.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 <div className="flex justify-center grid grid-cols-2 gap-6">
                   <FormField
@@ -175,20 +330,22 @@ export default function Appointment() {
 
                     <FormField
                       control={appointmentForm.control}
-                      name="attendees"
+                      name="notes"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Attendees</FormLabel>
+                          <FormLabel className="flex items-center gap-2">
+                            <Users className="w-4 h-4" />
+                            Additional Notes
+                          </FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="List attendees (emails, names, etc.)"
+                              placeholder="Additional notes or special instructions..."
                               className="min-h-[120px]"
                               {...field}
                             />
                           </FormControl>
                           <FormDescription>
-                            Add attendee information (names, emails, student
-                            IDs, etc.)
+                            Add any special instructions or notes for this appointment
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -196,6 +353,14 @@ export default function Appointment() {
                     />
                   </div>
                 </div>
+
+                <Button 
+                  type="submit" 
+                  className="w-full mt-6"
+                  disabled={loading}
+                >
+                  {loading ? "Scheduling..." : "Schedule Appointment"}
+                </Button>
               </form>
             </Form>
           </div>

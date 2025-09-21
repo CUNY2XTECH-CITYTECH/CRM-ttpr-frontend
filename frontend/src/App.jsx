@@ -49,7 +49,7 @@ function App() {
 
 
           <Route path='/admin/view-companies' element={<ViewCompanies />} />
-          <Route path="/admin/waiting" element={<Waiting />} />
+          <Route path="/admin/waiting" element={<Waiting />} /> 
           <Route path="/admin" element={<AdminHome/>} /> 
           <Route path="/" element={<StudentHome />} />
           <Route path='/profile' element={<StudentProfileUpdate />} />
