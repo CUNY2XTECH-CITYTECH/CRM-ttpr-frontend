@@ -50,6 +50,12 @@ export default function ViewStaffRequests() {
         else if(action==='approve'){
           toast.success('Staff approved successfully');
         }
+          const sendingEmail= await client.auth.sendEmail({
+            to: res.data.staff.email,
+            action:action
+        },{ credentials: 'include' })
+          console.log(sendingEmail,'..sending')
+
         // Refresh the list after approval
         fetchStaffs(token);
       }

@@ -55,20 +55,25 @@ export default function Dashboard() {
     const approving = await client.user.actionPendingStaff(id, { action }, { credentials: 'include' })
     console.log(approving, '..')
     if (approving.status === 200) {
-      setStats((prev) => {
-        let newStats = [...prev]
-        if (action === 'approve') {
-
-          setPendingApprovals((prev) => prev.filter((item) => item._id !== id))
+      if (action === 'approve') {
+        setStats((prev) => {
+          let newStats = [...prev]
           newStats[0].value += 1
-        }
-        else{
-          setPendingApprovals((prev) => prev.filter((item) => item._id !== id))
-        }
-        return newStats
-      })
+          return newStats
+        })
+        setPendingApprovals((prev) => prev.filter((item) => item._id !== id))
+      }
+      else {
+        setPendingApprovals((prev) => prev.filter((item) => item._id !== id))
+      }
+        const sendingEmail = await client.auth.sendEmail({
+          to: res.data.staff.email,
+          action: action
+      }, { credentials: 'include' })
+
+        console.log(sendingEmail, '..sending')
+
     }
-    // Handle approval logic here
   }
   const loadData = async () => {
     let students = await client.user.fetchStudents()
@@ -106,18 +111,15 @@ export default function Dashboard() {
                   <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
                   <p className="text-gray-600">Welcome back, manage your CRM platform</p>
                 </div>
-                {/*
                 <div className="flex items-center gap-4">
-                  <Button variant="outline" size="sm">
-                      
-                  </Button>
+
                   <div className="relative">
                     <Bell className="h-5 w-5 text-gray-600" />
                     <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
                       {pendingApprovals.length}
                     </Badge>
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
 
@@ -232,6 +234,11 @@ export default function Dashboard() {
                     <CardDescription>Registration requests awaiting approval</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
+                    {pendingApprovals.length === 0 && (
+                      <div className="flex flex-col items-center justify-center py-20 ">
+                        <p className="text-gray-600">No pending approvals</p>
+                      </div>
+                    )}
                     {pendingApprovals.map((approval) => (
                       <div key={approval._id} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex items-center space-x-3">
@@ -268,12 +275,12 @@ export default function Dashboard() {
                     ))}
 
                   </CardContent>
-                    <CardFooter className="mt-auto">
-                     
-                      <Button className="w-full cursor-pointer" onClick={() => navigate('/admin/view-staff-requests')}>
-                        View All Pending Requests
-                      </Button>
-                    </CardFooter>
+                  <CardFooter className="mt-auto">
+
+                    <Button className="w-full cursor-pointer" onClick={() => navigate('/admin/view-staff-requests')}>
+                      View All Pending Requests
+                    </Button>
+                  </CardFooter>
                 </Card>
 
                 {/* Today's Appointments */}
