@@ -51,7 +51,7 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const [selectedTimeframe, setSelectedTimeframe] = useState("month")
 
-  const handleApproval = async (id, action) => {
+  const handleApproval = async (id,email, action) => {
     const approving = await client.user.actionPendingStaff(id, { action }, { credentials: 'include' })
     console.log(approving, '..')
     if (approving.status === 200) {
@@ -66,8 +66,8 @@ export default function Dashboard() {
       else {
         setPendingApprovals((prev) => prev.filter((item) => item._id !== id))
       }
-        const sendingEmail = await client.auth.sendEmail({
-          to: res.data.staff.email,
+        const sendingEmail = await client.email.send({
+          to:email,
           action: action
       }, { credentials: 'include' })
 
@@ -77,7 +77,7 @@ export default function Dashboard() {
   }
   const loadData = async () => {
     let students = await client.user.fetchStudents()
-    let fetchPendingStaffs = await client.user.fetchPendingStaffs()
+    let fetchPendingStaffs = await client.user.fetchPendingStaffs({page:1,pageSize:3},{ credentials: 'include' })
     let matrix = await client.user.fetchMatrix()
     if (fetchPendingStaffs.status === 200) {
       setPendingApprovals(fetchPendingStaffs.data.pendingStaffs)
@@ -223,7 +223,7 @@ export default function Dashboard() {
                 </Card>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-[60%_auto] gap-6">
                 {/* Pending Approvals */}
                 <Card>
                   <CardHeader>
@@ -253,7 +253,8 @@ export default function Dashboard() {
                           </Avatar>
                           <div>
                             <p className="font-medium text-gray-900">{approval.name[0].toUpperCase() + approval.name.slice(1)}</p>
-                            <p className="text-sm text-gray-600">{approval.email}</p>
+                            <p className="text-sm text-gray-600">{approval.email.split('@')[0].length>10?(approval.email.split('@')[0].slice(0,10)+'...@'+approval.email.split('@')[1]):approval.email}
+                            </p>
                             <div className="flex items-center mt-1">
                               <Badge variant="secondary" className="text-xs mr-2">
                                 {approval.role}
@@ -264,10 +265,10 @@ export default function Dashboard() {
                         </div>
                         <div className="flex items-center space-x-2">
                           <span className="text-xs text-gray-500">{approval.time}</span>
-                          <Button size="sm" variant="destructive" className={'cursor-pointer'} onClick={() => handleApproval(approval._id, "reject")}>
+                          <Button size="sm" variant="destructive" className={'cursor-pointer'} onClick={() => handleApproval(approval._id,approval.email, "reject")}>
                             Reject
                           </Button>
-                          <Button className={'bg-green-600 hover:bg-green-700 cursor-pointer'} size="sm" onClick={() => handleApproval(approval._id, "approve")}>
+                          <Button className={'bg-green-600 hover:bg-green-700 cursor-pointer'} size="sm" onClick={() => handleApproval(approval._id,approval.email, "approve")}>
                             Approve
                           </Button>
                         </div>

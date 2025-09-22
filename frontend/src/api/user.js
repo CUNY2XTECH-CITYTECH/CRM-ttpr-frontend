@@ -17,8 +17,9 @@ export class UserClient extends BaseClient {
    const res = await this.get('users/getRegisteredStaffs',optionalHeader);
     return res
   }
-  async fetchPendingStaffs(optionalHeader){
-    const res = await this.get('users/getPendingStaffs',optionalHeader);
+  async fetchPendingStaffs(query,optionalHeader){
+    const withQuery=query?`?page=${query?.page}&pageSize=${query?.pageSize}`:''
+    const res = await this.get('users/getPendingStaffs'+withQuery,optionalHeader);
      return res
    }
   async fetchVerifiedStaffs(optionalHeader){

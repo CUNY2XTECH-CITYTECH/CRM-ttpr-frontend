@@ -40,6 +40,7 @@ function App() {
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
+            <Route path="/admin/waiting" element={<Waiting />} />
           <Route element={<ProtectedRoute allowRoutes={['admin']} />} >
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path='/admin/create-companies' element={<CreateCompanies />} />
@@ -53,7 +54,6 @@ function App() {
             <Route path='/admin/create-appointments' element={<Appointment />} />
             < Route path='/admin/view-appointments' element={<ViewAppointments />} />
             <Route path='/admin/view-companies' element={<ViewCompanies />} />
-            <Route path="/admin/waiting" element={<Waiting />} />
             <Route path="/admin/view-staff-requests" element={<ViewStaffRequests/>} />
             <Route path="/admin" element={<AdminHome />} />
           </Route>

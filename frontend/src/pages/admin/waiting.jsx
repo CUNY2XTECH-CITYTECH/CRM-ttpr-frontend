@@ -1,3 +1,4 @@
+import React from 'react'
 function Waiting() {
   return (
     <div className="h-screen bg-background w-full grid justify-center items-center">
