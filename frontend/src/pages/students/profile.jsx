@@ -280,12 +280,12 @@ const StudentProfileUpdate = ({ userId }) => {
 
 
   useEffect(() => {
-    if (currentUser && currentUser.role !== 'student') {
-      navigate('/not-authorized')
-    }
-    if (!token) {
-      navigate('/login')
-    }
+    // if (currentUser && currentUser.role !== 'student') {
+    //   navigate('/not-authorized')
+    // }
+    // if (!token) {
+    //   navigate('/login')
+    // }
 
   }, [token]);
   console.log('cu',currentUser)

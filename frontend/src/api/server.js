@@ -42,13 +42,11 @@ export class BaseClient {
       if (!response.ok) {
         let errorData = null;
         errorData = await response.json();
+        console.log("errorData", errorData);
         let errorMessage =
           errorData?.message ||
           response.statusText ||
           `Request failed with ${response.status}`;
-        // return new HTTPClientError(
-        //   errorMessage, response.status, response.statusText, errorData?.toString()
-        // )
         return {
           error: errorMessage,
           status: response.status,
@@ -125,6 +123,7 @@ export class BaseClient {
    * @param {3} options like authorization
    */
   delete(endpoint, body, options) {
+    console.log(endpoint, body, options, "delete called");
     return this.request(endpoint, "DELETE", body, options);
   }
 }

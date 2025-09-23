@@ -20,6 +20,7 @@ import { validateInternshipForm } from "@/lib/validations";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/lib/dataContext";
 import { CreatableSelect } from "@/components/creatable-select";
+import { handleCreate } from "@/lib/commonFunctions";
 
 
 export default function CreateInternships() {
@@ -53,6 +54,8 @@ export default function CreateInternships() {
       tags: "",
     },
   });
+
+  const { setValue } = internshipForm;
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -96,9 +99,9 @@ export default function CreateInternships() {
                           <CreatableSelect
                              form={internshipForm}
                               error={fieldState.error}
-                              options={positions}
+                              options={companies}
                               controller={field}
-                              onCreateOption={(inputValue) => handleCreate(setPositions, setValue, inputValue, 'contactPosition')}
+                              onCreateOption={(inputValue) => handleCreate(setCompanies, setValue, inputValue, 'company')}
                               placeholder="Enter or Select position ..."
                               searchPlaceholder="Search positions..."
                               createLabel="Create new position"

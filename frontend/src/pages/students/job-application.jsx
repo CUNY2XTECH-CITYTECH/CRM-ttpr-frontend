@@ -61,9 +61,9 @@ export default function JobApplication() {
 
   useEffect(() => {
 
-    if (currentUser && currentUser.role !== 'student') {
-      navigate('/not-authorized')
-    }
+    // if (currentUser && currentUser.role !== 'student') {
+    //   navigate('/not-authorized')
+    // }
     if (!token) {
       navigate('/login')
     }

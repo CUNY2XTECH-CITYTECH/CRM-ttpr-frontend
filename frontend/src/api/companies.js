@@ -9,30 +9,40 @@ export class CompaniesClient extends BaseClient {
     return res
   }
   async fetchOne(id) {
-    const res = await this.get('company/'+id);
-      return res
+    const res = await this.get('company/detail/' + id);
+    return res
 
   }
-
-  async create(data,optionalHeader) {
+  async fetchMatrix(){
+    const res = await this.get('company/getMatrix');
+      return res
+  }
+  async create(data, optionalHeader) {
     // get all user
 
-    const res = await this.post('company/create',data,optionalHeader);
+    const res = await this.post('company/create', data, optionalHeader);
+    return res;
+  }
+  async createMany(data, optionalHeader) {
+    console.log(data, 'data in create many')
+    const res = await this.post('company/createMany', data, optionalHeader);
     return res;
   }
 
-  async update(data,optionalHeader) {
+  async update(data, optionalHeader) {
     // get all user
 
-    const res = await this.patch('company/update',data,optionalHeader);
+    const res = await this.patch('company/update', data, optionalHeader);
     return res
   }
 
-  async delete(id,optionalHeader) {
+  async deleteOne(id, optionalHeader) {
     // get all user
-
-    const res = await this.delete('company/delete/'+id,optionalHeader);
-    return res  }
+    console.log(id,'id to delete in client')
+    const res = await this.delete('company/delete/' + id, optionalHeader);
+    return res
+    //
+  }
 }
 
 

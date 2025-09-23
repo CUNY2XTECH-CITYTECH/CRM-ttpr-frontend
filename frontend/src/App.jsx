@@ -26,16 +26,16 @@ import ViewStaff from "./pages/admin/view-staffs";
 import ViewInternships from "./pages/admin/view-internships";
 import { ComingSoon } from "./pages/ComingSoon";
 import ProtectedRoute from "./pages/protected";
+import ViewStaffRequests from "./pages/admin/view-staff-requests";
 import InterestForm from "./pages/admin/interest-form";
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-            <Route path="/error" element={<InfoPage />} />
-            <Route path="/not-authorized" element={<InfoPage />} />
-            <Route path="/account-exists" element={<InfoPage />} />
-
+          <Route path="/error" element={<InfoPage />} />
+          <Route path="/not-authorized" element={<InfoPage />} />
+          <Route path="/account-exists" element={<InfoPage />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
@@ -53,6 +53,7 @@ function App() {
             < Route path='/admin/view-appointments' element={<ViewAppointments />} />
             <Route path='/admin/view-companies' element={<ViewCompanies />} />
             <Route path="/admin/waiting" element={<Waiting />} />
+            <Route path="/admin/view-staff-requests" element={<ViewStaffRequests/>} />
             <Route path="/admin" element={<AdminHome />} />
             <Route path="/admin/interest-form"element={<InterestForm />}/>
           </Route>
