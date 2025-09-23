@@ -6,12 +6,15 @@ import { useAuth } from "@/lib/dataContext";
 import { Button } from "@/components/ui/button";
 import { useClient } from '@/lib/dataContext'
 
+import { handleCreate } from "@/lib/commonFunctions";
+import { CreatableSelect } from "@/components/creatable-select";
 export default function StudentOnboarding() {
 
   const { client } = useClient()
   const { token, currentUser } = useAuth();
   const navigate = useNavigate()
   const [step, setStep] = useState(0);
+  const [majors, setMajors] = useState([])
   const [formData, setFormData] = useState({
     interests: [],
     roles: [],
@@ -19,7 +22,22 @@ export default function StudentOnboarding() {
   });
   const [position, setPosition] = useState([])
 
-  const [steps,setSteps] = useState([
+  const [steps, setSteps] = useState([
+    {
+      key: "major",
+      label: "What is your major?",
+      hint: "This helps us personalize your experience.",
+      icon: "🎓",
+      options: [
+        "Computer Science",
+        "Information Technology",
+        "Software Engineering",
+        "Data Science",
+        "Cybersecurity",
+        "Business Administration",
+        "Marketing",
+      ]
+    },
     {
       key: "interests",
       label: "What are your interests?",
@@ -61,7 +79,8 @@ export default function StudentOnboarding() {
         "Marketing Specialist",
         "Sales Representative",
         "Business Analyst",
-      ]},
+      ]
+    },
     {
       key: "skills",
       label: "What are your top skillsets?",
@@ -113,10 +132,12 @@ export default function StudentOnboarding() {
     });
   };
 
-  const addCustomOption = async() => {
+  const addCustomOption = async () => {
     const val = customInput.trim();
     const upload_options = await client.positions.create({ name: val })
-    console.log('upload_options',upload_options)
+
+    console.log('upload_options', upload_options)
+
     if (val && !currentOptions.includes(val)) {
       const updatedOptions = [...currentOptions, val];
       const newDynamicOptions = [...dynamicOptions];
@@ -127,11 +148,22 @@ export default function StudentOnboarding() {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async (data) => {
     if (step < steps?.length - 1) {
+
       setStep(step + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
+
+      console.log('formData before next step', formData)
+      // final submit
+      const submitData = {
+        ...formData,
+        userId: currentUser?._id,
+      };
+      console.log('submitData', submitData)
+      const res = await client.student.create(submitData, { credentials: 'include' });
+      console.log('student profile created response', res)
       setIsReview(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -142,7 +174,6 @@ export default function StudentOnboarding() {
   };
   const loadData = async () => {
     const posres = await client.positions.fetchAll()
-    console.log('positions', posres)
     if (posres && posres.status === 200) {
       setPosition(posres.data.positions)
       setSteps((prevSteps) => {
@@ -167,6 +198,10 @@ export default function StudentOnboarding() {
       }
       );
 
+    }
+    const majorsRes = await client.departments().fetchAll()
+    if (majorsRes && majorsRes.status === 200) {
+      setMajors(majorsRes.data.departments)
     }
   }
   useEffect(() => {
@@ -210,7 +245,7 @@ export default function StudentOnboarding() {
           </div>
 
           <fieldset aria-labelledby="question-label" className="flex flex-wrap gap-2">
-            {currentOptions.map((opt, i) => {
+            {currentOptions.key !== 'major' ? currentOptions.map((opt, i) => {
               const isSelected = selected.includes(opt);
               const isDisabled = !isSelected && selected.length >= 5;
               return (
@@ -229,7 +264,11 @@ export default function StudentOnboarding() {
                   {opt}
                 </button>
               );
-            })}
+            }) :
+             
+                        <Combobox dataList={majors} type="major"  />
+
+            }
           </fieldset>
 
           <div className="flex gap-2">

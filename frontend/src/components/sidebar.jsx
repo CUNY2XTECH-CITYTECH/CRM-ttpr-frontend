@@ -18,7 +18,9 @@ import {
   Rows4,
   Users,
   Handshake, CalendarDays, Server,
-  BuildingIcon
+  BuildingIcon,
+  School2,
+  GraduationCap
 } from "lucide-react";
 import {
   Collapsible,
@@ -105,7 +107,20 @@ const items = [
     }],
     icon: BuildingIcon,
   },
-
+  {
+    title:"Majors",
+    url:"#",
+    childLinks:[{
+      title:"add majors",
+      url:"/admin/create-majors",
+    }
+    ,
+    {
+      title:"manage majors",
+      url:"/admin/view-majors",
+    }],
+    icon: GraduationCap,
+  },
   {
     title: "Staffs",
     url: "#",
@@ -118,7 +133,7 @@ const items = [
       url: "/admin/view-staff-requests",
     }
     ],
-    icon: Users,
+    icon:Users,
   },
 
   {
@@ -153,6 +168,7 @@ const items = [
     childLinks: null,
     icon: Settings,
   },
+
 ];
 
 export function AppSidebar({ role }) {

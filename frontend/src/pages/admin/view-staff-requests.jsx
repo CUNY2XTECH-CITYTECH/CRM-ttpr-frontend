@@ -40,7 +40,7 @@ export default function ViewStaffRequests() {
       setLoading(false);
     }
   }
-  const handleAction= async (id,action) => {
+  const handleAction= async (id,email,action) => {
     try {
       const res = await client.user.actionPendingStaff(id,{action},{ credentials: 'include' });
       if (res.status === 200) {
@@ -50,8 +50,8 @@ export default function ViewStaffRequests() {
         else if(action==='approve'){
           toast.success('Staff approved successfully');
         }
-          const sendingEmail= await client.auth.sendEmail({
-            to: res.data.staff.email,
+          const sendingEmail= await client.email.send({
+            to: email,
             action:action
         },{ credentials: 'include' })
           console.log(sendingEmail,'..sending')
@@ -118,14 +118,14 @@ export default function ViewStaffRequests() {
                             <Button
                               className="bg-red-500 hover:bg-red-600 text-white w-fit p-2"
                               size="icon"
-                              onClick={() => handleAction(staff._id,'reject')}
+                              onClick={() => handleAction(staff._id,staff.email,'reject')}
                             >
                               Reject
                             </Button>
                             <Button 
                               className="ml-2 bg-green-600 hover:bg-green-700 text-white w-fit p-2"
                               size="icon"
-                              onClick={() => handleAction(staff._id,'approve')}
+                              onClick={() => handleAction(staff._id,staff.email,'approve')}
                             >
                               Approve
                             </Button>

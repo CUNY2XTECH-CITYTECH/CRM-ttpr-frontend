@@ -59,9 +59,10 @@ export default function Register() {
       // if registeration successed
       if (res.status == 200) {
         toast.success("successfully registered")
+        console.log("res", res,res.data.role === "admin" && res.data.verified === false);
         if (res.data.role === "admin" && res.data.verified === false) {
           navigate("/admin/waiting");
-        } else {
+        } else if(res.data.role==='student'){
           navigate("/login");
         }
       } else if (res.status == 201) {

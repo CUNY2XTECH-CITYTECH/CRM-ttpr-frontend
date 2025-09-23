@@ -17,8 +17,9 @@ export class UserClient extends BaseClient {
    const res = await this.get('users/getRegisteredStaffs',optionalHeader);
     return res
   }
-  async fetchPendingStaffs(optionalHeader){
-    const res = await this.get('users/getPendingStaffs',optionalHeader);
+  async fetchPendingStaffs(query,optionalHeader){
+    const withQuery=query?`?page=${query?.page}&pageSize=${query?.pageSize}`:''
+    const res = await this.get('users/getPendingStaffs'+withQuery,optionalHeader);
      return res
    }
   async fetchVerifiedStaffs(optionalHeader){
@@ -57,10 +58,10 @@ export class UserClient extends BaseClient {
     return res
   }
 
-  async delete() {
+  async deleteOne(id,optionlHeader) {
     // get all user
 
-    const res = await this.post('users/delete');
+    const res = await this.delete('users/delete',id,optionlHeader);
     return res  }
 }
 

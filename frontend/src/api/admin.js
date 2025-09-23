@@ -4,6 +4,11 @@ export class AdminClient extends BaseClient {
   constructor(token) {
     super(undefined, token)
   }
+  async fetchAll() {
+    // get all user
+    const res = await this.get('adminProfile');
+    return res
+  }
   async fetchOne() {
     const res = await this.get('adminProfile/me');
     return res
@@ -23,10 +28,10 @@ export class AdminClient extends BaseClient {
     return res
   }
 
-  async delete() {
+  async deleteOne(id,optionalHeader) {
     // get all user
 
-    const res = await this.post('adminProfile/delete');
+    const res = await this.delete('adminProfile/delete',id,optionalHeader);
     return res
   }
 }
