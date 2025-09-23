@@ -58,10 +58,10 @@ export class UserClient extends BaseClient {
     return res
   }
 
-  async delete() {
+  async deleteOne(id,optionlHeader) {
     // get all user
 
-    const res = await this.post('users/delete');
+    const res = await this.delete('users/delete',id,optionlHeader);
     return res  }
 }
 

@@ -46,6 +46,27 @@ export const handleCreate = async (client,setFunc, setVal, inputValue, type) => 
       if (createInd.status === 200) {
         id = createInd.data.industries._id
       }; break;
+    case 'company':
+    const createComp = await client.companies.create(newOption)
+    console.log('createComp', createComp);
+    if (createComp.status === 200) {
+      id = createComp.data.companies._id
+    }
+    break;
+    case 'department':
+      const createDepartment = await client.departments.create(newOption)
+      console.log('createDepartment', createDepartment)
+      if (createDepartment.status === 200) {
+        id = createDepartment.data.departments._id
+      }
+      break;
+    case 'position':
+      const createPosition = await client.positions.create(newOption)
+      console.log('createPosition', createPosition)
+      if (createPosition.status === 200) {
+        id = createPosition.data.positions._id
+      }
+      break;
     default:
       break;
   }

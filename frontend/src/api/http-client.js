@@ -7,6 +7,7 @@ import { PositionClient } from "./positions";
 import { StateCityClient } from "./stateCity";
 import { UserClient } from "./user";
 import { BaseClient } from "./server";
+import { StudentClient } from "./student";
 
 export class Client {
   constructor(token) {
@@ -20,6 +21,8 @@ export class Client {
     this.departments = new DepartmentClient(this.token)
     this.positions = new PositionClient(this.token)
     this.email = new EmailClient(this.token)
+    this.student = new StudentClient(this.token)
+
   }
   user() {
     return this.user;
