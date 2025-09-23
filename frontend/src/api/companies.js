@@ -8,30 +8,30 @@ export class CompaniesClient extends BaseClient {
     const res = await this.get('company');
     return res
   }
-  async fetchOne() {
-    const res = await this.get('company/:id');
+  async fetchOne(id) {
+    const res = await this.get('company/'+id);
       return res
 
   }
 
-  async create() {
+  async create(data,optionalHeader) {
     // get all user
 
-    const res = await this.post('company/create');
+    const res = await this.post('company/create',data,optionalHeader);
     return res;
   }
 
-  async update() {
+  async update(data,optionalHeader) {
     // get all user
 
-    const res = await this.post('company/update');
+    const res = await this.patch('company/update',data,optionalHeader);
     return res
   }
 
-  async delete() {
+  async delete(id,optionalHeader) {
     // get all user
 
-    const res = await this.post('company/delete');
+    const res = await this.delete('company/delete/'+id,optionalHeader);
     return res  }
 }
 

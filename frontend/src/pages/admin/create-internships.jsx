@@ -14,16 +14,32 @@ import {
   FormMessage,
   Form,
 } from "@/components/ui/form";
-import { GraduationCap, Users, Briefcase } from "lucide-react";
+import { Briefcase, Loader2 } from "lucide-react";
 import Layout from "../../components/layout";
 import { validateInternshipForm } from "@/lib/validations";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/lib/dataContext";
+import { CreatableSelect } from "@/components/creatable-select";
+
 
 export default function CreateInternships() {
   const [view, setView] = useState("create");
+  const [isLoading, setIsLoading] = useState(false);
+  const [positions, setPositions] = useState([
+    { value: 'software-engineer', label: 'Software Engineer' },
+    { value: 'data-analyst', label: 'Data Analyst' },
+    { value: 'product-manager', label: 'Product Manager' },
+    { value: 'ui-ux-designer', label: 'UI/UX Designer' }
+  ]);
+  const [companies, setCompanies] = useState([
+    { value: 'tech-corp', label: 'Tech Corp' },
+    { value: 'startup-inc', label: 'Startup Inc' },
+    { value: 'big-company', label: 'Big Company' }
+  ]);
   const navigate = useNavigate();
   const { currentUser, token } = useAuth();
+
+
   const internshipForm = useForm({
     resolver: yupResolver(validateInternshipForm),
     defaultValues: {
@@ -38,20 +54,11 @@ export default function CreateInternships() {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
-  useEffect(() => {
-    console.log("current", currentUser);
-    if (currentUser && currentUser?.role !== "admin") {
-      navigate("/not-authorized");
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+     console.log("Form Data:", data);
     }
-    if(!token){
-        navigate('/login') 
-    }
-
-  }, [token]);
-
+  
   return (
     <>
       {currentUser ? (
@@ -81,12 +88,22 @@ export default function CreateInternships() {
                 <div className="grid grid-cols-2 gap-2">
                   <FormField
                     control={internshipForm.control}
-                    name="name"
-                    render={({ field }) => (
+                    name="company"
+                    render={({ field ,fieldState}) => (
                       <FormItem>
                         <FormLabel>Company Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Company Name" {...field} />
+                          <CreatableSelect
+                             form={internshipForm}
+                              error={fieldState.error}
+                              options={positions}
+                              controller={field}
+                              onCreateOption={(inputValue) => handleCreate(setPositions, setValue, inputValue, 'contactPosition')}
+                              placeholder="Enter or Select position ..."
+                              searchPlaceholder="Search positions..."
+                              createLabel="Create new position"
+                              className="w-full"
+                                                    />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -235,8 +252,8 @@ export default function CreateInternships() {
                     )}
                   />
                 </div>
-                <Button type="submit" className="w-full mt-4">
-                  Create Internship
+                <Button type="submit" className="w-full mt-4" disabled={isLoading}>
+                  {isLoading ? "Creating..." : "Create Internship"}
                 </Button>
               </form>
             </Form>
@@ -248,3 +265,4 @@ export default function CreateInternships() {
     </>
   );
 }
+  

@@ -1,9 +1,7 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
-  SidebarHeader,
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarGroupLabel,
@@ -14,18 +12,11 @@ import {
 } from "@/components/ui/sidebar";
 import {
   Calendar,
-  Home,
   LayoutDashboard,
-  Inbox,
-  Search,
   Settings,
   Building2,
   Rows4,
   Users,
-  ChevronDown,
-  SquarePlus,
-  List,
-  Building,
   Handshake, CalendarDays, Server,
   BuildingIcon
 } from "lucide-react";
@@ -35,7 +26,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import React from "react";
-
+import { Link } from "react-router";
 const studentItems = [
   {
     title: "Internships",
@@ -45,13 +36,13 @@ const studentItems = [
   },
   {
     title: "Calendar",
-    url: "/calendar",
+    url: "/coming-soon",
     childLinks: null,
     icon: CalendarDays,
   },
   {
     title: "Techstacks",
-    url: "/techstacks",
+    url: "/coming-soon",
     childLinks: null,
     icon: Server,
   },
@@ -132,7 +123,7 @@ const items = [
 
   {
     title: "Students",
-    url: "#",
+    url: "/admin/view-students",
     childLinks: null,
     icon: Users,
   },
@@ -194,9 +185,9 @@ export function AppSidebar({ role }) {
                             <SidebarMenuSub className={'mx-2'}>
                               {item.childLinks.map(cl =>
                                 <SidebarMenuSubItem key={cl.url} className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
-                                  <a className="flex gap-1" href={cl.url}>
+                                  <Link className="flex gap-1" to={cl.url}>
                                     <span>{cl.title}</span>
-                                  </a>
+                                  </Link>
                                 </SidebarMenuSubItem>
                               )}
                             </SidebarMenuSub>
@@ -206,10 +197,10 @@ export function AppSidebar({ role }) {
                       :
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild>
-                          <a href={item.url} className="flex gap-2">
+                          <Link to={item.url} className="flex gap-2">
                             <item.icon className="w-5 h-5" />
                             <span>{item.title}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     }
@@ -237,9 +228,9 @@ export function AppSidebar({ role }) {
                             <SidebarMenuSub className={'mx-2'}>
                               {item.childLinks.map(cl =>
                                 <SidebarMenuSubItem key={cl.url} className={'px-4 py-1 hover:bg-secondary rounded-sm '}>
-                                  <a className="flex gap-1" href={cl.url}>
+                                  <Link className="flex gap-1" to={cl.url}>
                                     <span>{cl.title}</span>
-                                  </a>
+                                  </Link>
                                 </SidebarMenuSubItem>
                               )}
                             </SidebarMenuSub>
@@ -249,10 +240,10 @@ export function AppSidebar({ role }) {
                       :
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild>
-                          <a href={item.url} className="flex gap-2">
+                          <Link to={item.url} className="flex gap-2">
                             <item.icon className="w-5 h-5" />
                             <span>{item.title}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     }

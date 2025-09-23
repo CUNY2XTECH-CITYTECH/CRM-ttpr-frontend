@@ -13,93 +13,84 @@ import { useAuth, useClient } from "@/lib/dataContext";
 import { useNavigate } from "react-router";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
-import toast from "react-hot-toast";
-
-export default function ViewCompanies() {
-  const [companies, setCompanies] = useState([]);
+export default function ViewStaffs() {
+  const [staffs, setStaffs] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { token, currentUser } = useAuth();
   const { client } = useClient()
-  const companiesPerPage = 5;
-  async function fetchCompanies(token) {
+  const staffsPerPage = 5;
+  async function fetchStaffs(token) {
+    console.log('func is called', token)
     setLoading(true);
-    try {
-      const res = await client.companies.fetchAll();
-      if (res.status === 200) {
-       // after waiting for all industries to be fetched, set the companies state
-        await Promise.all(res.data.map(async (company) => {
-          const industry_name = await client.industries.fetchOne(company.industry);
-          company.industry = industry_name.data?.industries.name
-        })
-        )
-       
-        setCompanies(res.data);
-      }
-      else {
-        console.log(res.error)
-      }
-    } catch (error) {
-      console.error(error, 'cannot fetch companies');
-    } finally {
-      setLoading(false);
-    }
+    // try {
+    //   const res = await client.staffs.fetchAll();
+    //   if (res.status === 200) {
+    //     setStaffs(res.data.data);
+    //   }
+    //   else{
+    //     console.log(res.error)
+    //   }
+    // } catch (error) {
+    //   console.error(error, 'cannot fetch staffs');
+    // } finally {
+    //   setLoading(false);
+    // }
   }
   useEffect(() => {
     const loadData = async () => {
+      if (currentUser && currentUser?.role !== "admin") {
+        navigate("/not-authorized");
+      }
+      if (!token) {
+
+        navigate("/login");
+      }
       if (token) {
-        await fetchCompanies(token);
+        await fetchStaffs(token);
       }
     }
     loadData()
-  }, []);
-  const totalPages = Math.ceil(companies.length / companiesPerPage);
-  const start = (currentPage - 1) * companiesPerPage;
-  const currentCompanies = companies.slice(start, start + companiesPerPage);
-  const handleEdit = async (id) => {
-    navigate(`/admin/view-companies/${id}`)
-    //  try {
-    //   const res = await client.companies.update(id,{credentials:'include'});
-    //   console.log(res,'updated')
-    // } catch (error) {
-    //   toast.error("Failed to update company");
-    //   console.error(error);
-    // }
-    //
+  }, [token]);
+  const totalPages = Math.ceil(staffs.length / staffsPerPage);
+  const start = (currentPage - 1) * staffsPerPage;
+  const currentStaffs = staffs.slice(start, start + staffsPerPage);
+  const handleEdit = (id) => {
+    alert(`Edit company with ID: ${id}`);
     // Replace with your real edit logic or navigation
   };
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this company?")) return;
-    try {
-      const res = await fetch(`/api/companies/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Delete failed");
-      setCompanies((prev) => prev.filter((c) => c.id !== id));
-      if (currentCompanies.length === 1 && currentPage > 1) {
-        setCurrentPage((p) => p - 1);
-      }
-    } catch (error) {
-      alert("Failed to delete company");
-      console.error(error);
-    }
+    // try {
+    //   const res = await fetch(`/api/staffs/${id}`, { method: "DELETE" });
+    //   if (!res.ok) throw new Error("Delete failed");
+    //   setStaffs((prev) => prev.filter((c) => c.id !== id));
+    //   if (currentStaffs.length === 1 && currentPage > 1) {
+    //     setCurrentPage((p) => p - 1);
+    //   }
+    // } catch (error) {
+    //   alert("Failed to delete company");
+    //   console.error(error);
+    // }
   };
-  if (loading) return <p className="p-6 text-center">Loading...</p>;
   return (
     <>
       {currentUser ? (
         <Layout user={currentUser}>
-          <Topbar title="Add New Company" mode="read" link="/admin/create-companies" />
+          <Topbar title="Add New Staff" mode="read" />
 
-          <div className="p-6 mt-6 bg-white rounded-lg shadow-sm mx-auto">
+          <div className="p-6 mt-6 bg-white rounded-lg shadow-sm max-w-7xl mx-auto">
 
-            <h4 className='py-2 font-semibold uppercase'>Companies</h4>
-            <div className="w-full">
-              <Table className={''}>
+            <h4 className='py-2 font-semibold uppercase'>Staffs</h4>
+            {loading ? <p className="p-6 text-center">Loading...</p> :
+              <Table className={'w-full'}>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
+                    <TableHead>Mission</TableHead>
                     <TableHead>Industry</TableHead>
                     <TableHead>Website</TableHead>
                     <TableHead>Location</TableHead>
@@ -107,17 +98,18 @@ export default function ViewCompanies() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {currentCompanies.length === 0 ? (
+                  {currentStaffs.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={7} className="text-center py-6">
-                        No companies found.
+                        No staffs found.
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentCompanies.map((company) => (
-                      <TableRow key={company._id}>
+                    currentStaffs.map((company) => (
+                      <TableRow key={company.id}>
                         <TableCell>{company.name}</TableCell>
                         <TableCell>{company.email}</TableCell>
+                        <TableCell>{company.mission.slice(0, 40)}...</TableCell>
                         <TableCell>{company.industry}</TableCell>
                         <TableCell>
                           <a
@@ -134,7 +126,7 @@ export default function ViewCompanies() {
                           <Button
                             variant="outline"
                             size="icon"
-                            onClick={() => handleEdit(company._id)}
+                            onClick={() => handleEdit(company.id)}
                             aria-label="Edit company"
                           >
                             <Edit className="w-4 h-4" />
@@ -153,7 +145,7 @@ export default function ViewCompanies() {
                   )}
                 </TableBody>
               </Table>
-            </div>
+            }
             {/* Pagination */}
             <div className="flex justify-between items-center mt-6">
               <Button

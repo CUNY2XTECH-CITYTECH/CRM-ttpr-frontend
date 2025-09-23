@@ -1,7 +1,14 @@
 import { AdminClient } from "./admin";
 import { AuthServiceClient } from "./auth";
 import { CompaniesClient } from "./companies";
+import { DepartmentClient } from "./departments";
+import { IndustryClient } from "./industries";
+import { PositionClient } from "./positions";
+import { StateCityClient } from "./stateCity";
 import { UserClient } from "./user";
+import { InterestsClient } from "./interest";
+import { InternshipClient } from "./internship";
+
 
 export class Client {
   constructor(token) {
@@ -10,10 +17,33 @@ export class Client {
     this.auth = new AuthServiceClient()
     this.companies = new CompaniesClient(this.token)
     this.adminProfile = new AdminClient(this.token)
+    this.industries = new IndustryClient(this.token)
+    this.stateCities = new StateCityClient(this.token)
+    this.departments = new DepartmentClient(this.token)
+    this.positions = new PositionClient(this.token)
+    this.interests = new InterestsClient(this.token)
+    this.internship = new InternshipClient(this.token)
   }
   user() {
     return this.user;
   }
+  positions() {
+    return this.positions;
+  }
+  interests() {
+    return this.interests;
+  }
+  internships() {
+    return this.internships;
+  }
+
+  departments() {
+    return this.departments;
+  }
+  industries() {
+    return this.industry;
+  }
+
   companies() {
     return this.companies
   }

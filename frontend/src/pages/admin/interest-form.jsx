@@ -80,15 +80,20 @@ export default function InterestForm() {
                 control={interestForm.control}
                 name="name"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Interest Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Interest Name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                  <>
+                    <FormItem>
+                      <FormLabel>Interest Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Interest Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  </>
                 )}
               />
+              <button type="submit" className="mt-4 bg-purple-600 text-white hover:bg-purple-700">
+                Add Interest 
+              </button>
             </div>
           </form>
         </Form>

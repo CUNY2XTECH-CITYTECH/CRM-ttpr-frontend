@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { motion } from "motion/react";
 import { Check, Info } from "lucide-react";
-
+import { useNavigate } from "react-router"
+import { useAuth } from "@/lib/dataContext";
+import { Button } from "@/components/ui/button";
 const initialSteps = [
   {
     key: "interests",
@@ -90,6 +92,10 @@ const initialSteps = [
 ];
 
 export default function StudentOnboarding() {
+
+
+  const { token, currentUser } = useAuth();
+  const navigate = useNavigate()
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     interests: [],
@@ -143,14 +149,16 @@ export default function StudentOnboarding() {
   const handleBack = () => {
     if (step > 0) setStep(step - 1);
   };
+  useEffect(() => {
+    if (currentUser && currentUser?.role !== "admin") {
+      navigate("/not-authorized");
+    }
+    if(!token){
+        navigate('/login') 
+    }
+  }, [token]);
 
-  const handleRestart = () => {
-    setFormData({ interests: [], roles: [], skills: [] });
-    setDynamicOptions(initialSteps.map((s) => s.options));
-    setStep(0);
-    setIsReview(false);
-    setCustomInput("");
-  };
+
 
   return (
     <div className="max-w-2xl grid my-24 mx-auto p-6 bg-white shadow-sm rounded-3xl space-y-8">
@@ -266,32 +274,25 @@ export default function StudentOnboarding() {
         </>
       ) : (
         <div className="text-center space-y-6">
-          <h2 className="text-3xl font-bold">🎉 You're all set!</h2>
-          <p className="text-gray-600">Here's what you told us:</p>
-          <div className="grid sm:grid-cols-3 gap-4 text-sm text-left">
-            {initialSteps.map((s) => (
-              <div key={s.key}>
-                <h4 className="font-semibold text-gray-800 mb-1">{s.label}</h4>
-                <ul className="space-y-1">
-                  {formData[s.key].map((item, i) => (
-                    <li key={i} className="bg-gray-100 px-3 py-1 rounded-lg">
-                      {item}
-                    </li>
-                  ))}
-                  {formData[s.key].length === 0 && (
-                    <li className="text-gray-400 italic">No selection</li>
-                  )}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <button
+          <h2 className="text-3xl font-bold">Welcome {currentUser?.name}  🎉</h2>
+          <p className="text-gray-600">We have set all your personalization in your profile.</p>
+              <div className="flex gap-3 ">
+          <Button
             type="button"
-            onClick={handleRestart}
-            className="text-blue-600 hover:underline text-sm mt-4 focus:outline-none"
+            onClick={()=>navigate('/profile')}
+            className="cursor-pointer text-sm mt-4 ml-auto"
           >
-            Start Over
-          </button>
+           Go to my profile 
+          </Button>
+
+          <Button
+            type="button"
+            onClick={()=>navigate('/')}
+            className="text-sm mt-4 cursor-pointer mr-auto"
+          >
+           Go to my dashboard 
+          </Button>
+          </div>
         </div>
       )}
     </div>
