@@ -23,10 +23,9 @@ const internshipData = [
 ]
 
 const departmentData = [
-  { name: "Computer Science", students: 456, fill: "var(--color-chart-1)" },
-  { name: "Engineering", students: 324, fill: "var(--color-chart-2)" },
-  { name: "Business", students: 267, fill: "var(--color-chart-3)" },
-  { name: "Design", students: 200, fill: "var(--color-chart-4)" },
+  { name: "Computer Science", students: 2, fill: "var(--color-chart-1)" },
+  { name: "Computer Engineering", students: 4, fill: "var(--color-chart-2)" },
+  { name: "Information Technology", students: 2, fill: "var(--color-chart-3)" },
 ]
 
 
@@ -41,10 +40,10 @@ export default function Dashboard() {
   const [pendingApprovals, setPendingApprovals] = useState([])
   const [stats, setStats] = useState(
     [
-      { name: "Staff Users", value: 45, icon: Users, color: "text-blue-600", bgColor: "bg-blue-50" },
-      { name: "Student Users", value: 1247, icon: GraduationCap, color: "text-green-600", bgColor: "bg-green-50" },
-      { name: "Companies", value: 89, icon: Building2, color: "text-purple-600", bgColor: "bg-purple-50" },
-      { name: "Internships", value: 324, icon: Briefcase, color: "text-orange-600", bgColor: "bg-orange-50" },
+      { name: "Staff Users", value: 45, icon: Users, color: "text-blue-600", bgColor: "bg-blue-50",stat: "+5.4%" },
+      { name: "Student Users", value: 1247, icon: GraduationCap, color: "text-green-600", bgColor: "bg-green-50",stat: "+3.2%" },
+      { name: "Companies", value: 89, icon: Building2, color: "text-purple-600", bgColor: "bg-purple-50",stat: "+4.1%" },
+      { name: "Internships", value: 10, icon: Briefcase, color: "text-orange-600", bgColor: "bg-orange-50",stat: "+2.8%" },
     ]
   )
 
@@ -78,17 +77,19 @@ export default function Dashboard() {
   const loadData = async () => {
     let students = await client.user.fetchStudents()
     let fetchPendingStaffs = await client.user.fetchPendingStaffs({page:1,pageSize:3},{ credentials: 'include' })
-    let matrix = await client.user.fetchMatrix()
+    console.log(fetchPendingStaffs,'pending')
+    let matrix = await client.user.fetchMatrix({ credentials: 'include' })
     if (fetchPendingStaffs.status === 200) {
       setPendingApprovals(fetchPendingStaffs.data.pendingStaffs)
     }
-    let companies = await client.companies.fetchMatrix()
-    if (matrix.status === 200) {
+    let companies = await client.companies.fetchMatrix({ credentials: 'include' })
+    console.log(companies, 'cmatrix')
+    if (matrix.status === 200 || companies.status===200) {
       let data = matrix.data
       setStats((prev) => {
         let newStats = [...prev]
-        newStats[0].value = data.staffCount
-        newStats[1].value = data.studentCount
+        newStats[0].value = data?.staffCount || prev[0].value
+        newStats[1].value = data?.studentCount || prev[1].value
         newStats[2].value = companies.status === 200 ? companies.data.companyCount : prev[2].value
         return newStats
       })
@@ -134,7 +135,7 @@ export default function Dashboard() {
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-sm font-medium text-gray-600">{stat.name}</p>
-                            <p className="text-3xl font-bold text-gray-900">{stat.value.toLocaleString()}</p>
+                            <p className="text-3xl font-bold text-gray-900">{stat.value?.toLocaleString()}</p>
                           </div>
                           <div className={`p-3 rounded-full ${stat.bgColor}`}>
                             <Icon className={`h-6 w-6 ${stat.color}`} />
@@ -143,7 +144,7 @@ export default function Dashboard() {
                         <div>
                           <div className="mt-4 flex items-center text-sm">
                             <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-                            <span className="text-green-600 font-medium">+12%</span></div>
+                            <span className="text-green-600 font-medium">{stat.stat}</span></div>
                           <span className="text-gray-600 ml-1 text-xs">from last month</span>
                         </div>
                       </CardContent>
@@ -171,7 +172,7 @@ export default function Dashboard() {
                           color: "hsl(var(--chart-2))",
                         },
                       }}
-                      className="h-[300px]"
+                      className="h-[200px] w-[300px] lg:w-full mr-4"
                     >
                       <BarChart data={internshipData}>
                         <XAxis dataKey="month" />
@@ -181,6 +182,17 @@ export default function Dashboard() {
                         <Bar dataKey="accepted" fill="var(--color-chart-2)" radius={4} />
                       </BarChart>
                     </ChartContainer>
+                    <div className="mt-4 flex space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-chart-1" />
+                        <span className="text-sm text-gray-600">Applied</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-chart-2" />
+                        <span className="text-sm text-gray-600">Accepted</span>
+                      </div>
+                    </div>
+
                   </CardContent>
                 </Card>
 
@@ -197,7 +209,7 @@ export default function Dashboard() {
                           label: "Students",
                         },
                       }}
-                      className="h-[200px] max-w-[200px]"
+                      className="h-[200px] w-[200px] lg:w-full mx-auto"
                     >
                       <PieChart>
                         <Pie data={departmentData} cx="50%" cy="50%" innerRadius={40} outerRadius={80} dataKey="students">

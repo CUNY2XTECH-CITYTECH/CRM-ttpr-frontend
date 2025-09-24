@@ -10,11 +10,94 @@ import {
 } from "@/components/ui/table";
 import { Edit, Trash2 } from "lucide-react";
 import { useAuth, useClient } from "@/lib/dataContext";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
 export default function ViewStudents() {
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState([
+    {
+      id: 1,
+      name: "John Doe",
+      email: "john.doe@citytech.cuny.edu",
+      major: "Computer Science",
+      track: "Software Development",
+      graduationYear: 2024,
+      linkedin: "https://linkedin.com/in/johndoe",
+      location: "New York, NY",
+    }
+    , {
+      id: 2,
+      name: "Jane Smith",
+      email: "jane.smith@citytech.cuny.edu",
+      major: "Information Technology",
+      track: "Network Administration",
+      graduationYear: 2023,
+      linkedin: "https://linkedin.com/in/janesmith",
+      location: "Brooklyn, NY",
+    }
+,
+{
+  id: 3,
+  name: "Michael Johnson",
+  email: "michael.johnson@citytech.cuny.edu",
+  major: "Computer Engineering",
+  track: "Embedded Systems",
+  graduationYear: 2024,
+  linkedin: "https://linkedin.com/in/michaeljohnson",
+  location: "Queens, NY",
+},
+{
+  id: 4,
+  name: "Emily Davis",
+  email: "emily.davis@citytech.cuny.edu",
+  major: "Computer Science",
+  track: "Software Development",
+  graduationYear: 2025,
+  linkedin: "https://linkedin.com/in/emilydavis",
+  location: "Manhattan, NY",
+},
+{
+  id: 5,
+  name: "Daniel Martinez",
+  email: "daniel.martinez@citytech.cuny.edu",
+  major: "Information Technology",
+  track: "Cybersecurity",
+  graduationYear: 2023,
+  linkedin: "https://linkedin.com/in/danielmartinez",
+  location: "Bronx, NY",
+},
+{
+  id: 6,
+  name: "Sophia Lee",
+  email: "sophia.lee@citytech.cuny.edu",
+  major: "Computer Systems",
+  track: "Database Administration",
+  graduationYear: 2024,
+  linkedin: "https://linkedin.com/in/sophialee",
+  location: "Brooklyn, NY",
+},
+{
+  id: 7,
+  name: "David Kim",
+  email: "david.kim@citytech.cuny.edu",
+  major: "Computer Engineering",
+  track: "Artificial Intelligence",
+  graduationYear: 2025,
+  linkedin: "https://linkedin.com/in/davidkim",
+  location: "Staten Island, NY",
+},
+
+{
+  id: 8,
+  name: "Maya Aung",
+  email: "maya.aung@citytech.cuny.edu",
+  major: "Computer Engineering",
+  track: "Web Development",
+  graduationYear: 2024,
+  linkedin: "https://linkedin.com/in/mayaaung",
+  location: "Brooklyn, NY",
+}
+  ]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -24,21 +107,8 @@ export default function ViewStudents() {
   const studentsPerPage = 5;
   async function fetchStudents(token) {
     console.log('func is called', token)
-    setLoading(true);
-    // try {
-    //   const res = await client.students.fetchAll();
-    //   if (res.status === 200) {
-    //     setStudents(res.data.data);
-    //   }
-    //   else{
-    //     console.log(res.error)
-    //   }
-    // } catch (error) {
-    //   console.error(error, 'cannot fetch students');
-    // } finally {
-    //   setLoading(false);
-    // }
-  }
+    setLoading(false);
+      }
   useEffect(() => {
     const loadData = async () => {
       // if (currentUser && currentUser?.role !== "admin") {
@@ -58,11 +128,11 @@ export default function ViewStudents() {
   const start = (currentPage - 1) * studentsPerPage;
   const currentStudents = students.slice(start, start + studentsPerPage);
   const handleEdit = (id) => {
-    alert(`Edit company with ID: ${id}`);
+    alert(`Edit stu with ID: ${id}`);
     // Replace with your real edit logic or navigation
   };
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this company?")) return;
+    if (!confirm("Are you sure you want to delete this stu?")) return;
     // try {
     //   const res = await fetch(`/api/students/${id}`, { method: "DELETE" });
     //   if (!res.ok) throw new Error("Delete failed");
@@ -71,7 +141,7 @@ export default function ViewStudents() {
     //     setCurrentPage((p) => p - 1);
     //   }
     // } catch (error) {
-    //   alert("Failed to delete company");
+    //   alert("Failed to delete stu");
     //   console.error(error);
     // }
   };
@@ -84,15 +154,16 @@ export default function ViewStudents() {
           <div className="p-6 mt-6 bg-white rounded-lg shadow-sm max-w-7xl mx-auto">
         <h4 className='py-2 font-semibold uppercase'>Students</h4>
             {loading ? <p className="p-6 text-center">Loading...</p>:
-            <Table className={'w-full'}>
+              <div className="w-full">
+            <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
-                  <TableHead>Mission</TableHead>
-                  <TableHead>Industry</TableHead>
-                  <TableHead>Website</TableHead>
-                  <TableHead>Location</TableHead>
+                  <TableHead>Major</TableHead>
+                  <TableHead>Track</TableHead>
+                  <TableHead>Graduation</TableHead>
+                  <TableHead>Linkedin</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -104,15 +175,25 @@ export default function ViewStudents() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  currentStudents.map((company) => (
-                    <TableRow key={company.id}>
-                      <TableCell>{company.name}</TableCell>
-                      <TableCell>{company.email}</TableCell>
-                      <TableCell>{company.mission.slice(0,40)}...</TableCell>
-                      <TableCell>{company.industry}</TableCell>
+                  currentStudents.map((stu) => (
+                    <TableRow key={stu.id}>
+                      <TableCell>{stu.name}</TableCell>
+                      <TableCell>{stu.email}</TableCell>
+                      <TableCell>{stu.major}</TableCell>
+                      <TableCell>{stu.track}</TableCell>
+                      <TableCell>{stu.graduationYear}</TableCell>
+                      {/* Assuming stu.linkedin is a URL */}
+                      <TableCell>
+                        <Link
+                          to={stu.linkedin}
+                          className="text-blue-600 "
+                        >
+                          Linkedin
+                        </Link>
+                      </TableCell>
                       <TableCell>
                         <a
-                          href={company.website}
+                          href={stu.website}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 underline"
@@ -120,21 +201,21 @@ export default function ViewStudents() {
                           Visit
                         </a>
                       </TableCell>
-                      <TableCell className={''}>{company.location}</TableCell>
+                      <TableCell className={''}>{stu.location}</TableCell>
                       <TableCell className="flex justify-end gap-2">
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => handleEdit(company.id)}
-                          aria-label="Edit company"
+                          onClick={() => handleEdit(stu.id)}
+                          aria-label="Edit stu"
                         >
                           <Edit className="w-4 h-4" />
                         </Button>
                         <Button
                           variant="destructive"
                           size="icon"
-                          onClick={() => handleDelete(company.id)}
-                          aria-label="Delete company"
+                          onClick={() => handleDelete(stu.id)}
+                          aria-label="Delete stu"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -144,6 +225,7 @@ export default function ViewStudents() {
                 )}
               </TableBody>
             </Table>
+            </div>
             }
             {/* Pagination */}
             <div className="flex justify-between items-center mt-6">

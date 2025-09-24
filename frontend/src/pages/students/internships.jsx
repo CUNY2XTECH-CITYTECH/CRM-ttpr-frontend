@@ -9,79 +9,126 @@ export default function Internships() {
   const navigate = useNavigate(); // ✅
 
   const [internships, setInternships] = useState([
-    // Sample data...
-    {
-      _id: "1",
-      title: "Software Engineer Intern",
-      company: "TechNova",
-      location: "San Francisco, CA",
-      arrangement: "Hybrid",
-      salary: "$4,500/month",
-      posted: "2 days ago",
-      logo: "",
-      description:
-        "Join our team to work on cutting-edge web applications using React and Node.js.",
-    },
-    {
-      _id: "2",
-      title: "Frontend Developer Intern",
-      company: "PixelWave",
-      location: "Remote",
-      arrangement: "Remote",
-      salary: "$3,800/month",
-      posted: "1 day ago",
-      logo: "",
-      description:
-        "Collaborate with designers and backend engineers to build engaging UIs with React.",
-    },
-    {
-      _id: "3",
-      title: "Product Management Intern",
-      company: "InnoLogix",
-      location: "Austin, TX",
-      arrangement: "Onsite",
-      salary: "$4,000/month",
-      posted: "3 days ago",
-      logo: "",
-      description:
-        "Assist in defining product features and roadmap, and conduct market research.",
-    },
-    {
-      _id: "4",
-      title: "Data Analyst Intern",
-      company: "DataXpress",
-      location: "New York, NY",
-      arrangement: "Hybrid",
-      salary: "$4,200/month",
-      posted: "Today",
-      logo: "",
-      description:
-        "Analyze datasets to generate insights and help drive data-informed decisions.",
-    },
-    {
-      _id: "5",
-      title: "UI/UX Designer Intern",
-      company: "Designly",
-      location: "Chicago, IL",
-      arrangement: "Remote",
-      salary: "$3,600/month",
-      posted: "5 days ago",
-      logo: "",
-      description:
-        "Create beautiful and user-friendly interface designs and wireframes.",
-    },
-    {
-      _id: "6",
-      title: "DevOps Intern",
-      company: "CloudCore",
-      location: "Seattle, WA",
-      arrangement: "Onsite",
-      salary: "$4,100/month",
-      posted: "2 days ago",
-      logo: "",
-      description:
-        "Work with cloud infrastructure, CI/CD pipelines, and monitoring systems.",
-    },
+  {
+    _id: "1",
+    title: "Frontend Developer Intern",
+    company: "TechNova Solutions",
+    location: "San Francisco, CA",
+    arrangement: "Hybrid",
+    salary: "$3,800/month",
+    posted: "2 days ago",
+    logo: "",
+    description:
+      "Work on responsive web applications, building UI components with React and collaborating with the design team."
+  },
+  {
+    _id: "2",
+    title: "Backend Developer Intern",
+    company: "CodeCrafters Inc.",
+    location: "New York, NY",
+    arrangement: "Onsite",
+    salary: "$4,200/month",
+    posted: "1 day ago",
+    logo: "",
+    description:
+      "Assist backend engineers in developing APIs, integrating databases, and writing unit tests using Node.js and Express."
+  },
+  {
+    _id: "3",
+    title: "UI/UX Design Intern",
+    company: "DesignHub Studios",
+    location: "Chicago, IL",
+    arrangement: "Remote",
+    salary: "$3,600/month",
+    posted: "3 days ago",
+    logo: "",
+    description:
+      "Create wireframes, prototypes, and user flows while collaborating with developers to ensure user-centered design."
+  },
+  {
+    _id: "4",
+    title: "Data Analyst Intern",
+    company: "DataMinds Analytics",
+    location: "Boston, MA",
+    arrangement: "Hybrid",
+    salary: "$4,500/month",
+    posted: "Today",
+    logo: "",
+    description:
+      "Analyze datasets, generate reports, and support the BI team in delivering data-driven insights."
+  },
+  {
+    _id: "5",
+    title: "Cybersecurity Intern",
+    company: "SecureNet Systems",
+    location: "Austin, TX",
+    arrangement: "Onsite",
+    salary: "$4,000/month",
+    posted: "4 days ago",
+    logo: "",
+    description:
+      "Support the cybersecurity team with monitoring systems, auditing, and incident response."
+  },
+  {
+    _id: "6",
+    title: "Cloud Engineer Intern",
+    company: "CloudWorks Global",
+    location: "Seattle, WA",
+    arrangement: "Hybrid",
+    salary: "$4,300/month",
+    posted: "2 days ago",
+    logo: "",
+    description:
+      "Assist cloud engineers with deployments, monitoring infrastructure, and writing automation scripts."
+  },
+  {
+    _id: "7",
+    title: "Machine Learning Intern",
+    company: "AI Innovators Lab",
+    location: "Palo Alto, CA",
+    arrangement: "Onsite",
+    salary: "$5,000/month",
+    posted: "5 days ago",
+    logo: "",
+    description:
+      "Train ML models, preprocess datasets, and support applied AI research projects."
+  },
+  {
+    _id: "8",
+    title: "Software Engineering Intern",
+    company: "FinTech Edge",
+    location: "New York, NY",
+    arrangement: "Remote",
+    salary: "$4,100/month",
+    posted: "Yesterday",
+    logo: "",
+    description:
+      "Collaborate with engineers to develop financial applications using Java and Spring Boot."
+  },
+  {
+    _id: "9",
+    title: "Sustainability Intern",
+    company: "GreenTech Energy",
+    location: "Denver, CO",
+    arrangement: "Onsite",
+    salary: "$3,700/month",
+    posted: "3 days ago",
+    logo: "",
+    description:
+      "Conduct research, prepare sustainability reports, and support project planning initiatives."
+  },
+  {
+    _id: "10",
+    title: "Healthcare IT Intern",
+    company: "MediTech Solutions",
+    location: "Philadelphia, PA",
+    arrangement: "Hybrid",
+    salary: "$3,900/month",
+    posted: "Today",
+    logo: "",
+    description:
+      "Assist in testing medical software, supporting IT teams, and ensuring HIPAA compliance."
+  }
   ]);
 
   const [loading, setLoading] = useState(true);

@@ -13,7 +13,11 @@ export class AdminClient extends BaseClient {
     const res = await this.get('adminProfile/me');
     return res
   }
-
+   async fetchById(id,optionalHeader) {
+    // get all user
+    const res = await this.get(`adminProfile/${id}`,optionalHeader);
+    return res
+  }
   async create() {
     // get all user
 

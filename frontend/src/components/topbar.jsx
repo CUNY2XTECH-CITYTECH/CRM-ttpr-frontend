@@ -6,7 +6,7 @@ import { Input } from './ui/input'
 import Papa from 'papaparse'
 import { useClient } from '@/lib/dataContext'
 import toast from 'react-hot-toast'
-export const Topbar = ({ title, view = null, creatable = true, setView = null, mode, setReload, link = null }) => {
+export const Topbar = ({createmultiple=true, title, view = null, creatable = true, setView = null, mode, setReload, link = null }) => {
   const [dataset, setDataset] = useState(null)
   const navigate = useNavigate()
   const { client } = useClient()
@@ -57,10 +57,12 @@ export const Topbar = ({ title, view = null, creatable = true, setView = null, m
           {creatable && 
             <div className='flex gap-2'>
               <Button><Link to={link}>Create new</Link></Button>
+              {createmultiple &&
               <Button className={'relative'}>
                 Upload CSV
                 <Input type='file' className='absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer' onChange={uploadCSV} />
               </Button>
+              }
             </div>
           }
           <div className='flex p-1 gap-1 border border-gray-200 rounded-lg ml-auto'>
