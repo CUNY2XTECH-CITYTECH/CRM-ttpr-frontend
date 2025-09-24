@@ -29,7 +29,7 @@ export function CreatableSelect({
   const exactMatch = filteredOptions.find((option) => option.name?.toLowerCase() === searchValue.toLowerCase())
 
   const showCreateOption = searchValue && !exactMatch && onCreateOption
-
+  console.log("options", options, controller?.value, selectedOption)
 
   const handleCreateFunction = async() => {
     if (searchValue && onCreateOption) {

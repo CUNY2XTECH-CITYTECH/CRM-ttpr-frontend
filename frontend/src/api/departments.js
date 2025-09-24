@@ -9,15 +9,15 @@ export class DepartmentClient extends BaseClient {
     return res
   }
   async fetchOne(id) {
-    const res = await this.get('department/'+id);
-      return res
+    const res = await this.get('department/' + id);
+    return res
 
   }
 
   async create(data) {
     // get all user
 
-    const res = await this.post('department/create',data); 
+    const res = await this.post('department/create', data);
     return res;
   }
 
@@ -31,6 +31,7 @@ export class DepartmentClient extends BaseClient {
   async delete() {
     // get all user
     const res = await this.post('department/delete');
-    return res  }
+    return res
+  }
 }
 

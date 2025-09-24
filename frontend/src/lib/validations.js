@@ -22,6 +22,13 @@ export const validateCompaniesForm = yup.object().shape({
   street: yup.string().required(),
   zipcode: yup.string().required().matches(zipRegex, "invalid zip code")
 })
+export const validateMajorsForm = yup.object().shape({
+  name: yup.string().min(3).required(),
+  degree: yup.string().min(3).required(),
+  track: yup.string().min(3),
+  department: yup.string().min(3).required(),
+  description: yup.string().min(10).max(500).required()
+})
 
 export const validateDepartmentForm = yup.object().shape({
   name: yup.string().min(3).required(),

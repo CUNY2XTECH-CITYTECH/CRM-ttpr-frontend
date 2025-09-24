@@ -18,14 +18,15 @@ import { Briefcase, Loader2 } from "lucide-react";
 import Layout from "../../components/layout";
 import { validateInternshipForm } from "@/lib/validations";
 import { useNavigate } from "react-router";
-import { useAuth } from "@/lib/dataContext";
 import { CreatableSelect } from "@/components/creatable-select";
 import { handleCreate } from "@/lib/commonFunctions";
+import { useAuth, useClient } from "@/lib/dataContext";
 
 
 export default function CreateInternships() {
   const [view, setView] = useState("create");
   const [isLoading, setIsLoading] = useState(false);
+  const { client } = useClient();
   const [positions, setPositions] = useState([
     { value: 'software-engineer', label: 'Software Engineer' },
     { value: 'data-analyst', label: 'Data Analyst' },
@@ -44,7 +45,7 @@ export default function CreateInternships() {
   const internshipForm = useForm({
     resolver: yupResolver(validateInternshipForm),
     defaultValues: {
-      name: "",
+      company: "",
       position: "",
       salary: "",
       requirements: "",
@@ -57,11 +58,37 @@ export default function CreateInternships() {
 
   const { setValue } = internshipForm;
 
+  async function fetchCompanies() {
+    try {
+      const res = await client.companies.fetchAll();
+      return res;
+    } catch (error) {
+      console.error(error, 'cannot fetch companies');
+      return [];
+    }
+  }
+
+  useEffect(() => {
+    if (token && client) {
+      fetchCompanies().then(res => {
+        console.log('Companies response:', res.data);
+        if (res.status === 200) {
+          const companyOptions = res.data.map(company => ({
+            value: company._id,
+            label: company.name
+          }));
+          console.log('Company options:', companyOptions);
+          setCompanies(companyOptions);
+        }
+      });
+    }
+  }, [token, client]);
+
   const onSubmit = async (data) => {
     setIsLoading(true);
-     console.log("Form Data:", data);
-    }
-  
+    console.log("Form Data:", data);
+  };
+
   return (
     <>
       {currentUser ? (
@@ -97,14 +124,14 @@ export default function CreateInternships() {
                         <FormLabel>Company Name</FormLabel>
                         <FormControl>
                           <CreatableSelect
-                             form={internshipForm}
-                              error={fieldState.error}
-                              options={companies}
-                              controller={field}
-                              onCreateOption={(inputValue) => handleCreate(setCompanies, setValue, inputValue, 'company')}
-                              placeholder="Enter or Select position ..."
-                              searchPlaceholder="Search positions..."
-                              createLabel="Create new position"
+                            options={companies}
+                            form={internshipForm}
+                            error={fieldState.error}
+                            controller={field}
+                            onCreateOption={(inputValue) => handleCreate(client, setCompanies, setValue, inputValue, 'company')}
+                              placeholder="Enter or Select company ..."
+                              searchPlaceholder="Search companies..."
+                              createLabel="Create new company"
                               className="w-full"
                                                     />
                         </FormControl>

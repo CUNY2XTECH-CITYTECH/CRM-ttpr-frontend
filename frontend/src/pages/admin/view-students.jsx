@@ -25,29 +25,29 @@ export default function ViewStudents() {
   async function fetchStudents(token) {
     console.log('func is called', token)
     setLoading(true);
-    // try {
-    //   const res = await client.students.fetchAll();
-    //   if (res.status === 200) {
-    //     setStudents(res.data.data);
-    //   }
-    //   else{
-    //     console.log(res.error)
-    //   }
-    // } catch (error) {
-    //   console.error(error, 'cannot fetch students');
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      const res = await client.students.fetchAll();
+      if (res.status === 200) {
+        setStudents(res.data.data);
+      }
+      else{
+        console.log(res.error)
+      }
+    } catch (error) {
+      console.error(error, 'cannot fetch students');
+    } finally {
+      setLoading(false);
+    }
   }
   useEffect(() => {
     const loadData = async () => {
-      // if (currentUser && currentUser?.role !== "admin") {
-      //   navigate("/not-authorized");
-      // }
-      // if (!token) {
-      //
-      //   navigate("/login");
-      // }
+      if (currentUser && currentUser?.role !== "admin") {
+        navigate("/not-authorized");
+      }
+      if (!token) {
+      
+        navigate("/login");
+      }
       if (token) {
         await fetchStudents(token);
       }
@@ -63,17 +63,17 @@ export default function ViewStudents() {
   };
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this company?")) return;
-    // try {
-    //   const res = await fetch(`/api/students/${id}`, { method: "DELETE" });
-    //   if (!res.ok) throw new Error("Delete failed");
-    //   setStudents((prev) => prev.filter((c) => c.id !== id));
-    //   if (currentStudents.length === 1 && currentPage > 1) {
-    //     setCurrentPage((p) => p - 1);
-    //   }
-    // } catch (error) {
-    //   alert("Failed to delete company");
-    //   console.error(error);
-    // }
+    try {
+      const res = await fetch(`/api/students/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Delete failed");
+      setStudents((prev) => prev.filter((c) => c.id !== id));
+      if (currentStudents.length === 1 && currentPage > 1) {
+        setCurrentPage((p) => p - 1);
+      }
+    } catch (error) {
+      alert("Failed to delete company");
+      console.error(error);
+    }
   };
   return (
     <>

@@ -13,6 +13,19 @@ import { useAuth, useClient } from "@/lib/dataContext";
 import { useNavigate } from "react-router";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import toast from "react-hot-toast";
+
 export default function ViewStaffs() {
   const [staffs, setStaffs] = useState([]);
 
@@ -25,61 +38,71 @@ export default function ViewStaffs() {
   async function fetchStaffs(token) {
     console.log('func is called', token)
     setLoading(true);
-    // try {
-    //   const res = await client.staffs.fetchAll();
-    //   if (res.status === 200) {
-    //     setStaffs(res.data.data);
-    //   }
-    //   else{
-    //     console.log(res.error)
-    //   }
-    // } catch (error) {
-    //   console.error(error, 'cannot fetch staffs');
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      const res = await client.user.fetchRegisteredStaffs();
+      const more = await client.adminProfile.fetchAll();
+
+      console.log(res.data, more, 'ressss')
+      const staffData = res.data.map(async (staff) => {
+        const profile = more.data.find(p => p._id === staff._id);
+        const department = profile?.department_id ? await client.department.fetchOne(profile?.department_id) : null;
+        console.log(department, 'dept')
+        return {
+          ...staff,
+          department: department || 'N/A',
+          position: profile?.position || 'N/A',
+          linkedin: profile?.linkedin || 'N/A'
+        };
+      })
+      let data = await Promise.all(staffData);
+      if (res.status === 200 && more.status === 200) {
+        console.log(data, 'final data')
+        setStaffs(data);
+      }
+      else {
+        console.log(res.error)
+      }
+    } catch (error) {
+      console.error(error, 'cannot fetch staffs');
+    } finally {
+      setLoading(false);
+    }
   }
   useEffect(() => {
     const loadData = async () => {
-      // if (currentUser && currentUser?.role !== "admin") {
-      //   navigate("/not-authorized");
-      // }
-      // if (!token) {
-      //
-      //   navigate("/login");
-      // }
       if (token) {
         await fetchStaffs(token);
       }
     }
     loadData()
   }, [token]);
-  const totalPages = Math.ceil(staffs.length / staffsPerPage);
+  const totalPages = Math.ceil(staffs?.length / staffsPerPage);
   const start = (currentPage - 1) * staffsPerPage;
-  const currentStaffs = staffs.slice(start, start + staffsPerPage);
-  const handleEdit = (id) => {
-    alert(`Edit company with ID: ${id}`);
-    // Replace with your real edit logic or navigation
+  const currentStaffs = staffs?.slice(start, start + staffsPerPage);
+  const handleDelete = async (id, name) => {
+    console.log(id, 'id to delete')
+    try {
+      const res = await client.user.deleteOne({id:id}, { credentials: 'include' });
+      const more = await client.adminProfile.deleteOne({id:id}, { credentials: 'include' });
+      if (res.status !== 200 || more.status !== 200) toast.error(`Deleting ${name} failed`);
+      else {
+        toast.success(`Staff ${name} is deleted successfully`);
+        setStaffs((prev) => prev.filter((c) => c._id !== id));
+        if (currentStaffs.length === 1 && currentPage > 1) {
+          setCurrentPage((p) => p - 1);
+        }
+      }
+    } catch (error) {
+      toast.error("Failed to delete staff");
+      console.error(error);
+    }
   };
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this company?")) return;
-    // try {
-    //   const res = await fetch(`/api/staffs/${id}`, { method: "DELETE" });
-    //   if (!res.ok) throw new Error("Delete failed");
-    //   setStaffs((prev) => prev.filter((c) => c.id !== id));
-    //   if (currentStaffs.length === 1 && currentPage > 1) {
-    //     setCurrentPage((p) => p - 1);
-    //   }
-    // } catch (error) {
-    //   alert("Failed to delete company");
-    //   console.error(error);
-    // }
-  };
+
   return (
     <>
       {currentUser ? (
         <Layout user={currentUser}>
-          <Topbar title="Add New Staff" mode="read" />
+          <Topbar title="Our Staffs" mode="read" creatable={false} />
 
           <div className="p-6 mt-6 bg-white rounded-lg shadow-sm max-w-7xl mx-auto">
 
@@ -89,11 +112,12 @@ export default function ViewStaffs() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Name</TableHead>
+                    <TableHead>Staff ID</TableHead>
                     <TableHead>Email</TableHead>
-                    <TableHead>Mission</TableHead>
-                    <TableHead>Industry</TableHead>
-                    <TableHead>Website</TableHead>
-                    <TableHead>Location</TableHead>
+                    <TableHead>Phone Number</TableHead>
+                    <TableHead>Department</TableHead>
+                    <TableHead>Position</TableHead>
+                    <TableHead>Linkedin</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -105,44 +129,62 @@ export default function ViewStaffs() {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentStaffs.map((company) => (
-                      <TableRow key={company.id}>
-                        <TableCell>{company.name}</TableCell>
-                        <TableCell>{company.email}</TableCell>
-                        <TableCell>{company.mission.slice(0, 40)}...</TableCell>
-                        <TableCell>{company.industry}</TableCell>
+                    currentStaffs.map((staff) => (
+                      <TableRow key={staff._id}>
+
+                        <TableCell>{staff.name}</TableCell>
+                        <TableCell>
+                          {staff.id}
+                        </TableCell>
+                        <TableCell>{staff.email}</TableCell>
+                        <TableCell>{staff.phoneNumber || 'N/A'}</TableCell>
+                        <TableCell>{staff.department}</TableCell>
+                        <TableCell>{staff.position}</TableCell>
                         <TableCell>
                           <a
-                            href={company.website}
+                            href={staff.linkedin}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 underline"
+                            className={staff.linkedin ? "text-blue-600 " : "text-gray-500"}
                           >
-                            Visit
+                            {staff.linkedin === 'N/A' ? 'N/A' : 'LinkedIn'}
                           </a>
                         </TableCell>
-                        <TableCell className={''}>{company.location}</TableCell>
                         <TableCell className="flex justify-end gap-2">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => handleEdit(company.id)}
-                            aria-label="Edit company"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            size="icon"
-                            onClick={() => handleDelete(company.id)}
-                            aria-label="Delete company"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+
+                          <AlertDialog >
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="destructive"
+                                size="icon"
+                                aria-label="Delete staff"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will permanently delete staff <b>{staff.name}</b>'s data
+                                  from our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDelete(staff._id, staff.name)}>Continue</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+
+                          </AlertDialog>
+
                         </TableCell>
                       </TableRow>
                     ))
                   )}
+
                 </TableBody>
               </Table>
             }
@@ -167,6 +209,7 @@ export default function ViewStaffs() {
               >
                 Next
               </Button>
+
             </div>
           </div>
         </Layout>
