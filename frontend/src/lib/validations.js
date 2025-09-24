@@ -65,9 +65,23 @@ export const validateAppointmentForm = yup.object().shape({
   title: yup.string().required("Appointment title is required"),
   description: yup.string().max(500, "Description must be less than 500 characters"),
   date: yup.date().required("Appointment date is required").min(new Date(), "Date must be in the future"),
-  time: yup.string().required("Appointment time is required"),
+  startTime: yup.string().required("Appointment time is required"),
+  endTime: yup.string().required("End time is required")
+  .test('is-greater', 'End time must be later than start time', function(value) {
+  const { startTime } = this.parent;
+  return value > startTime;
+  }),
   location: yup.string().required("Location is required"),
-  attendees: yup.string().required("Attendees are required")
+  // N/A or valid url
+  link: yup.string().url("Invalid URL").nullable(),
+  notes: yup.string().max(300, "Notes must be less than 300 characters"),
+  staff: yup.string().required("Staff is required"),
+  inviteSent: yup.boolean(),
+  reminderSent: yup.boolean(),
+  meetingType: yup.string().required("Meeting type is required"),
+  status: yup.string().required("Status is required"),
+  participant: yup.string().required("Attendees are required")
+
 })
 
 

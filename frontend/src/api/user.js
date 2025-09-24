@@ -4,6 +4,11 @@ export class UserClient extends BaseClient {
   constructor(token) {
     super(undefined, token)
   }
+ async fetchById(id,optionalHeader) {
+    // get all user
+    const res = await this.get(`users/detail/${id}`,optionalHeader);
+    return res
+  }
   async fetchAll() {
     // get all user
     const res = await this.get('users');
@@ -28,6 +33,7 @@ export class UserClient extends BaseClient {
    }
   async fetchMatrix(optionalHeader){
     const res = await this.get('users/getMatrix',optionalHeader);
+    console.log(res,'matrix')
       return res
   }
   async fetchByQuery(query,value) {

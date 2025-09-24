@@ -30,9 +30,12 @@ export default function LoginPage() {
       if (res.status === 200) {
         toast.success("Logged in successfully")
         if (res.data?.message?.role === 'admin') {
+        console.log(res.data?.message.role,'role');
           navigate('/admin')
         }
         else {
+
+        console.log(res.data?.message.role,'wtf');
           if (res.data?.message?.is_first_login) {
             navigate('/onboard')
           }

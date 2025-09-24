@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Edit, Trash2 } from "lucide-react";
 import { useAuth, useClient } from "@/lib/dataContext";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
 import {
@@ -39,7 +39,7 @@ export default function ViewStaffs() {
     console.log('func is called', token)
     setLoading(true);
     try {
-      const res = await client.user.fetchRegisteredStaffs();
+      const res = await client.user.fetchAll()
       const more = await client.adminProfile.fetchAll();
 
       console.log(res.data, more, 'ressss')
@@ -67,6 +67,9 @@ export default function ViewStaffs() {
     } finally {
       setLoading(false);
     }
+  }
+  const viewDetails = (id) => {
+    navigate(`/admin/view-staff-details/${id}`);
   }
   useEffect(() => {
     const loadData = async () => {
@@ -130,7 +133,7 @@ export default function ViewStaffs() {
                     </TableRow>
                   ) : (
                     currentStaffs.map((staff) => (
-                      <TableRow key={staff._id}>
+                      <TableRow key={staff._id} onClick={() => viewDetails(staff._id)} className="cursor-pointer hover:bg-gray-50">
 
                         <TableCell>{staff.name}</TableCell>
                         <TableCell>

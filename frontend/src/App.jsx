@@ -29,6 +29,8 @@ import ViewInternships from "./pages/admin/view-internships";
 import { ComingSoon } from "./pages/ComingSoon";
 import ProtectedRoute from "./pages/protected";
 import ViewStaffRequests from "./pages/admin/view-staff-requests";
+import StaffDetail from "./pages/admin/view-staff-detail";
+import TechStacks from "./pages/students/techstacks";
 function App() {
   return (
     <>
@@ -40,25 +42,26 @@ function App() {
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
-            <Route path="/admin/waiting" element={<Waiting />} />
+          <Route path="/admin/waiting" element={<Waiting />} />
           <Route element={<ProtectedRoute allowRoutes={['admin']} />} >
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path='/admin/create-companies' element={<CreateCompanies />} />
             <Route path='/admin/view-companies/:id' element={<UpdateCompanies />} />
             <Route path='/admin/view-students' element={<ViewStudents />} />
             <Route path='/admin/view-staffs' element={<ViewStaff />} />
-            <Route path="/admin" element={<AdminHome />} />
             <Route path='/admin/profile' element={<AdminProfile />} />
             <Route path="/admin/create-internships" element={<CreateInternships />} />
             <Route path="/admin/view-internships" element={<ViewInternships />} />
             <Route path='/admin/create-appointments' element={<Appointment />} />
-            < Route path='/admin/view-appointments' element={<ViewAppointments />} />
+            <Route path='/admin/view-appointments' element={<ViewAppointments />} />
             <Route path='/admin/view-companies' element={<ViewCompanies />} />
-            <Route path="/admin/view-staff-requests" element={<ViewStaffRequests/>} />
+            <Route path="/admin/view-staff-requests" element={<ViewStaffRequests />} />
+            <Route path='/admin/view-staff-details/:id' element={<StaffDetail/>} />
             <Route path="/admin" element={<AdminHome />} />
           </Route>
 
           <Route element={<ProtectedRoute allowRoutes={['student']} />} >
+            <Route path="/techstacks" element={<TechStacks/>} />
             <Route path="/" element={<StudentHome />} />
             <Route path='/profile' element={<StudentProfileUpdate />} />
             <Route path="/form" element={<MultiStepForm />} />

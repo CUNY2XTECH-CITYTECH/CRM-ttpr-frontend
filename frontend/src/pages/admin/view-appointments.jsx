@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Edit, Trash2 } from "lucide-react";
 import { useAuth, useClient } from "@/lib/dataContext";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
 export default function ViewAppointments() {
@@ -22,22 +22,68 @@ export default function ViewAppointments() {
   const { token, currentUser } = useAuth();
   const { client } = useClient()
   const appointmentsPerPage = 5;
+
+  const formatTime= ( startTime, endTime ) => {
+    // Validate the input strings before processing.
+    if (!startTime || !endTime) {
+      console.error("Input timestamps cannot be null or empty.");
+      return null;
+    }
+
+    const startDate = new Date(startTime);
+    const endDate = new Date(endTime);
+
+
+    // Get date components in UTC to avoid timezone issues.
+    const month = (startDate.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = startDate.getUTCDate().toString().padStart(2, '0');
+    const year = startDate.getUTCFullYear();
+
+    // Get time components in UTC.
+    const startHours = startDate.getUTCHours().toString().padStart(2, '0');
+    const startMinutes = startDate.getUTCMinutes().toString().padStart(2, '0');
+    const startSeconds = startDate.getUTCSeconds().toString().padStart(2, '0');
+
+    const endHours = endDate.getUTCHours().toString().padStart(2, '0');
+    const endMinutes = endDate.getUTCMinutes().toString().padStart(2, '0');
+    const endSeconds = endDate.getUTCSeconds().toString().padStart(2, '0');
+    console.log(`${month}/${day}/${year}`, `${startHours}:${startMinutes}:${startSeconds}`, `${endHours}:${endMinutes}:${endSeconds}`, 'formatted times');
+    return {
+      date: `${month}/${day}/${year}`,
+      startTime: `${startHours}:${startMinutes}:${startSeconds}`,
+      endTime: `${endHours}:${endMinutes}:${endSeconds}`,
+    };
+  }
   async function fetchAppointments(token) {
     console.log('func is called', token)
     setLoading(true);
-    // try {
-    //   const res = await client.appointments.fetchAll();
-    //   if (res.status === 200) {
-    //     setAppointments(res.data.data);
-    //   }
-    //   else{
-    //     console.log(res.error)
-    //   }
-    // } catch (error) {
-    //   console.error(error, 'cannot fetch appointments');
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      const res = await client.appointment.fetchAll();
+      console.log(res, 'ressss');
+
+      if (res.status === 200) {
+        let data = res.data.data.map(app => {
+          console.log(app.startTime, app.endTime, 'times');
+          const { date, startTime, endTime} = formatTime(app.startTime, app.endTime);
+          return {
+            ...app,
+            date: date,
+            startTime: startTime,
+            duration: Math.round((new Date(app.endTime) - new Date(app.startTime)) / 60000) // duration in minutes
+          };
+        }
+        );
+        console.log(data, 'dataaa');
+        setAppointments(data);
+      }
+      else {
+        console.log(res.error)
+      }
+    } catch (error) {
+      console.error(error, 'cannot fetch appointments');
+    } finally {
+      setLoading(false);
+    }
   }
   useEffect(() => {
     const loadData = async () => {
@@ -58,11 +104,11 @@ export default function ViewAppointments() {
   const start = (currentPage - 1) * appointmentsPerPage;
   const currentAppointments = appointments.slice(start, start + appointmentsPerPage);
   const handleEdit = (id) => {
-    alert(`Edit company with ID: ${id}`);
+    alert(`Edit app with ID: ${id}`);
     // Replace with your real edit logic or navigation
   };
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this company?")) return;
+    if (!confirm("Are you sure you want to delete this app?")) return;
     // try {
     //   const res = await fetch(`/api/appointments/${id}`, { method: "DELETE" });
     //   if (!res.ok) throw new Error("Delete failed");
@@ -71,7 +117,7 @@ export default function ViewAppointments() {
     //     setCurrentPage((p) => p - 1);
     //   }
     // } catch (error) {
-    //   alert("Failed to delete company");
+    //   alert("Failed to delete app");
     //   console.error(error);
     // }
   };
@@ -79,72 +125,70 @@ export default function ViewAppointments() {
     <>
       {currentUser ? (
         <Layout user={currentUser}>
-          <Topbar title="Add New Company" mode="read" />
+          <Topbar title="Add New Company" mode="read" createmultiple={false} />
 
           <div className="p-6 mt-6 bg-white rounded-lg shadow-sm max-w-7xl mx-auto">
 
-        <h4 className='py-2 font-semibold uppercase'>Appointments</h4>
-            {loading ? <p className="p-6 text-center">Loading...</p>:
-            <Table className={'w-full'}>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Mission</TableHead>
-                  <TableHead>Industry</TableHead>
-                  <TableHead>Website</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {currentAppointments.length === 0 ? (
+            <h4 className='py-2 font-semibold uppercase'>Appointments</h4>
+            {loading ? <p className="p-6 text-center">Loading...</p> :
+              <Table className={'w-full'}>
+                <TableHeader>
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-6">
-                      No appointments found.
-                    </TableCell>
+                    <TableHead>Title</TableHead>
+                    <TableHead>Description</TableHead>
+                    <TableHead>Attendee</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Start time</TableHead>
+                    <TableHead>Duration</TableHead>
+                    <TableHead>Appointment Type</TableHead>
+                    <TableHead>Location/Link</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
-                ) : (
-                  currentAppointments.map((company) => (
-                    <TableRow key={company.id}>
-                      <TableCell>{company.name}</TableCell>
-                      <TableCell>{company.email}</TableCell>
-                      <TableCell>{company.mission.slice(0,40)}...</TableCell>
-                      <TableCell>{company.industry}</TableCell>
-                      <TableCell>
-                        <a
-                          href={company.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          Visit
-                        </a>
-                      </TableCell>
-                      <TableCell className={''}>{company.location}</TableCell>
-                      <TableCell className="flex justify-end gap-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => handleEdit(company.id)}
-                          aria-label="Edit company"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          onClick={() => handleDelete(company.id)}
-                          aria-label="Delete company"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                </TableHeader>
+                <TableBody>
+                  {currentAppointments.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="text-center py-6">
+                        No appointments found.
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+                  ) : (
+                    currentAppointments.map((app) => (
+                      <TableRow key={app.id}>
+                        <TableCell>{app.title}</TableCell>
+                        <TableCell>{app.description.length > 30 ? app.description.slice(0, 30) + ".." : app.description}</TableCell>
+                        <TableCell>{app.participant}</TableCell>
+                        <TableCell>{app.date}</TableCell>
+                        <TableCell>{app.startTime}</TableCell>
+                        <TableCell>{app.duration} mins</TableCell>
+                        <TableCell>{app.meetingType}</TableCell>
+                        <TableCell>{app.meetingType=== "in-person" ? <span>app.location</span> : app.meetingLink!=="N/A" ?<Link className="text-blue-500" to={app.meetingLink}>{app.meetingLink}</Link>:"N/A"}</TableCell>
+                        <TableCell>{app.status}</TableCell>
+                        <TableCell className={''}>{app.location}</TableCell>
+                        <TableCell className="flex justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleEdit(app.id)}
+                            aria-label="Edit app"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            onClick={() => handleDelete(app.id)}
+                            aria-label="Delete app"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
             }
             {/* Pagination */}
             <div className="flex justify-between items-center mt-6">

@@ -44,7 +44,7 @@ const studentItems = [
   },
   {
     title: "Techstacks",
-    url: "/coming-soon",
+    url: "/techstacks",
     childLinks: null,
     icon: Server,
   },
@@ -143,12 +143,6 @@ const items = [
     icon: Users,
   },
   {
-    title: "Calendar",
-    url: "#",
-    childLinks: null,
-    icon: Calendar,
-  },
-  {
     title: "Appointments",
     url: "#",
     childLinks: [{
@@ -161,12 +155,6 @@ const items = [
       url: "/admin/view-appointments",
     }],
     icon: Calendar,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    childLinks: null,
-    icon: Settings,
   },
 
 ];
