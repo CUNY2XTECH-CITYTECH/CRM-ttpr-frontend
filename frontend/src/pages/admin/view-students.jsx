@@ -14,90 +14,7 @@ import { Link, useNavigate } from "react-router";
 import Layout from "@/components/layout";
 import { Topbar } from "@/components/topbar";
 export default function ViewStudents() {
-  const [students, setStudents] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john.doe@citytech.cuny.edu",
-      major: "Computer Science",
-      track: "Software Development",
-      graduationYear: 2024,
-      linkedin: "https://linkedin.com/in/johndoe",
-      location: "New York, NY",
-    }
-    , {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane.smith@citytech.cuny.edu",
-      major: "Information Technology",
-      track: "Network Administration",
-      graduationYear: 2023,
-      linkedin: "https://linkedin.com/in/janesmith",
-      location: "Brooklyn, NY",
-    }
-,
-{
-  id: 3,
-  name: "Michael Johnson",
-  email: "michael.johnson@citytech.cuny.edu",
-  major: "Computer Engineering",
-  track: "Embedded Systems",
-  graduationYear: 2024,
-  linkedin: "https://linkedin.com/in/michaeljohnson",
-  location: "Queens, NY",
-},
-{
-  id: 4,
-  name: "Emily Davis",
-  email: "emily.davis@citytech.cuny.edu",
-  major: "Computer Science",
-  track: "Software Development",
-  graduationYear: 2025,
-  linkedin: "https://linkedin.com/in/emilydavis",
-  location: "Manhattan, NY",
-},
-{
-  id: 5,
-  name: "Daniel Martinez",
-  email: "daniel.martinez@citytech.cuny.edu",
-  major: "Information Technology",
-  track: "Cybersecurity",
-  graduationYear: 2023,
-  linkedin: "https://linkedin.com/in/danielmartinez",
-  location: "Bronx, NY",
-},
-{
-  id: 6,
-  name: "Sophia Lee",
-  email: "sophia.lee@citytech.cuny.edu",
-  major: "Computer Systems",
-  track: "Database Administration",
-  graduationYear: 2024,
-  linkedin: "https://linkedin.com/in/sophialee",
-  location: "Brooklyn, NY",
-},
-{
-  id: 7,
-  name: "David Kim",
-  email: "david.kim@citytech.cuny.edu",
-  major: "Computer Engineering",
-  track: "Artificial Intelligence",
-  graduationYear: 2025,
-  linkedin: "https://linkedin.com/in/davidkim",
-  location: "Staten Island, NY",
-},
-
-{
-  id: 8,
-  name: "Maya Aung",
-  email: "maya.aung@citytech.cuny.edu",
-  major: "Computer Engineering",
-  track: "Web Development",
-  graduationYear: 2024,
-  linkedin: "https://linkedin.com/in/mayaaung",
-  location: "Brooklyn, NY",
-}
-  ]);
+  const [students, setStudents] =useState([])
 
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -111,22 +28,31 @@ export default function ViewStudents() {
       }
   useEffect(() => {
     const loadData = async () => {
-      // if (currentUser && currentUser?.role !== "admin") {
-      //   navigate("/not-authorized");
-      // }
-      // if (!token) {
-      //
-      //   navigate("/login");
-      // }
-      if (token) {
-        await fetchStudents(token);
+      const  stu = await client.user.fetchStudents({credentials: 'include'});
+      console.log("Fetched students:", stu);
+      if (stu.status==200) {
+        // if some of the fields are missing, add them with default values
+        const updatedStudents = stu?.data?.map((s, index) => ({
+        
+          id: s.id || index + 1,
+          name: s.name || "N/A",
+          email: s.email || "N/A",
+          major: s.major || "N/A",
+          track: s.track || "N/A",
+          graduationYear: s.graduationYear || "N/A",
+          linkedin: s.linkedin || "#",
+          location: s.location || "N/A",
+        }));
+        setStudents(updatedStudents);
       }
+      setLoading(false);
+    
     }
     loadData()
   }, [token]);
-  const totalPages = Math.ceil(students.length / studentsPerPage);
+  const totalPages = Math.ceil(students?.length / studentsPerPage);
   const start = (currentPage - 1) * studentsPerPage;
-  const currentStudents = students.slice(start, start + studentsPerPage);
+  const currentStudents = students?.slice(start, start + studentsPerPage);
   const handleEdit = (id) => {
     alert(`Edit stu with ID: ${id}`);
     // Replace with your real edit logic or navigation
@@ -168,14 +94,14 @@ export default function ViewStudents() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentStudents.length === 0 ? (
+                {currentStudents?.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-6">
                       No students found.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  currentStudents.map((stu) => (
+                  currentStudents?.map((stu) => (
                     <TableRow key={stu.id}>
                       <TableCell>{stu.name}</TableCell>
                       <TableCell>{stu.email}</TableCell>
