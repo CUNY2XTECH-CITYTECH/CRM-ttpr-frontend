@@ -123,9 +123,9 @@ export default function StudentOnboarding() {
   const toggleOption = (key, value) => {
     setFormData((prev) => {
       const selectedOptions = prev[key];
-      if (selectedOptions.includes(value)) {
+      if (selectedOptions?.includes(value)) {
         return { ...prev, [key]: selectedOptions.filter((v) => v !== value) };
-      } else if (selectedOptions.length < 5) {
+      } else if (selectedOptions?.length < 5) {
         return { ...prev, [key]: [...selectedOptions, value] };
       }
       return prev;
@@ -138,7 +138,7 @@ export default function StudentOnboarding() {
 
     console.log('upload_options', upload_options)
 
-    if (val && !currentOptions.includes(val)) {
+    if (val && !currentOptions?.includes(val)) {
       const updatedOptions = [...currentOptions, val];
       const newDynamicOptions = [...dynamicOptions];
       newDynamicOptions[step] = updatedOptions;
@@ -245,9 +245,9 @@ export default function StudentOnboarding() {
           </div>
 
           <fieldset aria-labelledby="question-label" className="flex flex-wrap gap-2">
-            {currentOptions.key !== 'major' ? currentOptions.map((opt, i) => {
-              const isSelected = selected.includes(opt);
-              const isDisabled = !isSelected && selected.length >= 5;
+            {currentOptions.key !== 'major' ? currentOptions?.map((opt, i) => {
+              const isSelected = selected?.includes(opt);
+              const isDisabled = !isSelected && selected?.length >= 5;
               return (
                 <button
                   key={i}
@@ -309,12 +309,12 @@ export default function StudentOnboarding() {
               <div />
             )}
             <div className="flex gap-3 items-center">
-              <span className="text-xs text-gray-400">{selected.length}/5 selected</span>
+              <span className="text-xs text-gray-400">{selected?.length}/5 selected</span>
               <button
                 type="button"
-                disabled={selected.length === 0}
+                disabled={selected?.length === 0}
                 onClick={handleNext}
-                className={`px-6 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 ${selected.length === 0
+                className={`px-6 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 ${selected?.length === 0
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-indigo-600 text-white hover:bg-indigo-700"
                   }`}

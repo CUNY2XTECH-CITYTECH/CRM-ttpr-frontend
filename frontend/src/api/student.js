@@ -1,4 +1,4 @@
-import {BaseClient} from './server.js';
+import { BaseClient } from './server.js';
 export class StudentClient extends BaseClient {
   constructor(token) {
     super(undefined, token);
@@ -13,12 +13,12 @@ export class StudentClient extends BaseClient {
   }
 
   async create(data) {
-    const res = await this.post('studentProfile/create', data); 
+    const res = await this.post('studentProfile/create', data);
     return res;
   }
 
   async update(data) {
-    const res = await this.post('studentProfile/update', data); 
+    const res = await this.post('studentProfile/update', data);
     return res;
   }
 
